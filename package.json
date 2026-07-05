@@ -1,7 +1,7 @@
 {
 	"name": "barkup",
 	"version": "0.1.0",
-	"description": "Author typed trees as HTML. A config-driven grammar codec with byte-for-byte id preservation, declared attribute coercion, and round-trip guarantees — designed for humans and LLM agents authoring the same markup.",
+	"description": "Author typed trees as HTML. A config-driven grammar codec with byte-for-byte id preservation, declared attribute coercion, and round-trip guarantees \u2014 designed for humans and LLM agents authoring the same markup.",
 	"author": "Kevin Peckham",
 	"license": "MIT",
 	"type": "module",
@@ -17,7 +17,11 @@
 			"import": "./dist/testing.js"
 		}
 	},
-	"files": ["dist", "README.md", "LICENSE"],
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
 	"sideEffects": false,
 	"scripts": {
 		"audit": "bunx fallow audit",
@@ -65,5 +69,8 @@
 	},
 	"engines": {
 		"node": ">=18"
+	},
+	"bugs": {
+		"url": "https://github.com/kevinpeckham/barkup/issues"
 	}
 }

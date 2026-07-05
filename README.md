@@ -168,6 +168,16 @@ speaks HTML; your prompt budget goes to your *semantics*, not your syntax.
 - The dialect has no text nodes by design; text belongs in declared
   attributes.
 
+## Used in production
+
+barkup came out of a working system, and that system now runs on it: the
+document platform described in the article compiles its template grammar
+(the same config that drives its visual editor) into a barkup grammar, and
+**every template edit its LLM agents author must pass barkup validation
+before it is applied**. The structured issues — unknown types, invalid
+containment, stray text, duplicate ids — go back to the model verbatim as
+correction feedback.
+
 ## Maintenance posture
 
 barkup is **scoped and stable**: the v1 surface (`defineGrammar` →

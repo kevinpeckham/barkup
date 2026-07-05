@@ -38,13 +38,13 @@ edit is reliable where a dozen granular mutation calls are not.
    misuse from your own code throws; markup-side problems are data.)
 
 All four are enforced by fast-check property tests over randomly generated
-grammars-valid trees, and `barkup/testing` ships the same helpers so you can
+grammars-valid trees, and `@kevinpeckham/barkup/testing` ships the same helpers so you can
 prove them over **your** grammar.
 
 ## Quick start
 
 ```ts
-import { defineGrammar } from "barkup";
+import { defineGrammar } from "@kevinpeckham/barkup";
 
 const grammar = defineGrammar({
   nodes: {
@@ -114,7 +114,7 @@ is the lightest:
 
 ```ts
 import { DOMParser } from "linkedom";
-import { defineGrammar, domParserAdapter } from "barkup";
+import { defineGrammar, domParserAdapter } from "@kevinpeckham/barkup";
 
 const adapter = domParserAdapter(new DOMParser());
 const grammar = defineGrammar(config, { adapter });
@@ -127,7 +127,7 @@ dependency):
 
 ```ts
 import fc from "fast-check";
-import { treeArbitrary, assertRoundTrip } from "barkup/testing";
+import { treeArbitrary, assertRoundTrip } from "@kevinpeckham/barkup/testing";
 
 test("my grammar round-trips", () => {
   fc.assert(
@@ -171,7 +171,7 @@ speaks HTML; your prompt budget goes to your *semantics*, not your syntax.
 ## Maintenance posture
 
 barkup is **scoped and stable**: the v1 surface (`defineGrammar` →
-`build` / `parse` / `format` / `validate`, plus `barkup/testing`) is the
+`build` / `parse` / `format` / `validate`, plus `@kevinpeckham/barkup/testing`) is the
 whole product, and it is intentionally small. Bug reports and guarantee
 violations are always welcome; feature scope is frozen by design.
 

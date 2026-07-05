@@ -1,5 +1,5 @@
 {
-	"name": "barkup",
+	"name": "@kevinpeckham/barkup",
 	"version": "0.1.0",
 	"description": "Author typed trees as HTML. A config-driven grammar codec with byte-for-byte id preservation, declared attribute coercion, and round-trip guarantees \u2014 designed for humans and LLM agents authoring the same markup.",
 	"author": "Kevin Peckham",
@@ -72,5 +72,8 @@
 	},
 	"bugs": {
 		"url": "https://github.com/kevinpeckham/barkup/issues"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

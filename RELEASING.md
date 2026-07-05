@@ -10,4 +10,4 @@ Publishing is manual, by the author, from a personal npm account.
 5. `npm publish --dry-run` — inspect the tarball contents.
 6. `git tag v<version> && git push --tags`.
 7. `npm login` (credentials in 1Password) then `npm publish`.
-8. Verify: `npm view barkup version` and install into a scratch project.
+8. Verify: `npm view @kevinpeckham/barkup version` and install into a scratch project.

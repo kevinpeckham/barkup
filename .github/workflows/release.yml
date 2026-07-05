@@ -1,15 +1,16 @@
 name: Release
 
-# Publishes to npm with provenance (signed attestation linking the package
-# to this repo + commit). Trigger by pushing a v* tag. Requires the
-# NPM_TOKEN repository secret (npm automation token with publish rights).
+# Publishes to npm via OIDC trusted publishing (configured on npmjs.com for
+# this repo + workflow). No tokens: GitHub's OIDC identity authenticates the
+# publish, and npm generates a signed provenance attestation automatically.
+# Trigger by pushing a v* tag.
 on:
   push:
     tags: ["v*"]
 
 permissions:
   contents: read
-  id-token: write # required for npm provenance
+  id-token: write # required for OIDC trusted publishing + provenance
 
 jobs:
   publish:
@@ -21,10 +22,10 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+      # Trusted publishing requires npm >= 11.5.1
+      - run: npm install -g npm@latest && npm --version
       - run: bun install --frozen-lockfile
       - run: bun run check
       - run: bun test
       - run: bun run build
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish

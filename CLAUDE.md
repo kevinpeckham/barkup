@@ -15,9 +15,11 @@ https://www.lightningjar.com/blog/ast-as-html. Author: Kevin Peckham (MIT).
   only. Enforced by `fallow-rules.json`.
 - **The four guarantees are the product** (see README). Any change must
   keep the property suites green: `bun test`.
-- **Scope is frozen at the v1 surface** (`defineGrammar` → build / parse /
-  format / validate + `barkup/testing`). Decline feature creep; bug fixes
-  and guarantee hardening only.
+- **Scope moves only on benchmark evidence** (surface: `defineGrammar` →
+  build / parse / format / validate + `barkup/testing` +
+  `barkup/patch`). Anchored patches cleared that bar (barkup-bench
+  condition F); nothing enters without it. Decline feature creep; bug
+  fixes and guarantee hardening only.
 - **format() must never regenerate an existing id** — only fill missing
   ones. This is guarantee 1 and the origin story of the package.
 - Markup-side problems return structured issues; tree-side misuse throws

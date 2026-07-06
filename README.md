@@ -197,6 +197,42 @@ them back to the model verbatim (they name the node and path). Route the
 accepted tree through the same pipeline as human edits. The model already
 speaks HTML; your prompt budget goes to your *semantics*, not your syntax.
 
+## Anchored patches
+
+Whole-tree rewrite is the simplest robust interface, but its output cost
+grows with the tree. `@kevinpeckham/barkup/patch` ships the other
+strategy [barkup-bench](https://github.com/kevinpeckham/barkup-bench)
+validated: a patch dialect whose operations address nodes **by id** —
+`before`/`after` sibling anchors or `parentId` append, never a
+positional index — applied atomically and validated by your grammar.
+In the benchmark it tied whole-tree rewrite on task success (92.6% vs
+91.9%), was the cheapest condition at every tree size measured, and
+fully recovered RFC 6902's large-tree collapse (85.1% vs 69.6% at ~150
+nodes). Its one precondition is stable node ids — guarantee #1.
+
+```ts
+import { applyAnchoredPatch } from "@kevinpeckham/barkup/patch";
+
+// 1. Serialize current state — format() fills any missing ids first,
+//    so every node the model sees is addressable.
+const current = grammar.build(storedTree);
+
+// 2. The model replies with a JSON array of operations addressing
+//    nodes by id: set-attribute, remove-attribute, set-name, remove,
+//    insert (with a fresh id), move.
+
+// 3. Apply atomically; grammar validation is built in.
+const result = applyAnchoredPatch(grammar, storedTree, JSON.parse(reply));
+if (!result.ok) return retryWithFeedback(result.issues); // verbatim
+persist(result.node);
+```
+
+The input tree is never mutated. The first failing operation rejects
+the whole patch, and the issue names the operation index; the patched
+tree must pass `validate()` before it is returned — a partial or
+invalid tree never escapes. Reach for patches when token cost or
+latency matters; keep whole-tree rewrite when simplicity does.
+
 ## When not to use this
 
 - **Numeric-heavy or deeply cross-referenced trees** — HTML's stringly
@@ -226,10 +262,15 @@ correction feedback.
 
 ## Maintenance posture
 
-barkup is **scoped and stable**: the v1 surface (`defineGrammar` →
-`build` / `parse` / `format` / `validate`, plus `@kevinpeckham/barkup/testing`) is the
-whole product, and it is intentionally small. Bug reports and guarantee
-violations are always welcome; feature scope is frozen by design.
+barkup is **scoped and stable**: the surface (`defineGrammar` →
+`build` / `parse` / `format` / `validate`, plus `@kevinpeckham/barkup/testing` and
+`@kevinpeckham/barkup/patch`) is the whole product, and it is intentionally
+small. Scope moves only on evidence: anchored patches were added because
+[the benchmark](https://github.com/kevinpeckham/barkup-bench) measured
+them tying whole-tree rewrite at the lowest cost, with barkup's id
+guarantee as their one precondition — that standard, not feature
+requests, is what changes the surface. Bug reports and guarantee
+violations are always welcome.
 
 ## License & credit
 

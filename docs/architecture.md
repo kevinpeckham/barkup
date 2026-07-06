@@ -44,6 +44,7 @@ build.ts ─┐
 parse.ts ─┼──▶ index.ts (defineGrammar assembles the public Grammar object)
 validate.ts┘
 testing.ts ──▶ index.ts + fast-check              (separate entry: barkup/testing)
+patch.ts ──▶ index.ts (Grammar type, normalizeNode) (separate entry: barkup/patch)
 ```
 
 No module imports anything at runtime outside this list — zero runtime
@@ -343,6 +344,53 @@ test("my grammar round-trips", () => {
 });
 ```
 
+## src/patch.ts — the `@kevinpeckham/barkup/patch` entry
+
+Anchored patches: atomic, grammar-validated edits addressing nodes by
+id — the second benchmark-winning editing strategy (barkup-bench
+condition F; see `docs/anchored-patches.md` for the evidence and the
+full design note). No DOM involvement — patches operate on
+`BarkupNode` trees. Patches are agent/user input, so the markup-side
+error model applies throughout: failures are data, never throws.
+
+- **`applyAnchoredPatch(grammar, tree, operations)`** — clones the
+  tree (never mutates the input), applies operations in order via
+  `applyOp`, and runs `grammar.validate()` on the result. The first
+  failing operation rejects the entire patch; an `ok: true` result is
+  the patched tree in normalized form. `operations` is `unknown` by
+  design: shape problems come back as issues, not type errors. The
+  only throw is `BarkupError` when the *base tree* (the caller's own
+  data) is not JSON-serializable — tree side.
+- **`AnchoredOperation` / `AnchoredPlacement`** — the six ops
+  (`set-attribute`, `remove-attribute`, `set-name`, `remove`,
+  `insert`, `move`); placement is exactly one of `before`/`after`
+  (sibling id, parent derived) or `parentId` (append). For `move`,
+  placement resolves **after** the node is detached.
+- **`PatchIssue` / `PatchIssueCode`** — op-level failures get
+  `code: "invalid-patch"`, a message prefixed `Operation ${i}: …`,
+  `path: "(patch op ${i})"`, and `opIndex`; grammar failures found by
+  post-apply validation are ordinary `GrammarIssue`s (structurally
+  assignable — their `opIndex` is absent). The core `IssueCode` union
+  is untouched.
+- *Internals worth knowing:* `OP_HANDLERS` dispatches op names to one
+  handler per op; `resolvePlacement`/`resolveSiblingPlacement` turn an
+  anchor spec into a concrete (parent, index); `attach`/`detach` do
+  the splicing (empty `children` arrays are pruned);
+  `mustNonRootNode` guards `remove`/`move` against the root;
+  `subtreeContainsId` blocks moving a node into its own subtree;
+  `jsonClone` is the clone primitive — trees are typed JSON by
+  contract, so a JSON round trip is the honest copy.
+
+```ts
+import { applyAnchoredPatch } from "@kevinpeckham/barkup/patch";
+
+const result = applyAnchoredPatch(grammar, storedTree, [
+  { op: "set-attribute", id: "t1", key: "content", value: "Hello" },
+  { op: "move", id: "b2", after: "b1" },
+]);
+// { ok: true, node } — or { ok: false, issues } naming the op index
+```
+
 ---
 
 ## tests/ — what each suite proves
@@ -366,6 +414,20 @@ test("my grammar round-trips", () => {
   attributes never change type for adversarial numeric-looking inputs;
   and a fixed battery of invalid markups that must all fail loudly with
   non-empty messages and paths.
+- **`tests/patch.test.ts`** *(unit)* — every anchored-patch op and
+  every failure mode, ported from the benchmark's reference suite:
+  happy paths per op; op-level failures (stale ids, malformed fields,
+  placement ambiguity, root guards, own-subtree moves, unknown ops)
+  with `opIndex` and path assertions; post-apply validation
+  (containment, value types, required attributes, duplicate ids); and
+  input immutability on multi-op failure.
+- **`tests/patch.property.test.ts`** *(property, 200 runs each)* —
+  anchored patches at scale over random grammar-valid trees:
+  atomicity (a failing op at any position leaves the input
+  byte-identical); equivalence (each of the five edit kinds, expressed
+  as an anchored op, produces the same tree as direct programmatic
+  mutation); id preservation (untouched nodes keep ids byte-for-byte);
+  validity (every accepted result passes `validate()`).
 
 ## Everything together — an agent's edit loop
 
@@ -415,12 +477,20 @@ persist(result.node);
 | 2. Round-trip identity | canonical build order + normalized parse output + perfect key casing (`ATTRIBUTE_KEY_RE`) + `escapeAttribute` | round-trip property test (200 random trees); example round-trip unit |
 | 3. Declared coercion only | `coerceValue` (parse.ts) switches on the *spec*, never the value shape; `serializeValue` (build.ts) enforces the same on the way out | coercion property test with adversarial strings; unit tests |
 | 4. Loud boundaries | every markup problem → `GrammarIssue` with code/path; partial trees never returned; adapter exceptions → `parse-failed` | invalid-markup battery; one unit test per issue code |
+| Patch atomicity + validity (extends 1 and 4 to `barkup/patch`) | `applyAnchoredPatch` works on a clone; first failing op rejects with `opIndex`; post-apply `validate()` gate | atomicity/id-preservation/validity property tests; unit failure suite |
 
-## Deliberate omissions (scope is frozen)
+## Deliberate omissions (scope moves on evidence, not requests)
 
 No text nodes (text lives in declared attributes, where its type is
 known). No rendering, diffing, schema migration, streaming, or framework
 bindings. No `class`/`style` passthrough — presentation is a declared
 attribute your renderer interprets. No attribute-level defaults or enums —
-that's your grammar config's concern upstream. See CLAUDE.md and the
-README's maintenance posture: v1 is the whole product.
+that's your grammar config's concern upstream. No inverse patches.
+
+One extension has cleared the bar since v1: anchored patches
+(`barkup/patch`), added because barkup-bench measured the dialect
+tying whole-tree rewrite on success at the lowest token cost, with
+stable ids — guarantee 1 — as its only precondition. That is the
+standard for scope changes: a benchmark-validated capability whose
+precondition barkup already guarantees. See CLAUDE.md and the README's
+maintenance posture.

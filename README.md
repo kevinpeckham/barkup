@@ -229,5 +229,6 @@ MIT © Kevin Peckham. Built at [Lightning Jar](https://www.lightningjar.com).
 The design is described in
 [HTML as a Native Data Format for LLMs](https://www.lightningjar.com/blog/ast-as-html);
 the benchmark behind the numbers is
-[barkup-bench](https://github.com/kevinpeckham/barkup-bench) (findings in its
-REPORT.md).
+[barkup-bench](https://github.com/kevinpeckham/barkup-bench), with the
+results write-up in
+[We Benchmarked It](https://www.lightningjar.com/blog/barkup-bench-results).

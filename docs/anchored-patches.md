@@ -1,6 +1,6 @@
 # Anchored patches — design note
 
-Status: accepted design, pre-implementation. The semantics below are
+Status: shipped in 0.2.0; see "Verification" below. The semantics are
 ported from the benchmark-validated reference implementation
 (barkup-bench `src/conditions/f.ts`, condition F) and are fixed; this
 note records the API and issue-type design for review in isolation.
@@ -140,3 +140,21 @@ application; (3) id preservation — untouched nodes keep ids
 byte-for-byte; (4) validity — every `ok: true` result passes
 `validate()`. Plus example-based unit tests for every op and every
 failure mode, ported from the reference suite.
+
+## Verification (post-release, 0.2.0)
+
+After release, barkup-bench verified the shipped 0.2.0 artifact
+behaviorally identical to the benchmark-validated reference
+implementation (condition F) three ways: differential property tests
+over random tree × operation sequences (identical verdicts, trees, and
+failing-op indexes), a 40-vector conformance suite (now vendored into
+this repo at `tests/fixtures/patch-vectors.json` and replayed by
+`tests/patch-vectors.test.ts`), and a paired in-harness run — reference
+184/200 vs shipped 184/200, discordant 1/1, McNemar p = 1.0
+(claude-haiku-4.5, parity prompts). One epistemic caveat: the two
+implementations share ancestry — the shipped code is a port of the
+reference — so this is divergence detection between the validated
+implementation and its released port, not verification against an
+independent oracle. Alternate, independently written implementations of
+the dialect can prove conformance by replaying the vendored vector
+file.

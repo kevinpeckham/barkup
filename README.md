@@ -234,6 +234,12 @@ tree must pass `validate()` before it is returned — a partial or
 invalid tree never escapes. Reach for patches when token cost or
 latency matters; keep whole-tree rewrite when simplicity does.
 
+The shipped implementation was verified behaviorally identical to the
+benchmark-validated reference (see "Verification" in
+[docs/anchored-patches.md](docs/anchored-patches.md)), and porters can
+prove conformance by replaying the vendored 40-vector suite at
+`tests/fixtures/patch-vectors.json`.
+
 ## When not to use this
 
 - **Numeric-heavy or deeply cross-referenced trees** — HTML's stringly

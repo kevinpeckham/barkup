@@ -347,9 +347,10 @@ test("my grammar round-trips", () => {
 ## src/patch.ts — the `@kevinpeckham/barkup/patch` entry
 
 Anchored patches: atomic, grammar-validated edits addressing nodes by
-id — the second benchmark-winning editing strategy (barkup-bench
-condition F; see `docs/anchored-patches.md` for the evidence and the
-full design note). No DOM involvement — patches operate on
+id — the benchmark's lowest-cost editing strategy, tying whole-tree
+rewrite on success (barkup-bench condition F; see
+`docs/anchored-patches.md` for the evidence and the full design
+note). No DOM involvement — patches operate on
 `BarkupNode` trees. Patches are agent/user input, so the markup-side
 error model applies throughout: failures are data, never throws.
 

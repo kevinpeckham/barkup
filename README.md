@@ -20,8 +20,8 @@ Working with JSON is hunting through closed bins in an attic: the labels are
 inside the lid, and the way out is a run of identical unlabeled braces. HTML
 labels the outside of every container and closes each one by name — legible
 to the humans who maintain it, and the natural carrier for the whole-tree
-"rewrite the markup" edit that benchmarks show is reliable where a dozen
-granular mutation calls are not.
+"rewrite the markup" edit that benchmarks show matches a dozen granular
+mutation calls on reliability at a fraction of the token cost.
 
 ## The four guarantees
 
@@ -49,18 +49,17 @@ We benchmarked the pattern instead of asserting it:
 pre-registered benchmark — HTML vs an equal-strictness JSON twin ×
 whole-tree rewrite vs granular mutation tools vs two patch dialects —
 run across four models from three vendors (9,600 scored runs, seeds and
-prompts committed before the first scored call). It publishes what it
-found:
+prompts committed before the first scored call, with one published
+protocol correction). It publishes what it found:
 
-- **The whole-tree rewrite strategy wins.** +5 points task success
-  over granular mutation tools overall and +33 points on multi-turn
-  edits referencing nodes from the model's own earlier output
-  (p < 0.0001). The tool failures concentrate in smaller models,
-  which silently fail to execute follow-up edits in multi-turn tool
-  conversations — a surface the rewrite interface never exposes.
-- **No crossover.** Tools never overtook rewrite at any size tested
-  (up to ~190 nodes). Positional (RFC 6902) JSON Patch collapsed to
-  70% success on large trees.
+- **Every id-stable interface works.** Under corrected conversation
+  history, whole-tree rewrite, granular mutation tools, and
+  id-anchored patches land within a few points of one another (A vs
+  C: 91.9% vs 93.9%). The gaps originally reported here were traced
+  to an SDK defect that hid the model's own tool calls from
+  multi-turn history — worth knowing about in its own right: it
+  silently collapses small-model tool reliability (as low as 5%)
+  while frontier models mask it.
 - **Id-anchored patches match rewrite at the lowest cost.** A
   pre-registered follow-up condition — patch operations addressing
   nodes by id, placements anchored to sibling ids, no positional
@@ -84,8 +83,10 @@ token budget as trees grow, and keeps the one advantage no benchmark
 scores — the same artifact is readable by the designer in a diff, the
 reviewer in a PR, and the model in a prompt. barkup's guarantees (id
 preservation, round-trip identity, structured issues built for
-correction loops) are what make both winning strategies — whole-tree
-rewrite and id-anchored patches — safe to operate in production.
+correction loops) are what make whole-tree rewrite and id-anchored
+patches safe to operate in production — and both are single-artifact
+interfaces, structurally immune to the history-construction failure
+class that tools pipelines must guard against.
 
 ## Quick start
 

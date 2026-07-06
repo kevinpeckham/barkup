@@ -47,8 +47,8 @@ prove them over **your** grammar.
 We benchmarked the pattern instead of asserting it:
 [barkup-bench](https://github.com/kevinpeckham/barkup-bench) is a
 pre-registered benchmark — HTML vs an equal-strictness JSON twin ×
-whole-tree rewrite vs granular mutation tools vs JSON Patch — run
-across four models from three vendors (8,000 scored runs, seeds and
+whole-tree rewrite vs granular mutation tools vs two patch dialects —
+run across four models from three vendors (9,600 scored runs, seeds and
 prompts committed before the first scored call). It publishes what it
 found:
 
@@ -59,8 +59,16 @@ found:
   which silently fail to execute follow-up edits in multi-turn tool
   conversations — a surface the rewrite interface never exposes.
 - **No crossover.** Tools never overtook rewrite at any size tested
-  (up to ~190 nodes). JSON Patch collapsed to 70% success on large
-  trees.
+  (up to ~190 nodes). Positional (RFC 6902) JSON Patch collapsed to
+  70% success on large trees.
+- **Id-anchored patches match rewrite at the lowest cost.** A
+  pre-registered follow-up condition — patch operations addressing
+  nodes by id, placements anchored to sibling ids, no positional
+  indexes — tied whole-tree rewrite on success (92.6% vs 91.9%),
+  fully recovered RFC 6902's large-tree collapse (85.1% vs 69.6% at
+  ~150 nodes, p < 0.0001), and was the cheapest condition measured
+  (13.2k tokens per solved ~150-node task). It depends on exactly one
+  thing: stable node ids — guarantee #1 above.
 - **The HTML dialect is accuracy-neutral.** Against a JSON twin with
   identical validator strictness and error quality, HTML and JSON
   rewrite tied on validity (≥99%), editing success, and reading
@@ -76,8 +84,8 @@ token budget as trees grow, and keeps the one advantage no benchmark
 scores — the same artifact is readable by the designer in a diff, the
 reviewer in a PR, and the model in a prompt. barkup's guarantees (id
 preservation, round-trip identity, structured issues built for
-correction loops) are what make the winning rewrite strategy safe to
-operate in production.
+correction loops) are what make both winning strategies — whole-tree
+rewrite and id-anchored patches — safe to operate in production.
 
 ## Quick start
 

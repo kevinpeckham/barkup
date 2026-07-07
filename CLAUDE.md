@@ -17,9 +17,10 @@ https://www.lightningjar.com/blog/ast-as-html. Author: Kevin Peckham (MIT).
   keep the property suites green: `bun test`.
 - **Scope moves only on benchmark evidence** (surface: `defineGrammar` →
   build / parse / format / validate + `barkup/testing` +
-  `barkup/patch`). Anchored patches cleared that bar (barkup-bench
-  condition F); nothing enters without it. Decline feature creep; bug
-  fixes and guarantee hardening only.
+  `barkup/patch` + `barkup/view`). Anchored patches cleared that bar
+  (barkup-bench condition F), then focused views did (Studies I and
+  J); nothing enters without it. Decline feature creep; bug fixes and
+  guarantee hardening only.
 - **format() must never regenerate an existing id** — only fill missing
   ones. This is guarantee 1 and the origin story of the package.
 - Markup-side problems return structured issues; tree-side misuse throws

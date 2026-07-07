@@ -45,6 +45,8 @@ parse.ts ─┼──▶ index.ts (defineGrammar assembles the public Grammar ob
 validate.ts┘
 testing.ts ──▶ index.ts + fast-check              (separate entry: barkup/testing)
 patch.ts ──▶ index.ts (Grammar type, normalizeNode) (separate entry: barkup/patch)
+view.ts ──▶ index.ts (defineGrammar, Grammar) + internal (pathSegment)
+                                                  (separate entry: barkup/view)
 ```
 
 No module imports anything at runtime outside this list — zero runtime
@@ -392,6 +394,64 @@ const result = applyAnchoredPatch(grammar, storedTree, [
 // { ok: true, node } — or { ok: false, issues } naming the op index
 ```
 
+## src/view.ts — the `@kevinpeckham/barkup/view` entry
+
+Focused views: render only the part of the tree an edit concerns —
+the root-to-focus spine fully, everything else collapsed to
+id-bearing placeholders or omitted with an honest count — as
+HTML-dialect markup for the prompt, while patches apply to the full
+tree. The benchmark's cheapest validated input interface
+(barkup-bench Studies I and J; see `docs/focused-views.md` for the
+evidence and the full design note). The load-bearing invariant:
+**every visible id is a real id in the tree** — visible implies
+patchable, which is what makes views compose with
+`applyAnchoredPatch`. Views are prompt artifacts, not round-trip
+inputs: placeholders omit required attributes, so view output is
+deliberately not valid `parse()` input.
+
+- **`renderView(grammar, tree, { focus, mode? })`** — renders the
+  view or returns structured issues. The spine renders fully
+  (byte-identical to `build()` of those node shells); children of
+  focus nodes always appear in document order, at minimum as
+  placeholders (`data-collapsed="true"` + `data-child-count="N"`, N =
+  the real child count, no grammar attributes); other non-spine
+  children are placeholders (`mode: "focused"`) or omitted with
+  `data-omitted-children="N"` on the parent (`mode: "minimal"`, the
+  default). Unknown focus ids, malformed focus arrays, and
+  reserved-attribute collisions are DATA (`{ ok: false, issues }`,
+  all problems in one pass); an invalid base tree throws from
+  `build()` and an unknown `mode` throws `BarkupError` — tree side,
+  as ever. Never mutates the input; deterministic.
+- **Reserved view attributes** — `collapsed`, `childCount`,
+  `omittedChildren` (→ `data-collapsed`, `data-child-count`,
+  `data-omitted-children`). A grammar that declares any of them on
+  any node type — or a tree that carries one under the `"string"`
+  policy — is rejected with issues rather than rendered ambiguously.
+- **`ViewIssue` / `ViewIssueCode`** — view-input failures get
+  `code: "invalid-view"` (path `"(view focus)"` for focus problems;
+  `nodeId`/`attribute` where applicable); the core `IssueCode` union
+  is untouched, mirroring `"invalid-patch"`.
+- **`VIEW_PROMPT_RULES`** — the exact five-bullet prompt block
+  pre-registered in barkup-bench BRIEF-J and scored by Study J
+  (pinned verbatim by a unit test). The fresh-id bullet is what kept
+  duplicate-id collisions at zero across 360 scored view runs.
+- *Internals worth knowing:* `viewGrammarFor` compiles (and caches
+  per Grammar, via WeakMap) an augmented grammar with the three view
+  attributes declared on every node type, so the shipped `build()`
+  does all serialization — that construction is why expanded regions
+  are byte-identical to `build()` output; `collectSpine` gathers
+  root-to-focus paths and reports unknown ids; `buildViewTree` /
+  `placeholderOf` / `viewNodeOf` assemble the view as a `BarkupNode`
+  carrying the metadata as declared attributes.
+
+```ts
+import { renderView } from "@kevinpeckham/barkup/view";
+
+const view = renderView(grammar, storedTree, { focus: ["n819"] });
+// { ok: true, html } — spine expanded, the rest collapsed/omitted —
+// or { ok: false, issues } (unknown focus id, reserved attribute)
+```
+
 ---
 
 ## tests/ — what each suite proves
@@ -429,6 +489,30 @@ const result = applyAnchoredPatch(grammar, storedTree, [
   as an anchored op, produces the same tree as direct programmatic
   mutation); id preservation (untouched nodes keep ids byte-for-byte);
   validity (every accepted result passes `validate()`).
+- **`tests/patch-vectors.test.ts`** *(conformance replay)* — replays
+  the 40-vector anchored-patch suite vendored from barkup-bench
+  (`tests/fixtures/patch-vectors.json`) against the benchmark grammar;
+  the dialect's portable conformance suite.
+- **`tests/view.test.ts`** *(unit)* — the focused-view contract by
+  example: both modes, default mode, placeholder shape and honest
+  counts, ordered children of focus nodes, leaf-focus `build()`
+  parity, input immutability, determinism, views-are-not-parse-input;
+  every failure mode (unknown focus ids, malformed focus,
+  grammar-level and tree-level reserved-attribute collisions, unknown
+  mode throws); and the exact `VIEW_PROMPT_RULES` wording, pinned.
+- **`tests/view.property.test.ts`** *(property, 200 runs each)* —
+  views at scale over random grammar-valid trees: every visible id
+  exists in the tree; placeholder and omission counts honest (rendered
+  + omitted = real child count, ids in document order); focus nodes
+  expanded with complete ordered child lists; visible implies
+  patchable (every visible id accepted by `applyAnchoredPatch` on the
+  full tree); determinism + immutability; focus-every-leaf output
+  equals `build(tree)` byte-for-byte.
+- **`tests/view-vectors.test.ts`** *(conformance replay)* — replays
+  the 39-vector focused-view suite vendored from barkup-bench
+  (`tests/fixtures/view-vectors.json`), generated by the exact
+  renderer Study J scored, byte-for-byte against the benchmark
+  grammar.
 
 ## Everything together — an agent's edit loop
 
@@ -479,6 +563,7 @@ persist(result.node);
 | 3. Declared coercion only | `coerceValue` (parse.ts) switches on the *spec*, never the value shape; `serializeValue` (build.ts) enforces the same on the way out | coercion property test with adversarial strings; unit tests |
 | 4. Loud boundaries | every markup problem → `GrammarIssue` with code/path; partial trees never returned; adapter exceptions → `parse-failed` | invalid-markup battery; one unit test per issue code |
 | Patch atomicity + validity (extends 1 and 4 to `barkup/patch`) | `applyAnchoredPatch` works on a clone; first failing op rejects with `opIndex`; post-apply `validate()` gate | atomicity/id-preservation/validity property tests; unit failure suite |
+| View honesty + visible-implies-patchable (extends 1 and 4 to `barkup/view`) | `collectSpine` reports unknown focus ids; placeholders carry real child counts; reserved-attribute gate; shipped `build()` does all serialization | view property tests (honest counts, patchability, leaf-focus `build()` parity); 39-vector byte-for-byte replay |
 
 ## Deliberate omissions (scope moves on evidence, not requests)
 
@@ -488,10 +573,12 @@ bindings. No `class`/`style` passthrough — presentation is a declared
 attribute your renderer interprets. No attribute-level defaults or enums —
 that's your grammar config's concern upstream. No inverse patches.
 
-One extension has cleared the bar since v1: anchored patches
+Two extensions have cleared the bar since v1: anchored patches
 (`barkup/patch`), added because barkup-bench measured the dialect
-tying whole-tree rewrite on success at the lowest token cost, with
-stable ids — guarantee 1 — as its only precondition. That is the
-standard for scope changes: a benchmark-validated capability whose
-precondition barkup already guarantees. See CLAUDE.md and the README's
-maintenance posture.
+tying whole-tree rewrite on success at the lowest token cost, and
+focused views (`barkup/view`), added because Studies I and J measured
+partial-context prompts holding accuracy while input stopped scaling
+with the tree — both with stable ids (guarantee 1) as their only
+precondition. That is the standard for scope changes: a
+benchmark-validated capability whose precondition barkup already
+guarantees. See CLAUDE.md and the README's maintenance posture.

@@ -75,6 +75,21 @@ protocol correction). It publishes what it found:
   hold 87–100% for both model tiers at every size — at ~$0.26 and
   4 seconds per solved 1000-node edit versus $0.88 and 10 minutes for
   a full rewrite.
+- **Views: show the model only what the edit concerns — input stops
+  scaling with the tree.** Two pre-registered follow-ups (Studies I
+  and J) replaced the full prompt tree with a **focused view** — the
+  root-to-target spine rendered fully, everything else collapsed to
+  id-bearing placeholders or omitted with an honest count — while
+  patches still applied to the full tree. Accuracy was statistically
+  unchanged in every paired comparison (McNemar p = 0.5–1.0; sonnet
+  went 45/45 on the minimal view), and median input per ~1000-node
+  task fell from ~86k tokens to ~1.4k (−98%). View size scales with
+  tree **depth**, not node count, which effectively removes the
+  context-window ceiling for id-addressed edits. HTML is the native
+  rendering: identical accuracy to JSON views (p = 1.0 in all four
+  paired comparisons), fewer input tokens (−9% to −24% at ~1000
+  nodes), and better first-pass patch validity (84–85/90 vs
+  80–81/90).
 - **The HTML dialect is accuracy-neutral.** Against a JSON twin with
   identical validator strictness and error quality, HTML and JSON
   rewrite tied on validity (≥99%), editing success, and reading
@@ -247,11 +262,62 @@ benchmark-validated reference (see "Verification" in
 prove conformance by replaying the vendored 40-vector suite at
 `tests/fixtures/patch-vectors.json`.
 
+## Focused views
+
+Anchored patches make the model's *output* cost independent of tree
+size; `@kevinpeckham/barkup/view` does the same for the *input*. A
+focused view renders only the part of the tree an edit concerns: the
+root-to-focus spine fully, children of focus nodes always in document
+order (so "as the 3rd child" stays resolvable — at minimum as
+placeholders carrying `data-collapsed="true"` and an honest
+`data-child-count`), and everything else omitted with
+`data-omitted-children="N"` (the default "minimal" mode) or shown as
+placeholders ("focused" mode). Every visible id is a real id in the
+tree — **visible implies patchable** — and unknown focus ids come
+back as structured issues, never silently ignored.
+
+In the benchmark ([Studies I and J](https://github.com/kevinpeckham/barkup-bench)),
+views left accuracy statistically unchanged while cutting median
+input per ~1000-node task from ~86k tokens to ~1.4k (−98%); the
+minimal view's input scales with tree depth, not node count.
+
+```ts
+import { applyAnchoredPatch } from "@kevinpeckham/barkup/patch";
+import { renderView, VIEW_PROMPT_RULES } from "@kevinpeckham/barkup/view";
+
+// 0. Append VIEW_PROMPT_RULES (the benchmark-validated five-bullet
+//    prompt block) to the agent's system prompt.
+
+// 1. Render only what the edit concerns.
+const view = renderView(grammar, storedTree, { focus: ["n819"] });
+if (!view.ok) return retryWithFeedback(view.issues); // e.g. stale ids
+
+// 2. Show view.html; ask for an anchored patch.
+
+// 3. Apply against the FULL tree — every hidden node still exists.
+const result = applyAnchoredPatch(grammar, storedTree, JSON.parse(reply));
+if (!result.ok) return retryWithFeedback(result.issues);
+persist(result.node);
+```
+
+A view is a prompt artifact, not a round-trip input (placeholders
+omit required attributes, so views are deliberately not `parse()`
+input). The dialect reserves three attribute names — `collapsed`,
+`childCount`, `omittedChildren` — and `renderView` returns a
+structured issue if your grammar declares any of them. Expanded
+regions are byte-identical to `build()` output, and the shipped
+renderer replays the benchmark's 39-vector conformance suite
+(`tests/fixtures/view-vectors.json`) byte-for-byte; see
+[docs/focused-views.md](docs/focused-views.md) for the full contract
+and evidence.
+
 ## When not to use this
 
 - **Numeric-heavy or deeply cross-referenced trees** — HTML's stringly
   attributes will fight you.
-- **Huge trees** — whole-artifact authoring assumes the tree fits in context.
+- **Huge trees** — whole-artifact authoring assumes the tree fits in
+  context (anchored patches + focused views are the measured escape
+  hatch when it doesn't).
 - **Real-time multi-writer collaboration** — whole-tree replacement is
   last-write-wins by construction.
 
@@ -277,14 +343,16 @@ correction feedback.
 ## Maintenance posture
 
 barkup is **scoped and stable**: the surface (`defineGrammar` →
-`build` / `parse` / `format` / `validate`, plus `@kevinpeckham/barkup/testing` and
-`@kevinpeckham/barkup/patch`) is the whole product, and it is intentionally
-small. Scope moves only on evidence: anchored patches were added because
+`build` / `parse` / `format` / `validate`, plus `@kevinpeckham/barkup/testing`,
+`@kevinpeckham/barkup/patch`, and `@kevinpeckham/barkup/view`) is the whole
+product, and it is intentionally small. Scope moves only on evidence:
+anchored patches and focused views were added because
 [the benchmark](https://github.com/kevinpeckham/barkup-bench) measured
-them tying whole-tree rewrite at the lowest cost, with barkup's id
-guarantee as their one precondition — that standard, not feature
-requests, is what changes the surface. Bug reports and guarantee
-violations are always welcome.
+them — patches tying whole-tree rewrite at the lowest cost, views
+holding accuracy while input stopped scaling with the tree — with
+barkup's id guarantee as their one precondition. That standard, not
+feature requests, is what changes the surface. Bug reports and
+guarantee violations are always welcome.
 
 ## License & credit
 

@@ -1,0 +1,3596 @@
+{
+	"version": 1,
+	"grammar": "src/grammar.ts BENCH_CONFIG",
+	"note": "view metadata renders as data-collapsed / data-child-count / data-omitted-children; validated by BRIEF-I/BRIEF-J",
+	"vectors": [
+		{
+			"name": "leaf focus (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"t1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-max-length=\"80\" data-content=\"Hi.\"></div>\n      <div data-type=\"image-atom\" id=\"i1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "leaf focus (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"t1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\" data-omitted-children=\"1\">\n    <div data-type=\"block\" id=\"b1\" data-omitted-children=\"1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-max-length=\"80\" data-content=\"Hi.\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "container focus (insert target) (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"b1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"image-atom\" id=\"i1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "container focus (insert target) (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"b1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\" data-omitted-children=\"1\">\n    <div data-type=\"block\" id=\"b1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"image-atom\" id=\"i1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "multi-focus (move: node + destination) (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"t1",
+				"p2"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-max-length=\"80\" data-content=\"Hi.\"></div>\n      <div data-type=\"image-atom\" id=\"i1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n  <section data-type=\"page\" id=\"p2\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "multi-focus (move: node + destination) (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"t1",
+				"p2"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\" data-omitted-children=\"1\">\n    <div data-type=\"block\" id=\"b1\" data-omitted-children=\"1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-max-length=\"80\" data-content=\"Hi.\"></div>\n    </div>\n  </section>\n  <section data-type=\"page\" id=\"p2\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "root focus (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"d1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-collapsed=\"true\" data-child-count=\"2\"></section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "root focus (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"d1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-collapsed=\"true\" data-child-count=\"2\"></section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "json-attribute node in focus (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"w1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\" data-collapsed=\"true\" data-child-count=\"2\"></div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-allowed-widget-ids=\"[&quot;a&quot;,&quot;b&quot;]\"></div>\n  </section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "json-attribute node in focus (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"w1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\" data-omitted-children=\"1\">\n    <div data-type=\"widget-slot\" id=\"w1\" data-allowed-widget-ids=\"[&quot;a&quot;,&quot;b&quot;]\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "focus with spine child of focus node (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"t1",
+				"p1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-max-length=\"80\" data-content=\"Hi.\"></div>\n      <div data-type=\"image-atom\" id=\"i1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "focus with spine child of focus node (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"t1",
+				"p1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\" data-omitted-children=\"1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-max-length=\"80\" data-content=\"Hi.\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "childless placeholder keeps childCount 0 (focused)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"i1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\">\n    <div data-type=\"block\" id=\"b1\">\n      <div data-type=\"text-atom\" id=\"t1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"image-atom\" id=\"i1\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"w1\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n  <section data-type=\"page\" id=\"p2\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "childless placeholder keeps childCount 0 (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"i1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"d1\" data-title=\"Vectors\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"intro\" id=\"p1\" data-layout-size=\"narrow\" data-omitted-children=\"1\">\n    <div data-type=\"block\" id=\"b1\" data-omitted-children=\"1\">\n      <div data-type=\"image-atom\" id=\"i1\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "unknown focus id rejected",
+			"tree": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"name": "intro",
+						"attributes": {
+							"layoutSize": "narrow"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80,
+											"content": "Hi."
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1",
+								"attributes": {
+									"allowedWidgetIds": [
+										"a",
+										"b"
+									]
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"focus": [
+				"zzz"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": false
+			}
+		},
+		{
+			"name": "random-0: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "W",
+				"id": "n16",
+				"attributes": {
+					"title": "US5+df=Y.}",
+					"theme": "ap"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "km__-",
+						"id": "n9",
+						"attributes": {
+							"layoutSize": "(h`EZ"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "Hxhv_tw",
+								"id": "n0",
+								"attributes": {
+									"defaultWidgetId": "g$",
+									"allowedWidgetIds": {
+										"&},Z7'&": false,
+										"": -3.0342250421438005e-217,
+										"!\"!T": "m=mF{<*",
+										"fMq%C E": null
+									},
+									"requireBleed": false
+								}
+							},
+							{
+								"type": "block",
+								"name": "NNK-m--_-G",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "G\""
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"attributes": {
+											"maxLength": -2.031731729890112e+84,
+											"minLength": 1.8510296045141723e+114
+										},
+										"id": "n22"
+									},
+									{
+										"type": "block",
+										"name": "zEx_",
+										"id": "n1",
+										"attributes": {
+											"containerClasses": "l$\"mR"
+										}
+									}
+								]
+							},
+							{
+								"type": "block",
+								"name": "n1_-_",
+								"attributes": {
+									"containerClasses": "0BLJ",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "wi",
+										"id": "n3",
+										"attributes": {
+											"src": "'",
+											"aspectRatio": ",y{ad"
+										}
+									},
+									{
+										"type": "image-atom",
+										"name": "W1T478-M__",
+										"id": "n4",
+										"attributes": {
+											"aspectRatio": ""
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "k-",
+										"id": "n5",
+										"attributes": {
+											"textStyle": "6RzpE^v\"6",
+											"maxLength": -5.2184882953433934e-86,
+											"minLength": 5.3456550428367e-270,
+											"content": "JP&cK"
+										}
+									},
+									{
+										"type": "block",
+										"name": "v_-9_--",
+										"id": "n6",
+										"attributes": {
+											"containerClasses": "F$J",
+											"featured": true
+										}
+									}
+								],
+								"id": "n18"
+							},
+							{
+								"type": "block",
+								"name": "T2",
+								"id": "n8",
+								"attributes": {
+									"containerClasses": "c",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "block",
+										"id": "n7",
+										"attributes": {
+											"featured": false
+										}
+									},
+									{
+										"type": "block",
+										"name": "zZw-b__-",
+										"attributes": {
+											"containerClasses": "",
+											"featured": false
+										},
+										"id": "n23"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "n12",
+						"attributes": {
+							"layoutSize": "f?_\\"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "RFY_A8",
+								"attributes": {
+									"defaultWidgetId": "$"
+								},
+								"id": "n19"
+							},
+							{
+								"type": "widget-slot",
+								"name": "MxM0-30-rQ",
+								"id": "n10",
+								"attributes": {
+									"defaultWidgetId": "GV(4~rob6",
+									"allowedWidgetIds": {
+										"<eo\"\\ad": "M",
+										"|4yyv\\F": true,
+										"f": true,
+										"X?ZpD7ScSM": 1.0523264858973243e+73,
+										"S)@\"C": -3.585454027803993e+271,
+										"EkmJmd": true,
+										"z+m": 1.6779660377012698e-146,
+										"4&Yjge=i": -4.8087030430236736e-198
+									},
+									"requireBleed": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "zB1I9",
+								"attributes": {
+									"allowedWidgetIds": {},
+									"requireBleed": true
+								},
+								"id": "n20"
+							},
+							{
+								"type": "block",
+								"name": "Y---0uBTP_",
+								"id": "n11",
+								"attributes": {
+									"containerClasses": "BPGysq",
+									"featured": false
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "mX",
+						"attributes": {
+							"layoutSize": "lRIr;6'*z"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"containerClasses": "%0",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "i08V_--",
+										"attributes": {
+											"textStyle": "U8c",
+											"maxLength": -1.5732640160764035e-262,
+											"minLength": 1.9544858558640349e-106,
+											"content": "{[QsS"
+										},
+										"id": "n24"
+									},
+									{
+										"type": "image-atom",
+										"name": "H____2E--",
+										"attributes": {
+											"aspectRatio": ":L6eM"
+										},
+										"id": "n25"
+									}
+								],
+								"id": "n21"
+							},
+							{
+								"type": "block",
+								"name": "M_F-E4_",
+								"id": "n13",
+								"attributes": {
+									"containerClasses": "fV?~"
+								}
+							},
+							{
+								"type": "block",
+								"name": "IC-0W",
+								"id": "n15",
+								"attributes": {
+									"containerClasses": "_K",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"id": "n14",
+										"attributes": {
+											"src": "-:C=--5k"
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "o-79U",
+										"attributes": {
+											"textStyle": "[s_O_FB",
+											"maxLength": -2.6520664040433505e-26,
+											"minLength": 1.4145644493786758e-67,
+											"content": "+4r"
+										},
+										"id": "n26"
+									},
+									{
+										"type": "image-atom",
+										"name": "L-r",
+										"attributes": {
+											"src": "lQF",
+											"aspectRatio": "MXi.["
+										},
+										"id": "n27"
+									},
+									{
+										"type": "text-atom",
+										"name": "v_Im--_e",
+										"attributes": {
+											"textStyle": "bK'rk:'",
+											"maxLength": 2.4776434650020274e+178,
+											"minLength": -9.238599237316377e-260,
+											"content": "c6]vOO<b7#"
+										},
+										"id": "n28"
+									}
+								]
+							}
+						],
+						"id": "n17"
+					}
+				]
+			},
+			"focus": [
+				"n28"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"W\" id=\"n16\" data-title=\"US5+df=Y.}\" data-theme=\"ap\">\n  <section data-type=\"page\" data-name=\"km__-\" id=\"n9\" data-collapsed=\"true\" data-child-count=\"4\"></section>\n  <section data-type=\"page\" id=\"n12\" data-collapsed=\"true\" data-child-count=\"4\"></section>\n  <section data-type=\"page\" data-name=\"mX\" id=\"n17\" data-layout-size=\"lRIr;6'*z\">\n    <div data-type=\"block\" id=\"n21\" data-collapsed=\"true\" data-child-count=\"2\"></div>\n    <div data-type=\"block\" data-name=\"M_F-E4_\" id=\"n13\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    <div data-type=\"block\" data-name=\"IC-0W\" id=\"n15\" data-container-classes=\"_K\" data-featured=\"true\">\n      <div data-type=\"image-atom\" id=\"n14\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"text-atom\" data-name=\"o-79U\" id=\"n26\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"image-atom\" data-name=\"L-r\" id=\"n27\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"text-atom\" data-name=\"v_Im--_e\" id=\"n28\" data-text-style=\"bK'rk:'\" data-max-length=\"2.4776434650020274e+178\" data-min-length=\"-9.238599237316377e-260\" data-content=\"c6]vOO&lt;b7#\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-0: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "W",
+				"id": "n16",
+				"attributes": {
+					"title": "US5+df=Y.}",
+					"theme": "ap"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "km__-",
+						"id": "n9",
+						"attributes": {
+							"layoutSize": "(h`EZ"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "Hxhv_tw",
+								"id": "n0",
+								"attributes": {
+									"defaultWidgetId": "g$",
+									"allowedWidgetIds": {
+										"&},Z7'&": false,
+										"": -3.0342250421438005e-217,
+										"!\"!T": "m=mF{<*",
+										"fMq%C E": null
+									},
+									"requireBleed": false
+								}
+							},
+							{
+								"type": "block",
+								"name": "NNK-m--_-G",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "G\""
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"attributes": {
+											"maxLength": -2.031731729890112e+84,
+											"minLength": 1.8510296045141723e+114
+										},
+										"id": "n22"
+									},
+									{
+										"type": "block",
+										"name": "zEx_",
+										"id": "n1",
+										"attributes": {
+											"containerClasses": "l$\"mR"
+										}
+									}
+								]
+							},
+							{
+								"type": "block",
+								"name": "n1_-_",
+								"attributes": {
+									"containerClasses": "0BLJ",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "wi",
+										"id": "n3",
+										"attributes": {
+											"src": "'",
+											"aspectRatio": ",y{ad"
+										}
+									},
+									{
+										"type": "image-atom",
+										"name": "W1T478-M__",
+										"id": "n4",
+										"attributes": {
+											"aspectRatio": ""
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "k-",
+										"id": "n5",
+										"attributes": {
+											"textStyle": "6RzpE^v\"6",
+											"maxLength": -5.2184882953433934e-86,
+											"minLength": 5.3456550428367e-270,
+											"content": "JP&cK"
+										}
+									},
+									{
+										"type": "block",
+										"name": "v_-9_--",
+										"id": "n6",
+										"attributes": {
+											"containerClasses": "F$J",
+											"featured": true
+										}
+									}
+								],
+								"id": "n18"
+							},
+							{
+								"type": "block",
+								"name": "T2",
+								"id": "n8",
+								"attributes": {
+									"containerClasses": "c",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "block",
+										"id": "n7",
+										"attributes": {
+											"featured": false
+										}
+									},
+									{
+										"type": "block",
+										"name": "zZw-b__-",
+										"attributes": {
+											"containerClasses": "",
+											"featured": false
+										},
+										"id": "n23"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "n12",
+						"attributes": {
+							"layoutSize": "f?_\\"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "RFY_A8",
+								"attributes": {
+									"defaultWidgetId": "$"
+								},
+								"id": "n19"
+							},
+							{
+								"type": "widget-slot",
+								"name": "MxM0-30-rQ",
+								"id": "n10",
+								"attributes": {
+									"defaultWidgetId": "GV(4~rob6",
+									"allowedWidgetIds": {
+										"<eo\"\\ad": "M",
+										"|4yyv\\F": true,
+										"f": true,
+										"X?ZpD7ScSM": 1.0523264858973243e+73,
+										"S)@\"C": -3.585454027803993e+271,
+										"EkmJmd": true,
+										"z+m": 1.6779660377012698e-146,
+										"4&Yjge=i": -4.8087030430236736e-198
+									},
+									"requireBleed": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "zB1I9",
+								"attributes": {
+									"allowedWidgetIds": {},
+									"requireBleed": true
+								},
+								"id": "n20"
+							},
+							{
+								"type": "block",
+								"name": "Y---0uBTP_",
+								"id": "n11",
+								"attributes": {
+									"containerClasses": "BPGysq",
+									"featured": false
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "mX",
+						"attributes": {
+							"layoutSize": "lRIr;6'*z"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"containerClasses": "%0",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "i08V_--",
+										"attributes": {
+											"textStyle": "U8c",
+											"maxLength": -1.5732640160764035e-262,
+											"minLength": 1.9544858558640349e-106,
+											"content": "{[QsS"
+										},
+										"id": "n24"
+									},
+									{
+										"type": "image-atom",
+										"name": "H____2E--",
+										"attributes": {
+											"aspectRatio": ":L6eM"
+										},
+										"id": "n25"
+									}
+								],
+								"id": "n21"
+							},
+							{
+								"type": "block",
+								"name": "M_F-E4_",
+								"id": "n13",
+								"attributes": {
+									"containerClasses": "fV?~"
+								}
+							},
+							{
+								"type": "block",
+								"name": "IC-0W",
+								"id": "n15",
+								"attributes": {
+									"containerClasses": "_K",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"id": "n14",
+										"attributes": {
+											"src": "-:C=--5k"
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "o-79U",
+										"attributes": {
+											"textStyle": "[s_O_FB",
+											"maxLength": -2.6520664040433505e-26,
+											"minLength": 1.4145644493786758e-67,
+											"content": "+4r"
+										},
+										"id": "n26"
+									},
+									{
+										"type": "image-atom",
+										"name": "L-r",
+										"attributes": {
+											"src": "lQF",
+											"aspectRatio": "MXi.["
+										},
+										"id": "n27"
+									},
+									{
+										"type": "text-atom",
+										"name": "v_Im--_e",
+										"attributes": {
+											"textStyle": "bK'rk:'",
+											"maxLength": 2.4776434650020274e+178,
+											"minLength": -9.238599237316377e-260,
+											"content": "c6]vOO<b7#"
+										},
+										"id": "n28"
+									}
+								]
+							}
+						],
+						"id": "n17"
+					}
+				]
+			},
+			"focus": [
+				"n28"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"W\" id=\"n16\" data-title=\"US5+df=Y.}\" data-theme=\"ap\" data-omitted-children=\"2\">\n  <section data-type=\"page\" data-name=\"mX\" id=\"n17\" data-layout-size=\"lRIr;6'*z\" data-omitted-children=\"2\">\n    <div data-type=\"block\" data-name=\"IC-0W\" id=\"n15\" data-container-classes=\"_K\" data-featured=\"true\" data-omitted-children=\"3\">\n      <div data-type=\"text-atom\" data-name=\"v_Im--_e\" id=\"n28\" data-text-style=\"bK'rk:'\" data-max-length=\"2.4776434650020274e+178\" data-min-length=\"-9.238599237316377e-260\" data-content=\"c6]vOO&lt;b7#\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-1: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "m__h",
+				"attributes": {
+					"title": "-",
+					"theme": "a~/"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "t",
+						"attributes": {
+							"layoutSize": ""
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "Aa",
+								"attributes": {
+									"defaultWidgetId": "^m xui4ixH",
+									"allowedWidgetIds": false,
+									"requireBleed": false
+								},
+								"id": "n10"
+							},
+							{
+								"type": "block",
+								"name": "mP_--I",
+								"attributes": {
+									"containerClasses": "*",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "A7T20_C_",
+										"id": "n0",
+										"attributes": {
+											"src": "$/",
+											"aspectRatio": "Cu"
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "C",
+										"attributes": {
+											"textStyle": ";",
+											"maxLength": -4.575268452925294e-35,
+											"minLength": -1.1291416335671774e+54,
+											"content": "~KYy"
+										},
+										"id": "n15"
+									}
+								],
+								"id": "n11"
+							},
+							{
+								"type": "block",
+								"name": "V--I",
+								"attributes": {
+									"containerClasses": "[d.g",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "xZ_468aB0",
+										"id": "n1",
+										"attributes": {
+											"src": "eLez",
+											"aspectRatio": "yS2*|H{/-"
+										}
+									},
+									{
+										"type": "image-atom",
+										"attributes": {
+											"src": "B5",
+											"aspectRatio": "<BI"
+										},
+										"id": "n16"
+									},
+									{
+										"type": "image-atom",
+										"name": "T--_JVuxC_",
+										"id": "n2",
+										"attributes": {
+											"src": "5o\"k'",
+											"aspectRatio": "sqXNI6e8!"
+										}
+									},
+									{
+										"type": "block",
+										"name": "j",
+										"id": "n17"
+									}
+								],
+								"id": "n12"
+							},
+							{
+								"type": "block",
+								"name": "I-6P-y-G",
+								"attributes": {
+									"containerClasses": "length",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "pFF",
+										"id": "n3",
+										"attributes": {
+											"containerClasses": "GbP",
+											"featured": true
+										}
+									}
+								],
+								"id": "n13"
+							}
+						],
+						"id": "n9"
+					},
+					{
+						"type": "page",
+						"name": "z_A",
+						"id": "n7",
+						"attributes": {
+							"layoutSize": "alK"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"containerClasses": "=d(",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "W___lo",
+										"attributes": {
+											"maxLength": -1.2801439197475807e+67,
+											"content": "}wj?DFLuW{"
+										},
+										"id": "n18"
+									},
+									{
+										"type": "text-atom",
+										"name": "x-6il_E_B6A",
+										"id": "n4",
+										"attributes": {
+											"maxLength": -1.1783798466614564e+246,
+											"minLength": 1.7976931348623057e+308,
+											"content": " cons"
+										}
+									}
+								],
+								"id": "n14"
+							},
+							{
+								"type": "block",
+								"id": "n6",
+								"attributes": {
+									"containerClasses": "&to",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "yJug-",
+										"id": "n5",
+										"attributes": {
+											"maxLength": 5.100422904923087e-199,
+											"minLength": -1.3556684819269867e-156,
+											"content": "AXQZ5k%`"
+										}
+									}
+								]
+							}
+						]
+					}
+				],
+				"id": "n8"
+			},
+			"focus": [
+				"n5"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"m__h\" id=\"n8\" data-title=\"-\" data-theme=\"a~/\">\n  <section data-type=\"page\" data-name=\"t\" id=\"n9\" data-collapsed=\"true\" data-child-count=\"4\"></section>\n  <section data-type=\"page\" data-name=\"z_A\" id=\"n7\" data-layout-size=\"alK\">\n    <div data-type=\"block\" id=\"n14\" data-collapsed=\"true\" data-child-count=\"2\"></div>\n    <div data-type=\"block\" id=\"n6\" data-container-classes=\"&amp;to\" data-featured=\"false\">\n      <div data-type=\"text-atom\" data-name=\"yJug-\" id=\"n5\" data-max-length=\"5.100422904923087e-199\" data-min-length=\"-1.3556684819269867e-156\" data-content=\"AXQZ5k%`\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-1: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "m__h",
+				"attributes": {
+					"title": "-",
+					"theme": "a~/"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "t",
+						"attributes": {
+							"layoutSize": ""
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "Aa",
+								"attributes": {
+									"defaultWidgetId": "^m xui4ixH",
+									"allowedWidgetIds": false,
+									"requireBleed": false
+								},
+								"id": "n10"
+							},
+							{
+								"type": "block",
+								"name": "mP_--I",
+								"attributes": {
+									"containerClasses": "*",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "A7T20_C_",
+										"id": "n0",
+										"attributes": {
+											"src": "$/",
+											"aspectRatio": "Cu"
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "C",
+										"attributes": {
+											"textStyle": ";",
+											"maxLength": -4.575268452925294e-35,
+											"minLength": -1.1291416335671774e+54,
+											"content": "~KYy"
+										},
+										"id": "n15"
+									}
+								],
+								"id": "n11"
+							},
+							{
+								"type": "block",
+								"name": "V--I",
+								"attributes": {
+									"containerClasses": "[d.g",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "xZ_468aB0",
+										"id": "n1",
+										"attributes": {
+											"src": "eLez",
+											"aspectRatio": "yS2*|H{/-"
+										}
+									},
+									{
+										"type": "image-atom",
+										"attributes": {
+											"src": "B5",
+											"aspectRatio": "<BI"
+										},
+										"id": "n16"
+									},
+									{
+										"type": "image-atom",
+										"name": "T--_JVuxC_",
+										"id": "n2",
+										"attributes": {
+											"src": "5o\"k'",
+											"aspectRatio": "sqXNI6e8!"
+										}
+									},
+									{
+										"type": "block",
+										"name": "j",
+										"id": "n17"
+									}
+								],
+								"id": "n12"
+							},
+							{
+								"type": "block",
+								"name": "I-6P-y-G",
+								"attributes": {
+									"containerClasses": "length",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "pFF",
+										"id": "n3",
+										"attributes": {
+											"containerClasses": "GbP",
+											"featured": true
+										}
+									}
+								],
+								"id": "n13"
+							}
+						],
+						"id": "n9"
+					},
+					{
+						"type": "page",
+						"name": "z_A",
+						"id": "n7",
+						"attributes": {
+							"layoutSize": "alK"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"containerClasses": "=d(",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "W___lo",
+										"attributes": {
+											"maxLength": -1.2801439197475807e+67,
+											"content": "}wj?DFLuW{"
+										},
+										"id": "n18"
+									},
+									{
+										"type": "text-atom",
+										"name": "x-6il_E_B6A",
+										"id": "n4",
+										"attributes": {
+											"maxLength": -1.1783798466614564e+246,
+											"minLength": 1.7976931348623057e+308,
+											"content": " cons"
+										}
+									}
+								],
+								"id": "n14"
+							},
+							{
+								"type": "block",
+								"id": "n6",
+								"attributes": {
+									"containerClasses": "&to",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "yJug-",
+										"id": "n5",
+										"attributes": {
+											"maxLength": 5.100422904923087e-199,
+											"minLength": -1.3556684819269867e-156,
+											"content": "AXQZ5k%`"
+										}
+									}
+								]
+							}
+						]
+					}
+				],
+				"id": "n8"
+			},
+			"focus": [
+				"n5"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"m__h\" id=\"n8\" data-title=\"-\" data-theme=\"a~/\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"z_A\" id=\"n7\" data-layout-size=\"alK\" data-omitted-children=\"1\">\n    <div data-type=\"block\" id=\"n6\" data-container-classes=\"&amp;to\" data-featured=\"false\">\n      <div data-type=\"text-atom\" data-name=\"yJug-\" id=\"n5\" data-max-length=\"5.100422904923087e-199\" data-min-length=\"-1.3556684819269867e-156\" data-content=\"AXQZ5k%`\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-2: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "hC-z",
+				"attributes": {
+					"title": "&AKFz.9|b",
+					"theme": "~<+h/&T@H"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "V",
+						"attributes": {
+							"layoutSize": "call"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"id": "n0",
+								"attributes": {
+									"defaultWidgetId": "*j",
+									"allowedWidgetIds": false,
+									"requireBleed": false
+								}
+							}
+						],
+						"id": "n2"
+					}
+				],
+				"id": "n1"
+			},
+			"focus": [
+				"n0"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"hC-z\" id=\"n1\" data-title=\"&amp;AKFz.9|b\" data-theme=\"~&lt;+h/&amp;T@H\">\n  <section data-type=\"page\" data-name=\"V\" id=\"n2\" data-layout-size=\"call\">\n    <div data-type=\"widget-slot\" id=\"n0\" data-default-widget-id=\"*j\" data-allowed-widget-ids=\"false\" data-require-bleed=\"false\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-2: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "hC-z",
+				"attributes": {
+					"title": "&AKFz.9|b",
+					"theme": "~<+h/&T@H"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "V",
+						"attributes": {
+							"layoutSize": "call"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"id": "n0",
+								"attributes": {
+									"defaultWidgetId": "*j",
+									"allowedWidgetIds": false,
+									"requireBleed": false
+								}
+							}
+						],
+						"id": "n2"
+					}
+				],
+				"id": "n1"
+			},
+			"focus": [
+				"n0"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"hC-z\" id=\"n1\" data-title=\"&amp;AKFz.9|b\" data-theme=\"~&lt;+h/&amp;T@H\">\n  <section data-type=\"page\" data-name=\"V\" id=\"n2\" data-layout-size=\"call\">\n    <div data-type=\"widget-slot\" id=\"n0\" data-default-widget-id=\"*j\" data-allowed-widget-ids=\"false\" data-require-bleed=\"false\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-3: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "D_--_Cr--",
+				"id": "n1",
+				"attributes": {
+					"theme": "oS"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "f5_",
+						"attributes": {
+							"layoutSize": "BSl_"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "k__-j-mo6B",
+								"id": "n0",
+								"attributes": {
+									"defaultWidgetId": "[q&26OK4",
+									"allowedWidgetIds": [
+										null,
+										null,
+										null,
+										"Qq4&32",
+										true,
+										-3.58706625102125e-275,
+										-4.28327391245173e-52,
+										"w#{aAd]{j",
+										1.7463545287356388e-87
+									],
+									"requireBleed": true
+								}
+							}
+						],
+						"id": "n2"
+					}
+				]
+			},
+			"focus": [
+				"n0"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"D_--_Cr--\" id=\"n1\" data-theme=\"oS\">\n  <section data-type=\"page\" data-name=\"f5_\" id=\"n2\" data-layout-size=\"BSl_\">\n    <div data-type=\"widget-slot\" data-name=\"k__-j-mo6B\" id=\"n0\" data-default-widget-id=\"[q&amp;26OK4\" data-allowed-widget-ids=\"[null,null,null,&quot;Qq4&amp;32&quot;,true,-3.58706625102125e-275,-4.28327391245173e-52,&quot;w#{aAd]{j&quot;,1.7463545287356388e-87]\" data-require-bleed=\"true\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-3: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "D_--_Cr--",
+				"id": "n1",
+				"attributes": {
+					"theme": "oS"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "f5_",
+						"attributes": {
+							"layoutSize": "BSl_"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "k__-j-mo6B",
+								"id": "n0",
+								"attributes": {
+									"defaultWidgetId": "[q&26OK4",
+									"allowedWidgetIds": [
+										null,
+										null,
+										null,
+										"Qq4&32",
+										true,
+										-3.58706625102125e-275,
+										-4.28327391245173e-52,
+										"w#{aAd]{j",
+										1.7463545287356388e-87
+									],
+									"requireBleed": true
+								}
+							}
+						],
+						"id": "n2"
+					}
+				]
+			},
+			"focus": [
+				"n0"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"D_--_Cr--\" id=\"n1\" data-theme=\"oS\">\n  <section data-type=\"page\" data-name=\"f5_\" id=\"n2\" data-layout-size=\"BSl_\">\n    <div data-type=\"widget-slot\" data-name=\"k__-j-mo6B\" id=\"n0\" data-default-widget-id=\"[q&amp;26OK4\" data-allowed-widget-ids=\"[null,null,null,&quot;Qq4&amp;32&quot;,true,-3.58706625102125e-275,-4.28327391245173e-52,&quot;w#{aAd]{j&quot;,1.7463545287356388e-87]\" data-require-bleed=\"true\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-4: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "Cll9ngF__de",
+				"id": "n0",
+				"attributes": {
+					"title": "i",
+					"theme": "MRst0i,gi%"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "zapply",
+						"attributes": {
+							"layoutSize": ">+YM;O*G"
+						},
+						"id": "n1"
+					},
+					{
+						"type": "page",
+						"name": "zza_-_-Q",
+						"attributes": {
+							"layoutSize": "Er"
+						},
+						"id": "n2"
+					}
+				]
+			},
+			"focus": [
+				"n2"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"Cll9ngF__de\" id=\"n0\" data-title=\"i\" data-theme=\"MRst0i,gi%\">\n  <section data-type=\"page\" data-name=\"zapply\" id=\"n1\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n  <section data-type=\"page\" data-name=\"zza_-_-Q\" id=\"n2\" data-layout-size=\"Er\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-4: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "Cll9ngF__de",
+				"id": "n0",
+				"attributes": {
+					"title": "i",
+					"theme": "MRst0i,gi%"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "zapply",
+						"attributes": {
+							"layoutSize": ">+YM;O*G"
+						},
+						"id": "n1"
+					},
+					{
+						"type": "page",
+						"name": "zza_-_-Q",
+						"attributes": {
+							"layoutSize": "Er"
+						},
+						"id": "n2"
+					}
+				]
+			},
+			"focus": [
+				"n2"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"Cll9ngF__de\" id=\"n0\" data-title=\"i\" data-theme=\"MRst0i,gi%\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"zza_-_-Q\" id=\"n2\" data-layout-size=\"Er\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-5: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "r-_",
+				"attributes": {
+					"title": "WbL'",
+					"theme": "Qs!O"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "Q-r",
+						"attributes": {
+							"layoutSize": "6:9\"fGR-"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "O_Y--xX",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "$wB|UoS^",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "rB",
+										"attributes": {
+											"featured": false
+										},
+										"id": "n6"
+									}
+								]
+							},
+							{
+								"type": "block",
+								"name": "jzRZ0vU-z",
+								"attributes": {
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "g__MIp",
+										"attributes": {
+											"textStyle": "Ha'0F4 |l",
+											"maxLength": 7.972174203961084e+62,
+											"minLength": -2.561189347427171e-38,
+											"content": "})IKyG"
+										},
+										"id": "n7"
+									},
+									{
+										"type": "text-atom",
+										"id": "n1",
+										"attributes": {
+											"textStyle": "gk+s]ik\\",
+											"maxLength": -6.486925235780643e+125,
+											"minLength": 4.69592962538864e-188
+										}
+									}
+								],
+								"id": "n5"
+							},
+							{
+								"type": "widget-slot",
+								"name": "m2oZ-D3_",
+								"id": "n2",
+								"attributes": {
+									"allowedWidgetIds": {
+										"": "",
+										"1$Agtf&e#}": null,
+										"se": "Z/?i",
+										"O?J": -8.323473442593169e+43,
+										"4*R2|": -4.2503749480675584e-274
+									}
+								}
+							}
+						],
+						"id": "n4"
+					}
+				],
+				"id": "n3"
+			},
+			"focus": [
+				"n1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"r-_\" id=\"n3\" data-title=\"WbL'\" data-theme=\"Qs!O\">\n  <section data-type=\"page\" data-name=\"Q-r\" id=\"n4\" data-layout-size=\"6:9&quot;fGR-\">\n    <div data-type=\"block\" data-name=\"O_Y--xX\" id=\"n0\" data-collapsed=\"true\" data-child-count=\"1\"></div>\n    <div data-type=\"block\" data-name=\"jzRZ0vU-z\" id=\"n5\" data-featured=\"false\">\n      <div data-type=\"text-atom\" data-name=\"g__MIp\" id=\"n7\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"text-atom\" id=\"n1\" data-text-style=\"gk+s]ik\\\" data-max-length=\"-6.486925235780643e+125\" data-min-length=\"4.69592962538864e-188\"></div>\n    </div>\n    <div data-type=\"widget-slot\" data-name=\"m2oZ-D3_\" id=\"n2\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-5: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "r-_",
+				"attributes": {
+					"title": "WbL'",
+					"theme": "Qs!O"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "Q-r",
+						"attributes": {
+							"layoutSize": "6:9\"fGR-"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "O_Y--xX",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "$wB|UoS^",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "rB",
+										"attributes": {
+											"featured": false
+										},
+										"id": "n6"
+									}
+								]
+							},
+							{
+								"type": "block",
+								"name": "jzRZ0vU-z",
+								"attributes": {
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "text-atom",
+										"name": "g__MIp",
+										"attributes": {
+											"textStyle": "Ha'0F4 |l",
+											"maxLength": 7.972174203961084e+62,
+											"minLength": -2.561189347427171e-38,
+											"content": "})IKyG"
+										},
+										"id": "n7"
+									},
+									{
+										"type": "text-atom",
+										"id": "n1",
+										"attributes": {
+											"textStyle": "gk+s]ik\\",
+											"maxLength": -6.486925235780643e+125,
+											"minLength": 4.69592962538864e-188
+										}
+									}
+								],
+								"id": "n5"
+							},
+							{
+								"type": "widget-slot",
+								"name": "m2oZ-D3_",
+								"id": "n2",
+								"attributes": {
+									"allowedWidgetIds": {
+										"": "",
+										"1$Agtf&e#}": null,
+										"se": "Z/?i",
+										"O?J": -8.323473442593169e+43,
+										"4*R2|": -4.2503749480675584e-274
+									}
+								}
+							}
+						],
+						"id": "n4"
+					}
+				],
+				"id": "n3"
+			},
+			"focus": [
+				"n1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"r-_\" id=\"n3\" data-title=\"WbL'\" data-theme=\"Qs!O\">\n  <section data-type=\"page\" data-name=\"Q-r\" id=\"n4\" data-layout-size=\"6:9&quot;fGR-\" data-omitted-children=\"2\">\n    <div data-type=\"block\" data-name=\"jzRZ0vU-z\" id=\"n5\" data-featured=\"false\" data-omitted-children=\"1\">\n      <div data-type=\"text-atom\" id=\"n1\" data-text-style=\"gk+s]ik\\\" data-max-length=\"-6.486925235780643e+125\" data-min-length=\"4.69592962538864e-188\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-6: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "BE",
+				"attributes": {
+					"title": "pp!__prot",
+					"theme": "+?-Pk"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "F1-4e__1",
+						"id": "n3",
+						"children": [
+							{
+								"type": "block",
+								"name": "j",
+								"attributes": {
+									"containerClasses": "(xxI",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"attributes": {
+											"src": "O|.Q $N7B",
+											"aspectRatio": "K"
+										},
+										"id": "n16"
+									},
+									{
+										"type": "image-atom",
+										"name": "Sn8",
+										"attributes": {
+											"src": "oH$}",
+											"aspectRatio": "TVOv"
+										},
+										"id": "n17"
+									},
+									{
+										"type": "block",
+										"name": "yZ0-h--_t4",
+										"attributes": {
+											"containerClasses": "&LngEa",
+											"featured": false
+										},
+										"id": "n18"
+									},
+									{
+										"type": "block",
+										"name": "f_",
+										"id": "n0"
+									}
+								],
+								"id": "n11"
+							},
+							{
+								"type": "widget-slot",
+								"name": "d",
+								"attributes": {
+									"defaultWidgetId": "u8(7mLy",
+									"allowedWidgetIds": [
+										false,
+										"Lu"
+									],
+									"requireBleed": false
+								},
+								"id": "n12"
+							},
+							{
+								"type": "block",
+								"name": "s__j3l_c-A",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "GDHj\\ {5F",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "e04_",
+										"attributes": {
+											"containerClasses": "&7",
+											"featured": false
+										},
+										"id": "n19"
+									},
+									{
+										"type": "block",
+										"name": "et6I-",
+										"id": "n1",
+										"attributes": {
+											"featured": true
+										}
+									},
+									{
+										"type": "block",
+										"name": "GP1vy-8_--_",
+										"attributes": {
+											"containerClasses": "",
+											"featured": true
+										},
+										"id": "n20"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "KQt_k",
+						"id": "n4"
+					},
+					{
+						"type": "page",
+						"name": "v7-31a-__b_",
+						"id": "n9",
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "bk_--C-g",
+								"attributes": {
+									"defaultWidgetId": ";kAlgB-Y_}",
+									"allowedWidgetIds": {},
+									"requireBleed": false
+								},
+								"id": "n13"
+							},
+							{
+								"type": "block",
+								"name": "A7_P_U2g5l",
+								"attributes": {
+									"containerClasses": "@>",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "t_L",
+										"id": "n5",
+										"attributes": {
+											"containerClasses": "ZoZ",
+											"featured": false
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "c",
+										"attributes": {
+											"textStyle": "q{ri",
+											"maxLength": -2.9630627364247264e+248,
+											"minLength": 1.9754074504348597e+243,
+											"content": "Oh_"
+										},
+										"id": "n21"
+									},
+									{
+										"type": "block",
+										"name": "Ac_--BEu-",
+										"attributes": {
+											"containerClasses": "qe",
+											"featured": true
+										},
+										"id": "n22"
+									}
+								],
+								"id": "n14"
+							},
+							{
+								"type": "block",
+								"name": "x",
+								"id": "n6",
+								"attributes": {
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "M-0F-__2_3",
+										"attributes": {
+											"containerClasses": "a",
+											"featured": true
+										},
+										"id": "n23"
+									}
+								]
+							},
+							{
+								"type": "block",
+								"name": "m-ni",
+								"attributes": {
+									"containerClasses": "^g",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "U6-_87",
+										"id": "n7",
+										"attributes": {
+											"src": "IS",
+											"aspectRatio": "FnMVL9"
+										}
+									},
+									{
+										"type": "block",
+										"id": "n8",
+										"attributes": {
+											"containerClasses": "(",
+											"featured": true
+										}
+									}
+								],
+								"id": "n15"
+							}
+						]
+					}
+				],
+				"id": "n10"
+			},
+			"focus": [
+				"n8"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"BE\" id=\"n10\" data-title=\"pp!__prot\" data-theme=\"+?-Pk\">\n  <section data-type=\"page\" data-name=\"F1-4e__1\" id=\"n3\" data-collapsed=\"true\" data-child-count=\"3\"></section>\n  <section data-type=\"page\" data-name=\"KQt_k\" id=\"n4\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n  <section data-type=\"page\" data-name=\"v7-31a-__b_\" id=\"n9\">\n    <div data-type=\"widget-slot\" data-name=\"bk_--C-g\" id=\"n13\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n    <div data-type=\"block\" data-name=\"A7_P_U2g5l\" id=\"n14\" data-collapsed=\"true\" data-child-count=\"3\"></div>\n    <div data-type=\"block\" data-name=\"x\" id=\"n6\" data-collapsed=\"true\" data-child-count=\"1\"></div>\n    <div data-type=\"block\" data-name=\"m-ni\" id=\"n15\" data-container-classes=\"^g\" data-featured=\"false\">\n      <div data-type=\"image-atom\" data-name=\"U6-_87\" id=\"n7\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"block\" id=\"n8\" data-container-classes=\"(\" data-featured=\"true\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-6: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "BE",
+				"attributes": {
+					"title": "pp!__prot",
+					"theme": "+?-Pk"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "F1-4e__1",
+						"id": "n3",
+						"children": [
+							{
+								"type": "block",
+								"name": "j",
+								"attributes": {
+									"containerClasses": "(xxI",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"attributes": {
+											"src": "O|.Q $N7B",
+											"aspectRatio": "K"
+										},
+										"id": "n16"
+									},
+									{
+										"type": "image-atom",
+										"name": "Sn8",
+										"attributes": {
+											"src": "oH$}",
+											"aspectRatio": "TVOv"
+										},
+										"id": "n17"
+									},
+									{
+										"type": "block",
+										"name": "yZ0-h--_t4",
+										"attributes": {
+											"containerClasses": "&LngEa",
+											"featured": false
+										},
+										"id": "n18"
+									},
+									{
+										"type": "block",
+										"name": "f_",
+										"id": "n0"
+									}
+								],
+								"id": "n11"
+							},
+							{
+								"type": "widget-slot",
+								"name": "d",
+								"attributes": {
+									"defaultWidgetId": "u8(7mLy",
+									"allowedWidgetIds": [
+										false,
+										"Lu"
+									],
+									"requireBleed": false
+								},
+								"id": "n12"
+							},
+							{
+								"type": "block",
+								"name": "s__j3l_c-A",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "GDHj\\ {5F",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "e04_",
+										"attributes": {
+											"containerClasses": "&7",
+											"featured": false
+										},
+										"id": "n19"
+									},
+									{
+										"type": "block",
+										"name": "et6I-",
+										"id": "n1",
+										"attributes": {
+											"featured": true
+										}
+									},
+									{
+										"type": "block",
+										"name": "GP1vy-8_--_",
+										"attributes": {
+											"containerClasses": "",
+											"featured": true
+										},
+										"id": "n20"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "KQt_k",
+						"id": "n4"
+					},
+					{
+						"type": "page",
+						"name": "v7-31a-__b_",
+						"id": "n9",
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "bk_--C-g",
+								"attributes": {
+									"defaultWidgetId": ";kAlgB-Y_}",
+									"allowedWidgetIds": {},
+									"requireBleed": false
+								},
+								"id": "n13"
+							},
+							{
+								"type": "block",
+								"name": "A7_P_U2g5l",
+								"attributes": {
+									"containerClasses": "@>",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "t_L",
+										"id": "n5",
+										"attributes": {
+											"containerClasses": "ZoZ",
+											"featured": false
+										}
+									},
+									{
+										"type": "text-atom",
+										"name": "c",
+										"attributes": {
+											"textStyle": "q{ri",
+											"maxLength": -2.9630627364247264e+248,
+											"minLength": 1.9754074504348597e+243,
+											"content": "Oh_"
+										},
+										"id": "n21"
+									},
+									{
+										"type": "block",
+										"name": "Ac_--BEu-",
+										"attributes": {
+											"containerClasses": "qe",
+											"featured": true
+										},
+										"id": "n22"
+									}
+								],
+								"id": "n14"
+							},
+							{
+								"type": "block",
+								"name": "x",
+								"id": "n6",
+								"attributes": {
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "M-0F-__2_3",
+										"attributes": {
+											"containerClasses": "a",
+											"featured": true
+										},
+										"id": "n23"
+									}
+								]
+							},
+							{
+								"type": "block",
+								"name": "m-ni",
+								"attributes": {
+									"containerClasses": "^g",
+									"featured": false
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "U6-_87",
+										"id": "n7",
+										"attributes": {
+											"src": "IS",
+											"aspectRatio": "FnMVL9"
+										}
+									},
+									{
+										"type": "block",
+										"id": "n8",
+										"attributes": {
+											"containerClasses": "(",
+											"featured": true
+										}
+									}
+								],
+								"id": "n15"
+							}
+						]
+					}
+				],
+				"id": "n10"
+			},
+			"focus": [
+				"n8"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"BE\" id=\"n10\" data-title=\"pp!__prot\" data-theme=\"+?-Pk\" data-omitted-children=\"2\">\n  <section data-type=\"page\" data-name=\"v7-31a-__b_\" id=\"n9\" data-omitted-children=\"3\">\n    <div data-type=\"block\" data-name=\"m-ni\" id=\"n15\" data-container-classes=\"^g\" data-featured=\"false\" data-omitted-children=\"1\">\n      <div data-type=\"block\" id=\"n8\" data-container-classes=\"(\" data-featured=\"true\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-7: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "S_5",
+				"attributes": {
+					"title": " y?"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "SDname_Gdke",
+						"id": "n0"
+					},
+					{
+						"type": "page",
+						"name": "z_-_-8b_2__",
+						"attributes": {
+							"layoutSize": ""
+						},
+						"id": "n2"
+					}
+				],
+				"id": "n1"
+			},
+			"focus": [
+				"n2"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"S_5\" id=\"n1\" data-title=\" y?\">\n  <section data-type=\"page\" data-name=\"SDname_Gdke\" id=\"n0\" data-collapsed=\"true\" data-child-count=\"0\"></section>\n  <section data-type=\"page\" data-name=\"z_-_-8b_2__\" id=\"n2\" data-layout-size=\"\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-7: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "S_5",
+				"attributes": {
+					"title": " y?"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "SDname_Gdke",
+						"id": "n0"
+					},
+					{
+						"type": "page",
+						"name": "z_-_-8b_2__",
+						"attributes": {
+							"layoutSize": ""
+						},
+						"id": "n2"
+					}
+				],
+				"id": "n1"
+			},
+			"focus": [
+				"n2"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"S_5\" id=\"n1\" data-title=\" y?\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"z_-_-8b_2__\" id=\"n2\" data-layout-size=\"\"></section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-8: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"id": "n0",
+				"attributes": {
+					"title": ""
+				}
+			},
+			"focus": [
+				"n0"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"n0\" data-title=\"\"></div>\n"
+			}
+		},
+		{
+			"name": "random-8: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"id": "n0",
+				"attributes": {
+					"title": ""
+				}
+			},
+			"focus": [
+				"n0"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" id=\"n0\" data-title=\"\"></div>\n"
+			}
+		},
+		{
+			"name": "random-9: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "I_KgJy",
+				"attributes": {
+					"title": "VSbind~_",
+					"theme": "key"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "wf0u04-HW_-",
+						"id": "n1",
+						"children": [
+							{
+								"type": "block",
+								"name": "VR4E5",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "%Q",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "Q-47-s2_-",
+										"attributes": {
+											"src": "=M.Bt&"
+										},
+										"id": "n15"
+									},
+									{
+										"type": "image-atom",
+										"attributes": {
+											"src": "#na!fiC6o"
+										},
+										"id": "n16"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "D5-fnGi___T",
+						"id": "n7",
+						"attributes": {
+							"layoutSize": "ol"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "K16V-",
+								"id": "n5",
+								"attributes": {
+									"containerClasses": "g8P"
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "E04o-",
+										"id": "n2",
+										"attributes": {
+											"src": "",
+											"aspectRatio": "n4nH4y2vG?"
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "n3",
+										"attributes": {
+											"src": "T>1me6=j",
+											"aspectRatio": "CI"
+										}
+									},
+									{
+										"type": "image-atom",
+										"name": "w-dd__8",
+										"id": "n4",
+										"attributes": {
+											"src": "&@j8"
+										}
+									},
+									{
+										"type": "text-atom",
+										"attributes": {
+											"textStyle": "",
+											"maxLength": -4.5556082794330635e-238,
+											"minLength": 5.4069880090138036e-208
+										},
+										"id": "n17"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"name": "S_v9HIp",
+								"id": "n6",
+								"attributes": {
+									"allowedWidgetIds": {},
+									"requireBleed": false
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "xu-_t-_-Bp",
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "l_--6",
+								"attributes": {
+									"defaultWidgetId": "l>^uxbO",
+									"allowedWidgetIds": [
+										false,
+										null,
+										"@5(eLz7 +:",
+										-1.850266389288856e+272,
+										true,
+										"FV;E.:\\O",
+										true,
+										"b`?Ab",
+										null,
+										true
+									]
+								},
+								"id": "n12"
+							}
+						],
+						"id": "n11"
+					},
+					{
+						"type": "page",
+						"name": "i4-m7eT",
+						"id": "n9",
+						"attributes": {
+							"layoutSize": "#Q\\C{c7W"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "Nmy--7",
+										"attributes": {
+											"containerClasses": "V|O",
+											"featured": true
+										},
+										"id": "n18"
+									},
+									{
+										"type": "text-atom",
+										"name": "V_4",
+										"attributes": {
+											"textStyle": "H=GRaEa{i",
+											"maxLength": -7.630743616465266e-240,
+											"minLength": -9.121248651425794e+285,
+											"content": "2AuFu"
+										},
+										"id": "n19"
+									},
+									{
+										"type": "image-atom",
+										"name": "k6OL--",
+										"attributes": {
+											"src": "1qnt/<",
+											"aspectRatio": ";B"
+										},
+										"id": "n20"
+									},
+									{
+										"type": "text-atom",
+										"id": "n8",
+										"attributes": {
+											"textStyle": "1\\+!",
+											"maxLength": 2.652171525146354e+55,
+											"minLength": 5.0669252038021986e+95,
+											"content": "LC;*o4"
+										}
+									}
+								],
+								"id": "n13"
+							},
+							{
+								"type": "widget-slot",
+								"attributes": {
+									"allowedWidgetIds": -3.5553983087686126e-250,
+									"requireBleed": true
+								},
+								"id": "n14"
+							}
+						]
+					}
+				],
+				"id": "n10"
+			},
+			"focus": [
+				"n8"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"I_KgJy\" id=\"n10\" data-title=\"VSbind~_\" data-theme=\"key\">\n  <section data-type=\"page\" data-name=\"wf0u04-HW_-\" id=\"n1\" data-collapsed=\"true\" data-child-count=\"1\"></section>\n  <section data-type=\"page\" data-name=\"D5-fnGi___T\" id=\"n7\" data-collapsed=\"true\" data-child-count=\"2\"></section>\n  <section data-type=\"page\" data-name=\"xu-_t-_-Bp\" id=\"n11\" data-collapsed=\"true\" data-child-count=\"1\"></section>\n  <section data-type=\"page\" data-name=\"i4-m7eT\" id=\"n9\" data-layout-size=\"#Q\\C{c7W\">\n    <div data-type=\"block\" id=\"n13\" data-featured=\"true\">\n      <div data-type=\"block\" data-name=\"Nmy--7\" id=\"n18\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"text-atom\" data-name=\"V_4\" id=\"n19\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"image-atom\" data-name=\"k6OL--\" id=\"n20\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"text-atom\" id=\"n8\" data-text-style=\"1\\+!\" data-max-length=\"2.652171525146354e+55\" data-min-length=\"5.0669252038021986e+95\" data-content=\"LC;*o4\"></div>\n    </div>\n    <div data-type=\"widget-slot\" id=\"n14\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-9: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "I_KgJy",
+				"attributes": {
+					"title": "VSbind~_",
+					"theme": "key"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "wf0u04-HW_-",
+						"id": "n1",
+						"children": [
+							{
+								"type": "block",
+								"name": "VR4E5",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "%Q",
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "Q-47-s2_-",
+										"attributes": {
+											"src": "=M.Bt&"
+										},
+										"id": "n15"
+									},
+									{
+										"type": "image-atom",
+										"attributes": {
+											"src": "#na!fiC6o"
+										},
+										"id": "n16"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "D5-fnGi___T",
+						"id": "n7",
+						"attributes": {
+							"layoutSize": "ol"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "K16V-",
+								"id": "n5",
+								"attributes": {
+									"containerClasses": "g8P"
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "E04o-",
+										"id": "n2",
+										"attributes": {
+											"src": "",
+											"aspectRatio": "n4nH4y2vG?"
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "n3",
+										"attributes": {
+											"src": "T>1me6=j",
+											"aspectRatio": "CI"
+										}
+									},
+									{
+										"type": "image-atom",
+										"name": "w-dd__8",
+										"id": "n4",
+										"attributes": {
+											"src": "&@j8"
+										}
+									},
+									{
+										"type": "text-atom",
+										"attributes": {
+											"textStyle": "",
+											"maxLength": -4.5556082794330635e-238,
+											"minLength": 5.4069880090138036e-208
+										},
+										"id": "n17"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"name": "S_v9HIp",
+								"id": "n6",
+								"attributes": {
+									"allowedWidgetIds": {},
+									"requireBleed": false
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "xu-_t-_-Bp",
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "l_--6",
+								"attributes": {
+									"defaultWidgetId": "l>^uxbO",
+									"allowedWidgetIds": [
+										false,
+										null,
+										"@5(eLz7 +:",
+										-1.850266389288856e+272,
+										true,
+										"FV;E.:\\O",
+										true,
+										"b`?Ab",
+										null,
+										true
+									]
+								},
+								"id": "n12"
+							}
+						],
+						"id": "n11"
+					},
+					{
+						"type": "page",
+						"name": "i4-m7eT",
+						"id": "n9",
+						"attributes": {
+							"layoutSize": "#Q\\C{c7W"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"featured": true
+								},
+								"children": [
+									{
+										"type": "block",
+										"name": "Nmy--7",
+										"attributes": {
+											"containerClasses": "V|O",
+											"featured": true
+										},
+										"id": "n18"
+									},
+									{
+										"type": "text-atom",
+										"name": "V_4",
+										"attributes": {
+											"textStyle": "H=GRaEa{i",
+											"maxLength": -7.630743616465266e-240,
+											"minLength": -9.121248651425794e+285,
+											"content": "2AuFu"
+										},
+										"id": "n19"
+									},
+									{
+										"type": "image-atom",
+										"name": "k6OL--",
+										"attributes": {
+											"src": "1qnt/<",
+											"aspectRatio": ";B"
+										},
+										"id": "n20"
+									},
+									{
+										"type": "text-atom",
+										"id": "n8",
+										"attributes": {
+											"textStyle": "1\\+!",
+											"maxLength": 2.652171525146354e+55,
+											"minLength": 5.0669252038021986e+95,
+											"content": "LC;*o4"
+										}
+									}
+								],
+								"id": "n13"
+							},
+							{
+								"type": "widget-slot",
+								"attributes": {
+									"allowedWidgetIds": -3.5553983087686126e-250,
+									"requireBleed": true
+								},
+								"id": "n14"
+							}
+						]
+					}
+				],
+				"id": "n10"
+			},
+			"focus": [
+				"n8"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"I_KgJy\" id=\"n10\" data-title=\"VSbind~_\" data-theme=\"key\" data-omitted-children=\"3\">\n  <section data-type=\"page\" data-name=\"i4-m7eT\" id=\"n9\" data-layout-size=\"#Q\\C{c7W\" data-omitted-children=\"1\">\n    <div data-type=\"block\" id=\"n13\" data-featured=\"true\" data-omitted-children=\"3\">\n      <div data-type=\"text-atom\" id=\"n8\" data-text-style=\"1\\+!\" data-max-length=\"2.652171525146354e+55\" data-min-length=\"5.0669252038021986e+95\" data-content=\"LC;*o4\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-10: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "WG8Oz",
+				"attributes": {
+					"title": "#nd",
+					"theme": ""
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "Ale",
+						"id": "n1",
+						"attributes": {
+							"layoutSize": "__d"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "l-",
+								"id": "n0",
+								"attributes": {
+									"allowedWidgetIds": 1.7191714763852302e-267,
+									"requireBleed": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "L__-",
+								"attributes": {
+									"defaultWidgetId": ">",
+									"requireBleed": false
+								},
+								"id": "n6"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "Exc8a-48_",
+						"id": "n4",
+						"attributes": {
+							"layoutSize": "lkq8yuZOy"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "vSR-k_eX",
+								"id": "n3",
+								"attributes": {
+									"containerClasses": "bind"
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "ff_-5-6",
+										"id": "n2",
+										"attributes": {
+											"src": "%Iu05P",
+											"aspectRatio": "B;QYUrK}mS"
+										}
+									},
+									{
+										"type": "image-atom",
+										"name": "ax-",
+										"attributes": {
+											"src": "",
+											"aspectRatio": ""
+										},
+										"id": "n7"
+									},
+									{
+										"type": "text-atom",
+										"attributes": {
+											"textStyle": ":]/A4",
+											"maxLength": -1.129850886450731e-203,
+											"minLength": -2.3921468327076726e-105,
+											"content": "g5{6&%Ok\""
+										},
+										"id": "n8"
+									}
+								]
+							}
+						]
+					}
+				],
+				"id": "n5"
+			},
+			"focus": [
+				"n8"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"WG8Oz\" id=\"n5\" data-title=\"#nd\" data-theme=\"\">\n  <section data-type=\"page\" data-name=\"Ale\" id=\"n1\" data-collapsed=\"true\" data-child-count=\"2\"></section>\n  <section data-type=\"page\" data-name=\"Exc8a-48_\" id=\"n4\" data-layout-size=\"lkq8yuZOy\">\n    <div data-type=\"block\" data-name=\"vSR-k_eX\" id=\"n3\" data-container-classes=\"bind\">\n      <div data-type=\"image-atom\" data-name=\"ff_-5-6\" id=\"n2\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"image-atom\" data-name=\"ax-\" id=\"n7\" data-collapsed=\"true\" data-child-count=\"0\"></div>\n      <div data-type=\"text-atom\" id=\"n8\" data-text-style=\":]/A4\" data-max-length=\"-1.129850886450731e-203\" data-min-length=\"-2.3921468327076726e-105\" data-content=\"g5{6&amp;%Ok&quot;\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-10: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "WG8Oz",
+				"attributes": {
+					"title": "#nd",
+					"theme": ""
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "Ale",
+						"id": "n1",
+						"attributes": {
+							"layoutSize": "__d"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "l-",
+								"id": "n0",
+								"attributes": {
+									"allowedWidgetIds": 1.7191714763852302e-267,
+									"requireBleed": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "L__-",
+								"attributes": {
+									"defaultWidgetId": ">",
+									"requireBleed": false
+								},
+								"id": "n6"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "Exc8a-48_",
+						"id": "n4",
+						"attributes": {
+							"layoutSize": "lkq8yuZOy"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "vSR-k_eX",
+								"id": "n3",
+								"attributes": {
+									"containerClasses": "bind"
+								},
+								"children": [
+									{
+										"type": "image-atom",
+										"name": "ff_-5-6",
+										"id": "n2",
+										"attributes": {
+											"src": "%Iu05P",
+											"aspectRatio": "B;QYUrK}mS"
+										}
+									},
+									{
+										"type": "image-atom",
+										"name": "ax-",
+										"attributes": {
+											"src": "",
+											"aspectRatio": ""
+										},
+										"id": "n7"
+									},
+									{
+										"type": "text-atom",
+										"attributes": {
+											"textStyle": ":]/A4",
+											"maxLength": -1.129850886450731e-203,
+											"minLength": -2.3921468327076726e-105,
+											"content": "g5{6&%Ok\""
+										},
+										"id": "n8"
+									}
+								]
+							}
+						]
+					}
+				],
+				"id": "n5"
+			},
+			"focus": [
+				"n8"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"WG8Oz\" id=\"n5\" data-title=\"#nd\" data-theme=\"\" data-omitted-children=\"1\">\n  <section data-type=\"page\" data-name=\"Exc8a-48_\" id=\"n4\" data-layout-size=\"lkq8yuZOy\">\n    <div data-type=\"block\" data-name=\"vSR-k_eX\" id=\"n3\" data-container-classes=\"bind\" data-omitted-children=\"2\">\n      <div data-type=\"text-atom\" id=\"n8\" data-text-style=\":]/A4\" data-max-length=\"-1.129850886450731e-203\" data-min-length=\"-2.3921468327076726e-105\" data-content=\"g5{6&amp;%Ok&quot;\"></div>\n    </div>\n  </section>\n</div>\n"
+			}
+		},
+		{
+			"name": "random-11: deepest-id focus (focused)",
+			"tree": {
+				"type": "document",
+				"name": "SZ_",
+				"attributes": {
+					"title": ";brm%na",
+					"theme": "tI\"\\3uCp"
+				},
+				"id": "n1"
+			},
+			"focus": [
+				"n1"
+			],
+			"mode": "focused",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"SZ_\" id=\"n1\" data-title=\";brm%na\" data-theme=\"tI&quot;\\3uCp\"></div>\n"
+			}
+		},
+		{
+			"name": "random-11: deepest-id focus (minimal)",
+			"tree": {
+				"type": "document",
+				"name": "SZ_",
+				"attributes": {
+					"title": ";brm%na",
+					"theme": "tI\"\\3uCp"
+				},
+				"id": "n1"
+			},
+			"focus": [
+				"n1"
+			],
+			"mode": "minimal",
+			"expected": {
+				"ok": true,
+				"html": "<div data-type=\"document\" data-name=\"SZ_\" id=\"n1\" data-title=\";brm%na\" data-theme=\"tI&quot;\\3uCp\"></div>\n"
+			}
+		}
+	]
+}

@@ -68,6 +68,13 @@ protocol correction). It publishes what it found:
   ~150 nodes, p < 0.0001), and was the cheapest condition measured
   (13.2k tokens per solved ~150-node task). It depends on exactly one
   thing: stable node ids — guarantee #1 above.
+- **And they scale.** A pre-registered follow-up at 300–1000 nodes
+  found the size crossover: whole-tree rewrite becomes
+  frontier-model-only above a few hundred nodes (and needs a
+  streaming transport to complete at all), while anchored patches
+  hold 87–100% for both model tiers at every size — at ~$0.26 and
+  4 seconds per solved 1000-node edit versus $0.88 and 10 minutes for
+  a full rewrite.
 - **The HTML dialect is accuracy-neutral.** Against a JSON twin with
   identical validator strictness and error quality, HTML and JSON
   rewrite tied on validity (≥99%), editing success, and reading

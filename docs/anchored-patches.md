@@ -158,3 +158,19 @@ implementation and its released port, not verification against an
 independent oracle. Alternate, independently written implementations of
 the dialect can prove conformance by replaying the vendored vector
 file.
+
+## At scale (Study H)
+
+A pre-registered size extension re-ran the dialect at ~300 / ~600 /
+~1000 nodes against whole-tree rewrite and RFC 6902. Anchored patches
+held 87–100% for both model tiers at every size; whole-tree rewrite
+became frontier-model-only (gemini-3.5-flash 0/15 at ~1000 nodes;
+claude-sonnet-4.5 12/15, and only with a streaming transport); RFC
+6902 decayed to ~10%. Per solved ~1000-node task: anchored patch
+≈ $0.26 and 4 s versus ≈ $0.88 and 597 s for a sonnet rewrite.
+
+Practical rule: at ≤200 nodes either interface works and whole-tree
+rewrite is operationally simplest; at ≥300 nodes use anchored patches.
+Full tables are in the Study H addendum of
+[barkup-bench](https://github.com/kevinpeckham/barkup-bench)'s
+REPORT.md.

@@ -171,6 +171,10 @@ if (!result.ok) return retryWithFeedback(result.issues); // verbatim
 persist(result.node);
 ```
 
+In multi-turn sessions, views from earlier turns go stale as patches
+land — generate a fresh view for each editing turn rather than reusing
+one from history.
+
 ## Test plan (quality bar)
 
 Property tests over `treeArbitrary` (fast-check): (1) every id

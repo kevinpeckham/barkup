@@ -311,6 +311,55 @@ renderer replays the benchmark's 39-vector conformance suite
 [docs/focused-views.md](docs/focused-views.md) for the full contract
 and evidence.
 
+## Sessions: a fresh view every turn
+
+Focused views change how you serialize a single edit; **sessions** are how
+you serialize a *conversation* of edits over one tree. The rule is short:
+for multi-edit conversations, attach a fresh minimal focused view
+(`renderView` with `mode: "minimal"`, targeted at the current edit) to
+**every** patch turn. Do not serialize the tree once at session start, and
+do not re-send the whole tree each turn.
+
+```ts
+import { applyAnchoredPatch } from "@kevinpeckham/barkup/patch";
+import { renderView } from "@kevinpeckham/barkup/view";
+
+for (const edit of session) {
+  // Render a fresh view of the CURRENT tree for THIS turn's target.
+  const view = renderView(grammar, tree, { focus: edit.focusIds });
+  if (!view.ok) return retryWithFeedback(view.issues);
+
+  // Show view.html; ask for an anchored patch; apply to the full tree.
+  const result = applyAnchoredPatch(grammar, tree, JSON.parse(reply));
+  if (!result.ok) return retryWithFeedback(result.issues);
+  tree = result.node;
+}
+```
+
+The counter-intuitive part is that showing the tree once saves nothing: a
+once-shown tree rides along in the conversation history every subsequent
+turn, so "serialize-once" pays the full tree's tokens on every step
+anyway — while going stale. In benchmark sessions of 12 sequential edits
+([barkup-bench](https://github.com/kevinpeckham/barkup-bench), Study K),
+per-turn fresh minimal views were the most accurate policy at every model
+tier tested **and** the cheapest by 4–15×: ~55k input tokens per session,
+versus ~215k for serialize-once, ~366k for periodic full refresh, and
+~836–971k for whole-tree rewrite.
+
+Serialize-once also drifts. On claude-sonnet-4.5, per-step success fell
+from 98.8% to 83.8% by steps 9–12, and only 8/20 sessions ended with an
+intact tree — versus 19/20 for per-turn views (19/20 on both models
+tested). The failure mechanism is **stale ordinal placement**: insert and
+move ops get anchored against an outdated picture of sibling order (they
+fall 95% → 85% → 80% across the session under serialize-once, while
+per-turn views hold ~98%). A fresh view keeps that picture current.
+
+Whole-tree rewrite is not a session protocol. Its conversation grows
+toward a hard context ceiling (200k exhausted deterministically at step 11
+on sonnet), and below the frontier tier it silently corrupts trees that
+still pass validation (gemini end-state intact 2/10; all 44 graded
+failures were valid-but-wrong).
+
 ## When not to use this
 
 - **Numeric-heavy or deeply cross-referenced trees** — HTML's stringly

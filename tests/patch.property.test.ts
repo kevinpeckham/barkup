@@ -68,9 +68,15 @@ const REQUIRED_VALUE: Record<string, AttributeValue> = {
 };
 
 /** Minimal grammar-valid node of the given type (required attrs set). */
-function minimalNode(config: GrammarConfig, type: string, id: string): BarkupNode {
+function minimalNode(
+	config: GrammarConfig,
+	type: string,
+	id: string,
+): BarkupNode {
 	const attributes: Record<string, AttributeValue> = {};
-	for (const [key, spec] of Object.entries(config.nodes[type]?.attributes ?? {})) {
+	for (const [key, spec] of Object.entries(
+		config.nodes[type]?.attributes ?? {},
+	)) {
 		if (spec.required) {
 			attributes[key] = REQUIRED_VALUE[spec.type] as AttributeValue;
 		}
@@ -219,12 +225,7 @@ function makeEdit(
 }
 
 const editArbitrary = fc
-	.tuple(
-		treeArbitrary(DOC_CONFIG),
-		fc.nat(),
-		fc.nat(),
-		fc.nat(),
-	)
+	.tuple(treeArbitrary(DOC_CONFIG), fc.nat(), fc.nat(), fc.nat())
 	.map(([raw, kindPick, nodePick, fieldPick]) => {
 		const tree = withIds(raw);
 		return { tree, edit: makeEdit(tree, kindPick, nodePick, fieldPick) };
@@ -242,14 +243,11 @@ describe("anchored patches: atomicity", () => {
 					const tree = withIds(raw);
 					const nodes = allNodes(tree);
 					// A prefix of valid ops, then one guaranteed-stale id.
-					const prefix = Array.from(
-						{ length: prefixPick % 3 },
-						(_, i) => ({
-							op: "set-name",
-							id: nodes[(namePick + i) % nodes.length]?.id,
-							name: `n-${i}`,
-						}),
-					);
+					const prefix = Array.from({ length: prefixPick % 3 }, (_, i) => ({
+						op: "set-name",
+						id: nodes[(namePick + i) % nodes.length]?.id,
+						name: `n-${i}`,
+					}));
 					const ops = [
 						...prefix,
 						{ op: "set-name", id: "__no-such-id__", name: "x" },
@@ -299,9 +297,7 @@ describe("anchored patches: id preservation", () => {
 				const removedSubtree =
 					edit.op.op === "remove"
 						? new Set(
-								collectIds(
-									findById(tree, edit.op.id as string) as BarkupNode,
-								),
+								collectIds(findById(tree, edit.op.id as string) as BarkupNode),
 							)
 						: new Set<string>();
 				for (const id of before) {

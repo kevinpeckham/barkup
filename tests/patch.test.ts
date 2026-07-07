@@ -165,7 +165,9 @@ describe("applyAnchoredPatch — op-level failures", () => {
 	});
 
 	test("remove-attribute on an absent attribute rejected", () => {
-		const result = apply([{ op: "remove-attribute", id: "t1", key: "content" }]);
+		const result = apply([
+			{ op: "remove-attribute", id: "t1", key: "content" },
+		]);
 		expect(result.ok).toBe(false);
 		if (!result.ok) {
 			expect(result.issues[0]?.message).toContain('"content"');

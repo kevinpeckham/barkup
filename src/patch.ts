@@ -243,7 +243,11 @@ function attach(
 	return null;
 }
 
-function detach(tree: BarkupNode, id: string, index: number): PatchIssue | null {
+function detach(
+	tree: BarkupNode,
+	id: string,
+	index: number,
+): PatchIssue | null {
 	const located = findParent(tree, id);
 	if (!located) {
 		return fail(index, `No node with id "${id}".`);
@@ -271,8 +275,7 @@ function applyOp(tree: BarkupNode, op: RawOp, i: number): PatchIssue | null {
 	if (op === null || typeof op !== "object" || Array.isArray(op)) {
 		return fail(i, "each operation must be an object.");
 	}
-	const handler =
-		typeof op.op === "string" ? OP_HANDLERS[op.op] : undefined;
+	const handler = typeof op.op === "string" ? OP_HANDLERS[op.op] : undefined;
 	if (!handler) {
 		return fail(
 			i,
@@ -353,14 +356,26 @@ function mustNonRootNode(
 	return node;
 }
 
-function applyRemove(tree: BarkupNode, op: RawOp, i: number): PatchIssue | null {
+function applyRemove(
+	tree: BarkupNode,
+	op: RawOp,
+	i: number,
+): PatchIssue | null {
 	const node = mustNonRootNode(tree, op, i, "removed");
 	if (!("type" in node)) return node;
 	return detach(tree, node.id as string, i);
 }
 
-function applyInsert(tree: BarkupNode, op: RawOp, i: number): PatchIssue | null {
-	if (op.node === null || typeof op.node !== "object" || Array.isArray(op.node)) {
+function applyInsert(
+	tree: BarkupNode,
+	op: RawOp,
+	i: number,
+): PatchIssue | null {
+	if (
+		op.node === null ||
+		typeof op.node !== "object" ||
+		Array.isArray(op.node)
+	) {
 		return fail(i, '"node" must be a node object.');
 	}
 	let inserted: BarkupNode;

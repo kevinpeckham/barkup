@@ -364,11 +364,9 @@ failures were valid-but-wrong).
 
 - **Numeric-heavy or deeply cross-referenced trees** — HTML's stringly
   attributes will fight you.
-- **Huge trees** — whole-artifact authoring assumes the tree fits in
-  context (anchored patches + focused views are the measured escape
-  hatch when it doesn't).
-- **Real-time multi-writer collaboration** — whole-tree replacement is
-  last-write-wins by construction.
+- **Real-time multi-writer collaboration** — there are no merge
+  semantics; concurrent edits are last-write-wins on every channel
+  (rewrite and patch alike).
 
 ## Limitations
 

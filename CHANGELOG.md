@@ -4,6 +4,47 @@ All notable changes to `@kevinpeckham/barkup`. The project follows
 semver; the core surface is stable and scope moves only on benchmark
 evidence (see the README's maintenance posture).
 
+## 0.5.0 — 2026-07-09
+
+### Added
+
+- **`selectNodes(tree, query)` in `@kevinpeckham/barkup/view` — the
+  measured fan-out decomposition loop.** Deterministic, exact node
+  selection: `SelectQuery` criteria (`type`, `name`, `attributes`,
+  `within`) are ANDed; an empty query matches every id-bearing node;
+  `within` scopes to strict descendants of the anchor (an unknown id
+  returns `[]` — selection is data, not an error); attribute
+  constraints are deep-equal on values (primitives strict, json
+  values structural, object key order ignored); results are ids in
+  document order (depth-first pre-order), id-less nodes skipped.
+  Ported from the enumerator barkup-bench Study R executed
+  (`src/corpus/fanout.ts` `fanoutTargets`) and generalized to the
+  full object query. The exact complement to `findNodes`: fuzzy
+  search grounds human language, `selectNodes` grounds programmatic
+  queries. A CSS-selector-string sugar is deliberately deferred.
+- In Study R (barkup-bench REPORT.md addendum, 2026-07-09,
+  pre-registered in BRIEF-R), this enumeration plus one single-target
+  anchored edit per returned id ran **90/90 fan-out tasks on both
+  models tested (674/674 subtasks, zero failures)**, including every
+  7–32-target task, at about a third of the input cost of a
+  whole-tree prompt — while every prompt-side alternative (worked
+  example, checklist, whole tree, search) left partial coverage.
+
+### Changed
+
+- The fan-out boundary docs (README and `docs/focused-views.md`, added
+  for Study Q) get their resolution: the decomposition loop is now
+  measured rather than inferred, shown as a complete `selectNodes`
+  example with the Study R numbers and caveats; the three-tier
+  grounding table's "your app knows the ids" tier names `selectNodes`
+  for programmatic queries; `docs/architecture.md` exports and test
+  inventories updated.
+- README's maintenance posture now states the two-layer promise
+  explicitly: the core codec is scoped and stable, while the
+  surrounding toolkit grows research-first — each utility shipping
+  only with a pre-registered study's numbers attached, as a minor
+  version.
+
 ## 0.4.0 — 2026-07-09
 
 ### Added

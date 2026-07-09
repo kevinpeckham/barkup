@@ -37,12 +37,22 @@
  * edit requests at oracle-level accuracy on the frontier model tested
  * (43/45) and full-tree-level on the cheap one (39/45 vs 23/45 for
  * expand-node navigation) at ~90% less input than a full-tree read.
+ *
+ * findNodes' exact complement is selectNodes (barkup-bench Study R's
+ * fan-out enumeration step, ported faithfully): fuzzy search grounds
+ * human language, selectNodes grounds programmatic queries. It is the
+ * "enumerate the targets yourself" half of the measured fan-out
+ * decomposition loop — one object query, then one single-target
+ * anchored edit per returned id — which ran 90/90 fan-out tasks on
+ * both models tested (674/674 subtasks, zero failures) at about a
+ * third of the input cost of showing the whole tree.
  */
 import type { Grammar } from "./index.js";
 import { defineGrammar } from "./index.js";
 import { pathSegment } from "./internal.js";
 import type {
 	AttributeSpec,
+	AttributeValue,
 	BarkupNode,
 	IssueCode,
 	NodeSpec,
@@ -457,4 +467,151 @@ export function renderSearch(
 		focus,
 		...(options?.mode !== undefined ? { mode: options.mode } : {}),
 	});
+}
+
+// ---------------------------------------------------------------------------
+// Deterministic selection — the fan-out enumeration step
+// (barkup-bench Study R's decomposition pipeline; the {type, within}
+// semantics are ported faithfully from the benchmark's committed
+// enumerator, src/corpus/fanout.ts fanoutTargets).
+// ---------------------------------------------------------------------------
+
+/**
+ * An exact, structural node query. All present criteria are ANDed; an
+ * empty query matches every id-bearing node in the tree.
+ */
+export interface SelectQuery {
+	/** Node type to match (exact). */
+	type?: string;
+	/** Node name to match (exact). */
+	name?: string;
+	/** Attribute equality constraints: every listed key must be
+	 * present on the node with a deep-equal value. Primitives compare
+	 * by identity (`"40"` never matches `40` — declared coercion only,
+	 * as everywhere); json values compare structurally, with array
+	 * order significant and JSON object key order not (the same
+	 * equality `nodesEqual` in barkup/testing uses). */
+	attributes?: Record<string, AttributeValue>;
+	/** Restrict matches to STRICT descendants of the node with this
+	 * id — the anchor node itself never matches. An unknown id selects
+	 * nothing (`[]`): selection is data, not an error, matching
+	 * renderSearch's null-on-a-miss philosophy — a within id can go
+	 * stale between turns exactly like a search that stops matching. */
+	within?: string;
+}
+
+/** First node with the id, searching in document order (depth-first
+ * pre-order) — ids are unique in valid trees, so "first" only matters
+ * for malformed input, where doc order is the deterministic choice. */
+function firstById(node: BarkupNode, id: string): BarkupNode | null {
+	if (node.id === id) return node;
+	for (const child of node.children ?? []) {
+		const found = firstById(child, id);
+		if (found) return found;
+	}
+	return null;
+}
+
+/** A non-null, non-array object — a JSON object for our purposes
+ * (attribute values are typed JSON by contract). */
+function isJsonObject(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function arraysEqual(a: readonly unknown[], b: readonly unknown[]): boolean {
+	return (
+		a.length === b.length &&
+		a.every((value, index) => attributeValuesEqual(value, b[index]))
+	);
+}
+
+/** Key-set equality — JSON object key order is not significant,
+ * matching `nodesEqual` in barkup/testing. */
+function objectsEqual(
+	a: Record<string, unknown>,
+	b: Record<string, unknown>,
+): boolean {
+	const keys = Object.keys(a);
+	return (
+		keys.length === Object.keys(b).length &&
+		keys.every((key) => key in b && attributeValuesEqual(a[key], b[key]))
+	);
+}
+
+/** Deep equality over attribute values: primitives by `===`, arrays
+ * element-wise in order, JSON objects by key set. */
+function attributeValuesEqual(a: unknown, b: unknown): boolean {
+	if (a === b) return true;
+	if (Array.isArray(a)) return Array.isArray(b) && arraysEqual(a, b);
+	if (isJsonObject(a)) return isJsonObject(b) && objectsEqual(a, b);
+	return false;
+}
+
+/** Every listed attribute must be present with a deep-equal value. */
+function matchesAttributes(
+	node: BarkupNode,
+	constraints: Record<string, AttributeValue> | undefined,
+): boolean {
+	if (constraints === undefined) return true;
+	const attributes = node.attributes ?? {};
+	return Object.entries(constraints).every(
+		([key, value]) =>
+			key in attributes && attributeValuesEqual(attributes[key], value),
+	);
+}
+
+/** Every present criterion must hold (AND). */
+function matchesSelect(node: BarkupNode, query: SelectQuery): boolean {
+	if (query.type !== undefined && node.type !== query.type) return false;
+	if (query.name !== undefined && node.name !== query.name) return false;
+	return matchesAttributes(node, query.attributes);
+}
+
+/**
+ * Select the ids of every node matching an exact structural query —
+ * the deterministic enumeration step of the benchmark-measured
+ * fan-out decomposition loop (barkup-bench Study R):
+ *
+ * ```ts
+ * const targets = selectNodes(tree, { type: "text-atom", within: sectionId });
+ * for (const id of targets) {
+ *   // one single-target anchored edit per node,
+ *   // against a focused view of that node
+ * }
+ * ```
+ *
+ * All present criteria are ANDed; an empty query matches every
+ * id-bearing node. `within` scopes to strict descendants (the anchor
+ * itself never matches; an unknown id returns `[]` — see SelectQuery).
+ * Results are ids in document order (depth-first pre-order, the same
+ * order findNodes breaks ties in), nodes without ids are skipped, and
+ * selection is purely structural and synchronous — no scoring, no
+ * fuzziness. It is the exact complement to findNodes: fuzzy search
+ * grounds human language, selectNodes grounds programmatic queries.
+ * Deterministic; never mutates the input.
+ *
+ * In Study R, this enumeration plus one single-target anchored edit
+ * per returned id ran 90/90 fan-out tasks on both models tested
+ * (674/674 subtasks, zero failures, including every 7–32-target
+ * task) at about a third of the input cost of a whole-tree prompt —
+ * while every prompt-side alternative left partial coverage.
+ */
+export function selectNodes(tree: BarkupNode, query: SelectQuery): string[] {
+	const scoped = query.within !== undefined;
+	const scope =
+		query.within === undefined ? tree : firstById(tree, query.within);
+	if (scope === null) return [];
+	const ids: string[] = [];
+	const walk = (node: BarkupNode, isAnchor: boolean): void => {
+		if (
+			!(isAnchor && scoped) &&
+			node.id !== undefined &&
+			matchesSelect(node, query)
+		) {
+			ids.push(node.id);
+		}
+		for (const child of node.children ?? []) walk(child, false);
+	};
+	walk(scope, true);
+	return ids;
 }

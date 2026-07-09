@@ -26,6 +26,17 @@
  * Semantics are ported from the benchmark-validated reference renderer
  * (barkup-bench Studies I and J — see docs/focused-views.md for the
  * evidence and design).
+ *
+ * The entry also ships the benchmark-validated retrieval companion:
+ * findNodes (the deterministic content-search scorer barkup-bench
+ * Study N handed to models as a find_nodes tool) and renderSearch
+ * (search composed with the minimal view — the exact tool-result
+ * rendering the study scored), plus SEARCH_PROMPT_RULES and
+ * NO_MATCHES_MESSAGE. Together they close the "who supplies the focus
+ * ids?" gap: a skeleton view plus one find_nodes call grounded id-free
+ * edit requests at oracle-level accuracy on the frontier model tested
+ * (43/45) and full-tree-level on the cheap one (39/45 vs 23/45 for
+ * expand-node navigation) at ~90% less input than a full-tree read.
  */
 import type { Grammar } from "./index.js";
 import { defineGrammar } from "./index.js";
@@ -320,4 +331,130 @@ function viewNodeOf(
 		...(Object.keys(attributes).length > 0 ? { attributes } : {}),
 		...(rendered.length > 0 ? { children: rendered } : {}),
 	};
+}
+
+// ---------------------------------------------------------------------------
+// Content search — the benchmark-validated retrieval companion
+// (barkup-bench Study N's find_nodes scorer, ported faithfully).
+// ---------------------------------------------------------------------------
+
+/**
+ * The benchmark-validated prompt block for agents given a find_nodes
+ * search tool (barkup-bench BRIEF-N wording, scored by Study N, with
+ * the benchmark's "anchored patch" phrasing generalized the same way
+ * VIEW_PROMPT_RULES was). Show the model a minimal view of the tree's
+ * root (renderView with focus: [rootId]) plus a find_nodes tool backed
+ * by renderSearch, append this block to the system prompt, and one
+ * search call is the median path to a correctly grounded edit.
+ */
+export const SEARCH_PROMPT_RULES = `Search rules:
+- You are shown a minimal view of the tree's root. Collapsed elements are real nodes shown without their contents; data-child-count is how many children each actually has.
+- Call find_nodes with a few search words (names, types, attribute values) to retrieve the 5 best-matching nodes, shown in place in the tree with their ancestors. Search as many times as you need to locate the nodes the edit request concerns.
+- When you have found them, reply with your patch as your final message. Every id you use must be one you have seen.`;
+
+/**
+ * The exact no-match tool result the benchmark scored. renderSearch
+ * returns null on a miss (null is retrieval data, not an error — the
+ * issues union stays reserved for real failures); return this text as
+ * the tool result so the model knows to reword, exactly as the
+ * benchmark's harness did.
+ */
+export const NO_MATCHES_MESSAGE =
+	"No nodes match that query. Try different words (node types, names, attribute values).";
+
+export interface FindNodesOptions {
+	/** Maximum number of ids returned. Defaults to 5 — the top-k the
+	 * benchmark pre-registered and scored. */
+	limit?: number;
+}
+
+/** Lowercase alphanumeric token runs of a string, as a set (distinct
+ * tokens — repetition never scores twice). */
+function tokenize(text: string): Set<string> {
+	return new Set(text.toLowerCase().match(/[a-z0-9]+/g) ?? []);
+}
+
+/** The node text a query is scored against: type, name, and every
+ * attribute as `key JSON-value`. */
+function searchableText(node: BarkupNode): string {
+	const attrs = Object.entries(node.attributes ?? {})
+		.map(([key, value]) => `${key} ${JSON.stringify(value)}`)
+		.join(" ");
+	return `${node.type} ${node.name ?? ""} ${attrs}`;
+}
+
+/**
+ * Find the node ids best matching a content query — the deterministic
+ * scorer barkup-bench Study N handed to models as a find_nodes tool.
+ *
+ * Scoring is distinct-token overlap: a node's score is how many of its
+ * distinct tokens (from type, name, and attributes) appear in the
+ * query's token set. Nodes without ids are skipped (search feeds focus
+ * and patches, which address by id); zero scores are excluded; ties
+ * break by document order (depth-first pre-order). Returns at most
+ * `limit` (default 5) ids — possibly none.
+ *
+ * Deliberately simple: in the benchmark, this keyword scorer driven by
+ * the model's own queries matched the frontier model's id-oracle
+ * accuracy, and swapping it for off-the-shelf text embeddings measured
+ * no better (Study N refuted that upgrade).
+ */
+export function findNodes(
+	tree: BarkupNode,
+	query: string,
+	options?: FindNodesOptions,
+): string[] {
+	const limit = options?.limit ?? 5;
+	const wanted = tokenize(query);
+	const scored: { id: string; score: number; order: number }[] = [];
+	let order = 0;
+	const walk = (node: BarkupNode): void => {
+		if (node.id !== undefined) {
+			let score = 0;
+			for (const token of tokenize(searchableText(node))) {
+				if (wanted.has(token)) score += 1;
+			}
+			if (score > 0) scored.push({ id: node.id, score, order });
+			order += 1;
+		}
+		for (const child of node.children ?? []) walk(child);
+	};
+	walk(tree);
+	return scored
+		.sort((a, b) => b.score - a.score || a.order - b.order)
+		.slice(0, limit)
+		.map((s) => s.id);
+}
+
+export interface SearchOptions extends FindNodesOptions {
+	/** View mode for the rendered matches. Defaults to "minimal" — the
+	 * rendering the benchmark scored as the find_nodes tool result. */
+	mode?: ViewMode;
+}
+
+/**
+ * Search the tree and render the matches in place — the exact
+ * find_nodes tool-result composition barkup-bench Study N scored:
+ * `renderView(grammar, tree, { focus: findNodes(tree, query), mode: "minimal" })`.
+ *
+ * Returns null when nothing matches: a miss is retrieval data, not a
+ * failure, so it does not join the issues union — send
+ * NO_MATCHES_MESSAGE (the exact benchmarked miss text) back as the
+ * tool result instead. A returned ViewResult can still be
+ * `{ ok: false }` for the usual view-input reasons (reserved-attribute
+ * collisions); found ids are always real, so unknown-focus issues
+ * cannot occur.
+ */
+export function renderSearch(
+	grammar: Grammar,
+	tree: BarkupNode,
+	query: string,
+	options?: SearchOptions,
+): ViewResult | null {
+	const focus = findNodes(tree, query, options);
+	if (focus.length === 0) return null;
+	return renderView(grammar, tree, {
+		focus,
+		...(options?.mode !== undefined ? { mode: options.mode } : {}),
+	});
 }

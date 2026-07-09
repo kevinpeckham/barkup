@@ -1,8 +1,11 @@
 # Focused views — design note
 
-Status: shipped in 0.3.0; see "Verification" below. The semantics are
-ported from the benchmark-validated reference renderer (barkup-bench
-`src/conditions/views-html.ts`, the implementation Study J scored) and
+Status: rendering shipped in 0.3.0; content search (`findNodes` /
+`renderSearch`, the Study N companion) shipped in 0.4.0; see
+"Verification" below. The semantics are ported from the
+benchmark-validated reference implementations (barkup-bench
+`src/conditions/views-html.ts`, the renderer Study J scored, and
+`src/conditions/grounded-n.ts`, the search scorer Study N scored) and
 are fixed; this note records the contract, API, and issue-type design
 for review in isolation.
 
@@ -50,7 +53,14 @@ runtime dependencies; no DOM involvement — views are built from
 ## API surface (complete)
 
 ```ts
-import { renderView, VIEW_PROMPT_RULES } from "@kevinpeckham/barkup/view";
+import {
+  renderView,
+  findNodes,
+  renderSearch,
+  VIEW_PROMPT_RULES,
+  SEARCH_PROMPT_RULES,
+  NO_MATCHES_MESSAGE,
+} from "@kevinpeckham/barkup/view";
 
 function renderView(
   grammar: Grammar,
@@ -66,11 +76,25 @@ interface ViewOptions {
 type ViewResult =
   | { ok: true; html: string }
   | { ok: false; issues: ViewIssue[] };
+
+function findNodes(
+  tree: BarkupNode,
+  query: string,
+  options?: { limit?: number }, // default 5, the benched top-k
+): string[];
+
+function renderSearch(
+  grammar: Grammar,
+  tree: BarkupNode,
+  query: string,
+  options?: { limit?: number; mode?: "focused" | "minimal" },
+): ViewResult | null; // null = no matches (see below)
 ```
 
-`VIEW_PROMPT_RULES` is the exact five-bullet prompt block the
-benchmark validated (see below). No diffing, no retrieval, no JSON
-rendering. That is the whole surface.
+`VIEW_PROMPT_RULES` and `SEARCH_PROMPT_RULES` are the exact prompt
+blocks the benchmark validated (see below); `NO_MATCHES_MESSAGE` is
+the exact no-match tool result it scored. No diffing, no embeddings,
+no JSON rendering. That is the whole surface.
 
 ## The view contract (fixed, ported from the reference)
 
@@ -150,6 +174,14 @@ The zero duplicate-id-collision result across 360 scored view runs is
 attributable to that wording (specifically the fresh-id bullet);
 consumers should not have to rediscover it.
 
+`SEARCH_PROMPT_RULES` is the same deal for agents given a `find_nodes`
+search tool: the three-bullet "Search rules" block pre-registered in
+barkup-bench `docs/BRIEF-N.md` and scored by Study N, with one
+generalization — the benchmark's "reply with the anchored patch" became
+"reply with your patch", the same benchmark-dialect strip
+`VIEW_PROMPT_RULES` received. Under this wording the median run needed
+exactly ONE `find_nodes` call to ground an id-free edit request.
+
 ## The agent-loop recipe (goes in the README)
 
 ```ts
@@ -159,7 +191,8 @@ import { renderView, VIEW_PROMPT_RULES } from "@kevinpeckham/barkup/view";
 // 0. Append VIEW_PROMPT_RULES to the agent's system prompt.
 
 // 1. Render only what the edit concerns. (format() first if any node
-//    might be missing an id — focus and patches address by id.)
+//    might be missing an id — focus and patches address by id. No ids
+//    to hand? See "Finding the focus ids" below.)
 const view = renderView(grammar, storedTree, { focus: editTargetIds });
 if (!view.ok) return retryWithFeedback(view.issues); // e.g. stale ids
 
@@ -173,7 +206,81 @@ persist(result.node);
 
 In multi-turn sessions, views from earlier turns go stale as patches
 land — generate a fresh view for each editing turn rather than reusing
-one from history.
+one from history: keep the full conversation history AND attach a
+fresh minimal view every turn (Studies K, M, and O; annotating views
+with child positions is optional and harmless).
+
+## Finding the focus ids — content search (Study N)
+
+The recipe above takes the focus ids as given. Study N (pre-registered
+in barkup-bench `docs/BRIEF-N.md`; REPORT.md addendum, 2026-07-09)
+measured how a system should *find* them when all it has is a human
+description, and the answer graduated into this entry as `findNodes` /
+`renderSearch`. Pick the tier that matches what your application
+knows:
+
+1. **The app knows the ids** (they came from a UI selection, a
+   database row, a previous turn): render the view directly. This is
+   the Studies I/J oracle case — retrieval is free, accuracy is the
+   ceiling (sonnet 45/45 on the minimal view).
+2. **The app has only a human description** ("make the hero shorter"):
+   give the model a skeleton view — the root with its children
+   collapsed, `renderView(grammar, tree, { focus: [rootId] })` — plus
+   a `find_nodes` tool backed by `renderSearch`, and append
+   `SEARCH_PROMPT_RULES` to the system prompt. One tool call is the
+   median. In Study N this grounded id-free requests at 43/45 on
+   sonnet-4.5 (equal to its id-oracle bound) and 39/45 on
+   gemini-3.5-flash — versus 23/45 for the expand-node navigation
+   agent it replaces (p < 0.001) — at ~4–7k input tokens per task,
+   ~90% below a full-tree read. Deterministic keyword
+   overlap is enough: upgrading the scorer to
+   `openai/text-embedding-3-small` measured *no better* (target
+   coverage 23/45 vs lexical's 24/45; task success statistically
+   identical), because node-level embeddings resolve structural
+   references ("the 3rd block inside the section named atlas") no
+   better than keywords do.
+3. **A frontier patcher under budget pressure**: ground with a cheap
+   model first — show it the full tree, ask only for the target ids —
+   then have the frontier model patch against the minimal view of
+   those ids. Study N's cross cell (gemini grounds, sonnet patches)
+   held accuracy at 41/45 while the frontier model's median input
+   dropped to 1,484 tokens, 97% less. Grounding is cheap-model work:
+   gemini's stage-1 id lists were exactly as good as sonnet's.
+
+The tool wiring for tier 2:
+
+```ts
+import {
+  findNodes,
+  renderSearch,
+  NO_MATCHES_MESSAGE,
+  SEARCH_PROMPT_RULES,
+} from "@kevinpeckham/barkup/view";
+
+// The find_nodes tool the model calls (any tool-use framework):
+function findNodesTool(query: string): string {
+  const result = renderSearch(grammar, storedTree, query);
+  if (result === null) return NO_MATCHES_MESSAGE; // the benched miss text
+  if (!result.ok) throw new Error("unrenderable grammar"); // app bug, not model error
+  return result.html; // matches shown in place, ancestors visible
+}
+```
+
+`renderSearch` is exactly the composition
+`renderView(grammar, tree, { focus: findNodes(tree, query), mode: "minimal" })`
+— it exists so the tool result you ship is the rendering the
+benchmark scored. A miss returns `null` rather than an issue:
+"nothing matched" is retrieval data the model should react to (the
+issues union stays reserved for real failures like reserved-attribute
+collisions), and `NO_MATCHES_MESSAGE` is exported so the miss text
+matches the benched wording too.
+
+`findNodes` itself is the scorer the benchmark handed to models:
+distinct-token overlap between the query and each node's type, name,
+and attributes (lowercase alphanumeric runs), nodes without ids
+skipped, zero scores excluded, ties by document order, top 5 by
+default. It is deliberately simple — see the tier-2 numbers above for
+why simple is enough.
 
 ## Test plan (quality bar)
 
@@ -189,6 +296,15 @@ untouched-serialization parity — focusing every leaf reproduces
 contract and every failure mode, and the exact prompt-block wording
 pinned by test.
 
+Search gets the same bar: unit tests port the benchmark's scorer suite
+(ranking, zero-score exclusion, document-order ties, the limit cap,
+id-less skipping, the no-match null, the pinned prompt block and miss
+message), and property tests check `findNodes` against an independent
+re-scoring over random trees (results real, relevant, distinct,
+capped, rank-ordered; nothing relevant omitted from an unfilled
+result; determinism and immutability; `renderSearch` equal to the
+documented composition with every match visible).
+
 ## Verification
 
 The shipped implementation replays the 39-vector conformance suite
@@ -202,6 +318,16 @@ caveat as anchored patches applies: the shipped code is a port of the
 reference renderer, so this is divergence detection, not independent
 oracle verification — but alternate implementations of the view
 dialect can prove conformance by replaying the vendored file.
+
+`findNodes` is a port of the Study N scorer (barkup-bench
+`src/conditions/grounded-n.ts` `searchNodes`, with `tokenize` /
+`searchableText` from `src/conditions/grounded.ts`), verified by the
+ported unit suite plus independent re-scoring property tests. One
+deliberate divergence: the benchmark harness's tree walk was
+breadth-first, so its ties between equal-scored nodes at different
+depths followed BFS order; the pre-registered spec (and this port)
+break ties by document order — depth-first pre-order — as BRIEF-N
+states. Rankings differ only on those cross-depth ties.
 
 Headline numbers (barkup-bench REPORT.md, Study I and Study J
 addenda, both pre-registered; 360 scored view runs across two models):
@@ -231,8 +357,29 @@ simultaneously the most reliable, cheapest, and fastest editing
 interface measured, with input that scales with tree depth rather
 than node count.
 
-**Scope caveats (pre-registered in the studies).** The benchmark
-measured the oracle bound: task instructions named their target ids,
-so retrieval was trivially perfect. How a real system finds the
-relevant node ids from a vague request is deliberately out of scope —
-`renderView` takes the focus set as given.
+Search headline numbers (barkup-bench REPORT.md, Study N addendum,
+2026-07-09, pre-registered in `docs/BRIEF-N.md`; 315 scored cells,
+zero errors, every record independently re-graded):
+
+- **Skeleton view + one `find_nodes` tool call** grounds id-free edit
+  requests at 43/45 on sonnet-4.5 (equal to its id-oracle bound;
+  beats its own full-tree read 4–0) and 39/45 on gemini-3.5-flash
+  (vs 23/45 for expand-node navigation, 16–0 discordant, p < 0.001;
+  equal to its full-tree read) — median ONE search call, ~4–7k input
+  tokens per task, ~90% below full-tree.
+- **Embeddings measured no better than this keyword scorer**: top-5
+  target coverage 23/45 vs lexical's 24/45; task success
+  statistically identical (p = 0.688 / 1.000).
+- **Cheap-model grounding + frontier patching** (tier 3) held 41/45
+  while the frontier model's median input fell to 1,484 tokens
+  (−97.4%); the cheap model's id lists were exactly as good as the
+  frontier model's (valid 45/45, covers targets 41/45 for both).
+
+**Scope caveats (pre-registered in the studies).** Studies I and J
+measured the oracle bound — task instructions named their target ids,
+so retrieval was trivially perfect — and `renderView` still takes the
+focus set as given. Study N closed the retrieval question for the
+id-free case, but with the benchmark's standing limits: two models
+(claude-sonnet-4.5 and gemini-3.5-flash), a generated corpus, trees of
+roughly 300–1000 nodes. Whether the same tiers hold for other model
+families, human-authored trees, or much larger documents is untested.

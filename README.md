@@ -90,6 +90,16 @@ protocol correction). It publishes what it found:
   paired comparisons), fewer input tokens (−9% to −24% at ~1000
   nodes), and better first-pass patch validity (84–85/90 vs
   80–81/90).
+- **Finding the ids is one search call, not a full-tree read.** When
+  the edit request is a human description with no ids in it, a
+  pre-registered follow-up (Study N) gave models a skeleton view plus
+  one deterministic keyword-search tool (`find_nodes`, shipped here
+  as `findNodes`/`renderSearch`): id-free requests grounded at 43/45
+  on sonnet-4.5 (equal to its id-oracle bound) and 39/45 on
+  gemini-3.5-flash (vs 23/45 for expand-node navigation, p < 0.001),
+  with a median of ONE search call at ~90% less input than reading
+  the whole tree. Upgrading the scorer to text embeddings measured no
+  better.
 - **The HTML dialect is accuracy-neutral.** Against a JSON twin with
   identical validator strictness and error quality, HTML and JSON
   rewrite tied on validity (≥99%), editing success, and reading
@@ -311,6 +321,57 @@ renderer replays the benchmark's 39-vector conformance suite
 [docs/focused-views.md](docs/focused-views.md) for the full contract
 and evidence.
 
+### Finding the focus ids
+
+Where do the focus ids come from? Three tiers, each benchmark-measured
+([Study N addendum, barkup-bench REPORT.md](https://github.com/kevinpeckham/barkup-bench)):
+
+1. **Your application knows the ids** (a UI selection, a database row,
+   a previous turn) — render the view directly. That is the oracle
+   case Studies I/J measured: retrieval is free.
+2. **You have only a human description** ("make the hero shorter") —
+   show the model a skeleton view (the root with children collapsed:
+   `renderView(grammar, tree, { focus: [rootId] })`), give it a
+   `find_nodes` tool backed by `renderSearch`, and append
+   `SEARCH_PROMPT_RULES` to the system prompt. One call is the median.
+   In Study N this grounded id-free requests at 43/45 (sonnet-4.5,
+   equal to its id-oracle bound) and 39/45 (gemini-3.5-flash, vs 23/45
+   for expand-node navigation, p < 0.001) at ~90% less input than a
+   full-tree read. Deterministic keyword overlap is enough — swapping
+   the scorer for `text-embedding-3-small` measured no better (target
+   coverage 23/45 vs 24/45).
+3. **A frontier patcher under budget pressure** — ground with a cheap
+   model on the full tree first (ask it only for the target ids), then
+   patch against the minimal view of those ids. Study N's cross cell
+   (gemini grounds, sonnet patches) held 41/45 with 97% less
+   frontier-model input (median 1,484 tokens).
+
+```ts
+import {
+  findNodes,
+  renderSearch,
+  NO_MATCHES_MESSAGE,
+  SEARCH_PROMPT_RULES,
+} from "@kevinpeckham/barkup/view";
+
+// Tier 2's find_nodes tool, in any tool-use framework:
+function findNodesTool(query: string): string {
+  const result = renderSearch(grammar, storedTree, query); // top 5, minimal view
+  if (result === null) return NO_MATCHES_MESSAGE; // the exact benched miss text
+  if (!result.ok) throw new Error("unrenderable grammar"); // app bug, not model error
+  return result.html; // matches shown in place, ancestors visible
+}
+```
+
+`renderSearch(grammar, tree, query)` is exactly
+`renderView(grammar, tree, { focus: findNodes(tree, query), mode: "minimal" })`
+— `findNodes` is the deliberately simple scorer the benchmark handed
+to models (distinct-token overlap over type, name, and attributes;
+zero scores excluded; ties in document order; top 5 by default), and a
+miss returns `null` so your tool layer can send back the structured
+no-match text the study scored. Usual caveats: two models, a generated
+corpus, trees of ~300–1000 nodes.
+
 ## Sessions: a fresh view every turn
 
 Focused views change how you serialize a single edit; **sessions** are how
@@ -353,6 +414,14 @@ tested). The failure mechanism is **stale ordinal placement**: insert and
 move ops get anchored against an outdated picture of sibling order (they
 fall 95% → 85% → 80% across the session under serialize-once, while
 per-turn views hold ~98%). A fresh view keeps that picture current.
+
+Keep the conversation history too: two pre-registered follow-ups
+(Studies M and O) tried dropping it — a stateless fresh view each
+turn, then the same with every child annotated with its true position
+— and both fell short of history-plus-fresh-view on session
+integrity. The rule stands as stated: full history AND a fresh
+minimal view every turn (position annotations are optional and
+harmless — they cost ~9% extra view tokens and rescue nothing).
 
 Whole-tree rewrite is not a session protocol. Its conversation grows
 toward a hard context ceiling (200k exhausted deterministically at step 11

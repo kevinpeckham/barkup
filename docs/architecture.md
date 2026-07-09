@@ -447,8 +447,27 @@ deliberately not valid `parse()` input.
   (43/45) and full-tree-level on the cheap one (39/45 vs navigation's
   23/45) at ~90% less input. Fan-out instructions ("every X inside
   Y") are outside the recipe's boundary — Study Q measured it failing
-  there; the application should decompose to single-target edits (see
-  the boundary note in `docs/focused-views.md`).
+  there; the application should decompose to single-target edits via
+  `selectNodes` (see below, and the boundary note in
+  `docs/focused-views.md`).
+- **`selectNodes(tree, query)`** — deterministic, exact node
+  selection: the enumeration step of the fan-out decomposition loop
+  barkup-bench Study R measured (90/90 fan-out tasks on both models,
+  674/674 subtasks, zero failures, ~1/3 the input cost of a
+  whole-tree prompt), ported from the benchmark's committed
+  enumerator (`src/corpus/fanout.ts` `fanoutTargets`, the
+  `{type, within}` case) and generalized to the full ANDed
+  `SelectQuery`: `type` / `name` exact, `attributes` deep-equal on
+  values (primitives strict; json arrays order-significant, object
+  key order not), `within` scoping to STRICT descendants (the anchor
+  never matches; an unknown id returns `[]` — selection is data, not
+  an error, matching `renderSearch`'s miss philosophy). An empty
+  query matches every id-bearing node. Results are ids in document
+  order (depth-first pre-order — the same order `findNodes` breaks
+  ties in); id-less nodes are skipped; purely structural, no scoring.
+  The exact complement to `findNodes`: fuzzy search grounds human
+  language, `selectNodes` grounds programmatic queries. A
+  CSS-selector-string sugar is deliberately deferred.
 - **`renderSearch(grammar, tree, query, { limit?, mode? })`** — the
   benched tool-result composition, `renderView` over `findNodes`
   (minimal mode by default). Returns `null` on a miss — retrieval
@@ -557,6 +576,21 @@ const found = renderSearch(grammar, storedTree, "hero text-atom");
   input immutability; `renderSearch` null exactly on a miss and
   otherwise equal to `renderView` over `findNodes` with every match
   visible.
+- **`tests/select.test.ts`** *(unit)* — the deterministic-selection
+  contract: the benchmark's enumeration cases (strict descendants of
+  the anchor, document order), AND semantics, exact name matching,
+  the empty query, the unknown-`within` empty result, attribute
+  deep-equality (strict primitives, json arrays order-significant,
+  object key order ignored, missing keys never match), pre-order vs
+  BFS result order, id-less skipping, determinism, and input
+  immutability.
+- **`tests/select.property.test.ts`** *(property, 200 runs each)* —
+  the brief's core property over random grammar-valid trees with
+  queries drawn from the trees themselves: `selectNodes` output
+  equals an independently re-implemented filter over a full
+  depth-first pre-order walk, in walk order; `within` strictness
+  (never the anchor, always its strict descendants); determinism and
+  input immutability.
 
 ## Everything together — an agent's edit loop
 
@@ -622,11 +656,17 @@ Extensions clear the bar only on evidence: anchored patches
 tying whole-tree rewrite on success at the lowest token cost; focused
 views (`barkup/view`), added because Studies I and J measured
 partial-context prompts holding accuracy while input stopped scaling
-with the tree; and content search (`findNodes`/`renderSearch` in
+with the tree; content search (`findNodes`/`renderSearch` in
 `barkup/view`), added because Study N measured a skeleton view plus
 one deterministic search call grounding id-free requests at
-oracle-level accuracy (and text embeddings measuring no better) — all
-with stable ids (guarantee 1) as their only precondition. That is the
-standard for scope changes: a benchmark-validated capability whose
-precondition barkup already guarantees. See CLAUDE.md and the README's
+oracle-level accuracy (and text embeddings measuring no better); and
+exact selection (`selectNodes` in `barkup/view`), added because Study
+R measured app-side enumeration plus one single-target edit per node
+running 90/90 fan-out tasks with zero subtask failures where every
+prompt-side approach left partial coverage — all with stable ids
+(guarantee 1) as their only precondition. That is the standard for
+scope changes: a benchmark-validated capability whose precondition
+barkup already guarantees. The core codec stays scoped and stable;
+the toolkit around it grows exactly this way — research first, one
+minor version per measured capability. See CLAUDE.md and the README's
 maintenance posture.

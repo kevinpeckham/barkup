@@ -1,13 +1,16 @@
 # Focused views — design note
 
 Status: rendering shipped in 0.3.0; content search (`findNodes` /
-`renderSearch`, the Study N companion) shipped in 0.4.0; see
-"Verification" below. The semantics are ported from the
-benchmark-validated reference implementations (barkup-bench
-`src/conditions/views-html.ts`, the renderer Study J scored, and
-`src/conditions/grounded-n.ts`, the search scorer Study N scored) and
-are fixed; this note records the contract, API, and issue-type design
-for review in isolation.
+`renderSearch`, the Study N companion) shipped in 0.4.0;
+deterministic selection (`selectNodes`, the Study R fan-out
+enumeration step) shipped in 0.5.0; see "Verification" below. The
+semantics are ported from the benchmark-validated reference
+implementations (barkup-bench `src/conditions/views-html.ts`, the
+renderer Study J scored; `src/conditions/grounded-n.ts`, the search
+scorer Study N scored; and `src/corpus/fanout.ts`, the enumerator
+Study R's decomposition pipeline ran) and are fixed; this note
+records the contract, API, and issue-type design for review in
+isolation.
 
 ## Why this exists
 
@@ -56,6 +59,7 @@ runtime dependencies; no DOM involvement — views are built from
 import {
   renderView,
   findNodes,
+  selectNodes,
   renderSearch,
   VIEW_PROMPT_RULES,
   SEARCH_PROMPT_RULES,
@@ -83,6 +87,18 @@ function findNodes(
   options?: { limit?: number }, // default 5, the benched top-k
 ): string[];
 
+function selectNodes(
+  tree: BarkupNode,
+  query: SelectQuery, // exact, ANDed; {} matches every id-bearing node
+): string[]; // ids in document order; unknown `within` → []
+
+interface SelectQuery {
+  type?: string; // exact
+  name?: string; // exact
+  attributes?: Record<string, AttributeValue>; // deep-equal on values
+  within?: string; // strict descendants of this id only
+}
+
 function renderSearch(
   grammar: Grammar,
   tree: BarkupNode,
@@ -93,8 +109,13 @@ function renderSearch(
 
 `VIEW_PROMPT_RULES` and `SEARCH_PROMPT_RULES` are the exact prompt
 blocks the benchmark validated (see below); `NO_MATCHES_MESSAGE` is
-the exact no-match tool result it scored. No diffing, no embeddings,
-no JSON rendering. That is the whole surface.
+the exact no-match tool result it scored. `findNodes` and
+`selectNodes` are the two grounding utilities — fuzzy search grounds
+human language, exact selection grounds programmatic queries. No
+diffing, no embeddings, no JSON rendering, no selector-string parsing
+(a CSS-selector sugar over `SelectQuery` is deliberately deferred —
+the object form has zero parsing risk and covers everything Study R
+measured). That is the whole surface.
 
 ## The view contract (fixed, ported from the reference)
 
@@ -230,9 +251,13 @@ description, and the answer graduated into this entry as `findNodes` /
 knows:
 
 1. **The app knows the ids** (they came from a UI selection, a
-   database row, a previous turn): render the view directly. This is
-   the Studies I/J oracle case — retrieval is free, accuracy is the
-   ceiling (sonnet 45/45 on the minimal view).
+   database row, a previous turn — or a programmatic query:
+   `selectNodes(tree, { type, name, attributes, within })` enumerates
+   the matching ids exactly, in document order): render the view
+   directly. This is the Studies I/J oracle case — retrieval is free,
+   accuracy is the ceiling (sonnet 45/45 on the minimal view).
+   `selectNodes` is what makes fan-out requests belong to this tier —
+   see "The fan-out boundary" below.
 2. **The app has only a human description** ("make the hero shorter"):
    give the model a skeleton view — the root with its children
    collapsed, `renderView(grammar, tree, { focus: [rootId] })` — plus
@@ -292,7 +317,7 @@ skipped, zero scores excluded, ties by document order, top 5 by
 default. It is deliberately simple — see the tier-2 numbers above for
 why simple is enough.
 
-### The fan-out boundary (Study Q)
+### The fan-out boundary (Studies Q and R)
 
 The three tiers above are single-target validated: every Study N
 task edited one node. Study Q (pre-registered in barkup-bench
@@ -312,15 +337,60 @@ gemini on the full tree, p = 0.008 — the first inversion in the
 series), so no prompt-shape choice rescues fan-out
 model-independently.
 
-The guidance is **decomposition, in the application**: enumerate the
-target set deterministically yourself — your own query logic
-("descendants of C with type T") or a plain tree traversal;
-`findNodes` can help enumerate, but traversal is exact — and issue
-one single-target anchored edit per node, which runs at 87–100% at
-every size tested (Studies F, H, and I). More model calls, but each
-call is back in the regime the tiers above were measured in. On
-current models, one prompt asked to edit N nodes delivers roughly
-N × 50% coverage.
+The guidance is **decomposition, in the application** — and as of
+Study R (pre-registered in barkup-bench `docs/BRIEF-R.md`; REPORT.md
+addendum, 2026-07-09) that loop is measured, not inferred, and its
+enumeration step ships here as `selectNodes`:
+
+```ts
+const targets = selectNodes(tree, { type: "text-atom", within: sectionId });
+for (const id of targets) {
+  // one single-target anchored edit per node, focused view of that node
+}
+```
+
+Study R executed exactly this pipeline against the same 45 fan-out
+tasks per model that broke every prompt-side approach: **90/90 tasks
+on both models, 674/674 subtasks, zero failures** — including every
+7–32-target task, where the one-prompt arms ran ~45% — at about a
+third of the input cost of showing the whole tree once (median ~8k
+input tokens per task vs ~40–48k for any full-tree arm, and mean
+~10k per solved task vs 51–102k for the search-driven recipe). The
+prompt-side alternatives it was audited against all left partial
+coverage: a worked example did not transfer to exhaustiveness
+(essentially refuted; best arm 4–1 vs base, p = 0.375), a checklist
+instruction helped only one model on one context shape (sonnet
+full-tree, 9–1, p = 0.021 — still below its view baseline), and the
+Study Q model inversion persisted through every prompt arm. More
+model calls, but each call is back in the 87–100% single-target
+regime the tiers above were measured in — and per-edit reliability
+in the pipeline itself was 100% at n = 674, so compounding never bit
+at these lengths.
+
+`selectNodes` semantics (fixed; the `{type, within}` case is a
+faithful port of the enumerator the study ran, barkup-bench
+`src/corpus/fanout.ts` `fanoutTargets`): all present criteria are
+ANDed; an empty query matches every id-bearing node; `within` scopes
+to strict descendants (the anchor itself never matches), and an
+unknown `within` id returns `[]` — selection is data, not an error,
+the same null-on-a-miss philosophy as `renderSearch` (a `within` id
+can go stale between turns exactly like a search that stops
+matching; the module's throws stay reserved for program config and
+invalid trees). Results are ids in document order (depth-first
+pre-order, the same order `findNodes` breaks ties in); nodes without
+ids are skipped; attribute constraints are deep-equal on values
+(primitives strict, json values structural with object key order
+ignored). Purely structural and synchronous — no scoring, no
+fuzziness. A CSS-selector-string sugar is a possible future
+addition, deliberately deferred: the object form has zero parsing
+risk and covers everything Study R measured.
+
+Honest caveats, pre-registered with the study: two models
+(claude-sonnet-4.5 and gemini-3.5-flash), a generated corpus, and
+fan-out subtasks of two kinds (set-attribute and remove on a named
+id against a focused view). Whether per-edit reliability holds at
+100% for harder subtask kinds or much longer target lists is
+untested.
 
 ## Test plan (quality bar)
 
@@ -345,6 +415,16 @@ capped, rank-ordered; nothing relevant omitted from an unfilled
 result; determinism and immutability; `renderSearch` equal to the
 documented composition with every match visible).
 
+Selection too: unit tests port the benchmark's enumeration cases and
+cover AND semantics, strict-descendant scoping, the unknown-`within`
+empty result, attribute deep-equality (primitives strict; json
+arrays order-significant, object key order not), the empty query,
+pre-order results, id-less skipping, determinism, and immutability;
+a property test checks `selectNodes` against an independently
+re-implemented filter over a full pre-order walk — equal output, in
+walk order — with queries drawn from the trees themselves so json
+attribute matching is exercised with real values.
+
 ## Verification
 
 The shipped implementation replays the 39-vector conformance suite
@@ -368,6 +448,23 @@ breadth-first, so its ties between equal-scored nodes at different
 depths followed BFS order; the pre-registered spec (and this port)
 break ties by document order — depth-first pre-order — as BRIEF-N
 states. Rankings differ only on those cross-depth ties.
+
+`selectNodes` is a port of the Study R enumerator (barkup-bench
+`src/corpus/fanout.ts` `fanoutTargets`, the `{type, within}` case
+the study executed), generalized to the full ANDed query (`name`,
+`attributes`, the empty query) and with two documented differences
+from the benchmark function's shape: unknown `within` ids return
+`[]` instead of throwing (the benchmark threw because a missing
+container there meant a corpus bug; here the query is caller data,
+and selection-is-data matches `renderSearch`'s miss philosophy), and
+result order is document order (depth-first pre-order) where the
+benchmark's `descendants()` walk was breadth-first — the same
+cross-depth-order divergence documented for `findNodes` above, and
+order-irrelevant to Study R's result since every target received an
+independent edit. Verified by the ported enumeration cases from the
+benchmark's fan-out suite plus a property test checking `selectNodes`
+against an independently re-implemented filter over a full pre-order
+walk, in walk order.
 
 Headline numbers (barkup-bench REPORT.md, Study I and Study J
 addenda, both pre-registered; 360 scored view runs across two models):
@@ -419,9 +516,10 @@ zero errors, every record independently re-graded):
 measured the oracle bound — task instructions named their target ids,
 so retrieval was trivially perfect — and `renderView` still takes the
 focus set as given. Study N closed the retrieval question for the
-id-free **single-target** case (Study Q bounds it on the other side —
-see "The fan-out boundary" above), with the benchmark's standing
-limits: two models
-(claude-sonnet-4.5 and gemini-3.5-flash), a generated corpus, trees of
-roughly 300–1000 nodes. Whether the same tiers hold for other model
-families, human-authored trees, or much larger documents is untested.
+id-free **single-target** case; Study Q bounded the recipe on the
+fan-out side and Study R measured the decomposition that resolves it
+(see "The fan-out boundary" above). The benchmark's standing limits
+apply throughout: two models (claude-sonnet-4.5 and
+gemini-3.5-flash), a generated corpus, trees of roughly 300–1000
+nodes. Whether the same tiers hold for other model families,
+human-authored trees, or much larger documents is untested.

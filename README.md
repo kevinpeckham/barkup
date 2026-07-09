@@ -327,8 +327,10 @@ Where do the focus ids come from? Three tiers, each benchmark-measured
 ([Study N addendum, barkup-bench REPORT.md](https://github.com/kevinpeckham/barkup-bench)):
 
 1. **Your application knows the ids** (a UI selection, a database row,
-   a previous turn) — render the view directly. That is the oracle
-   case Studies I/J measured: retrieval is free.
+   a previous turn — or a programmatic query: `selectNodes(tree,
+   { type, name, attributes, within })` enumerates the matching ids
+   exactly, in document order) — render the view directly. That is the
+   oracle case Studies I/J measured: retrieval is free.
 2. **You have only a human description** ("make the hero shorter") —
    show the model a skeleton view (the root with children collapsed:
    `renderView(grammar, tree, { focus: [rootId] })`), give it a
@@ -372,10 +374,11 @@ miss returns `null` so your tool layer can send back the structured
 no-match text the study scored. Usual caveats: two models, a generated
 corpus, trees of ~300–1000 nodes.
 
-**Boundary: this recipe is single-target.** A pre-registered stress
-test ([Study Q addendum, barkup-bench REPORT.md](https://github.com/kevinpeckham/barkup-bench))
-pointed it at fan-out instructions — "set X on every text-atom
-inside the block named Y", 2–32 targets — and the recipe fails
+**Boundary: this recipe is single-target — fan-out requests get
+decomposed instead.** A pre-registered stress test
+([Study Q addendum, barkup-bench REPORT.md](https://github.com/kevinpeckham/barkup-bench))
+pointed the recipe at fan-out instructions — "set X on every
+text-atom inside the block named Y", 2–32 targets — and it fails
 there: median 6 `find_nodes` calls instead of 1, a third of runs
 above 100k input tokens (max 2.4M), and −24 pp accuracy vs a
 whole-tree prompt on gemini. Retrieval is not the bottleneck: even
@@ -384,12 +387,35 @@ tested left fan-out patches partially complete (62–69% success
 overall, ~45% at 7+ targets; failures are partial coverage) — and
 the models invert on mitigation (sonnet does better on views, gemini
 on the full tree), so there is no model-independent fan-out prompt
-strategy either. For "every X inside Y" requests, **decompose in
-the application**: enumerate the target set yourself — your own
-query logic or a plain tree traversal (`findNodes` can help, but
-traversal is exact) — and issue one single-target anchored edit per
-node, the 87–100% regime of Studies F/H/I. One prompt asked for N
-edits delivers roughly half of N on current models.
+strategy either.
+
+The fix is measured, not inferred
+([Study R addendum](https://github.com/kevinpeckham/barkup-bench)):
+**decompose in the application.** Enumerate the target set
+deterministically with `selectNodes` — exact, ANDed object queries,
+ids back in document order — and issue one single-target anchored
+edit per node against a focused view of that node:
+
+```ts
+import { selectNodes } from "@kevinpeckham/barkup/view";
+
+const targets = selectNodes(tree, { type: "text-atom", within: sectionId });
+for (const id of targets) {
+  // one single-target anchored edit per node, focused view of that node
+}
+```
+
+Study R ran exactly this pipeline on the fan-out tasks that broke
+every prompt-side approach: **90/90 tasks on both models tested,
+674/674 subtasks, zero failures** — every 7–32-target task included —
+at about a third of the input cost of showing the whole tree once
+(median ~8k input tokens per task vs ~40–48k for any full-tree arm).
+Per-edit reliability was 100% at n = 674, so compounding never bit;
+the prompt-side alternatives (a worked example, a checklist, the full
+tree, the search recipe) all left partial coverage. One prompt asked
+for N edits still delivers roughly half of N on current models — so
+ask N times, cheaply. Caveats as ever: two models, a generated
+corpus, set-attribute/remove subtasks.
 
 ## Sessions: a fresh view every turn
 
@@ -503,16 +529,32 @@ correction feedback.
 
 ## Maintenance posture
 
-barkup is **scoped and stable**: the surface (`defineGrammar` →
-`build` / `parse` / `format` / `validate`, plus `@kevinpeckham/barkup/testing`,
-`@kevinpeckham/barkup/patch`, and `@kevinpeckham/barkup/view`) is the whole
-product, and it is intentionally small. Scope moves only on evidence:
-anchored patches and focused views were added because
-[the benchmark](https://github.com/kevinpeckham/barkup-bench) measured
-them — patches tying whole-tree rewrite at the lowest cost, views
-holding accuracy while input stopped scaling with the tree — with
-barkup's id guarantee as their one precondition. That standard, not
-feature requests, is what changes the surface. Bug reports and
+barkup develops **research-first**, in two layers with different
+promises.
+
+The **core codec** — `defineGrammar` → `build` / `parse` / `format` /
+`validate`, stable ids, the four guarantees — is scoped and stable.
+It is intentionally small, it does not churn, and nothing gets added
+to it.
+
+Around that core, a **toolkit grows as
+[the companion benchmark](https://github.com/kevinpeckham/barkup-bench)
+identifies what agents editing typed trees actually need.** Every
+utility exists because a pre-registered study measured both the
+problem it solves and the solution it ships: anchored patches
+(Studies F/H — tying whole-tree rewrite at the lowest cost, holding
+87–100% where rewrite collapses at scale), focused views (Studies
+I/J/K — accuracy unchanged while input stops scaling with the tree,
+and the per-turn session protocol), content search (Studies L/N — a
+skeleton view plus one deterministic search call grounding id-free
+requests at oracle-level accuracy), and exact selection (Studies
+Q/R — the fan-out boundary and the measured decomposition loop,
+90/90 with zero subtask failures). Nothing is added speculatively;
+nothing ships without benchmark numbers attached — and that
+standard, not feature requests, is what changes the surface.
+
+Semver keeps the two layers honest: toolkit additions arrive as
+minor versions; the core surface does not churn. Bug reports and
 guarantee violations are always welcome.
 
 ## License & credit

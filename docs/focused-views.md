@@ -206,9 +206,19 @@ persist(result.node);
 
 In multi-turn sessions, views from earlier turns go stale as patches
 land — generate a fresh view for each editing turn rather than reusing
-one from history: keep the full conversation history AND attach a
-fresh minimal view every turn (Studies K, M, and O; annotating views
-with child positions is optional and harmless).
+one from history. Two validated ways to run the session around those
+views (barkup-bench REPORT.md, Study P addendum, 2026-07-09): keep
+the full conversation history alongside the per-turn views (Studies
+K, M, and O; annotating views with child positions is optional and
+harmless), or go fully stateless with two worked examples — an
+ordinal insert and an ordinal move, from a fixed tree unrelated to
+any real document — in the system prompt (Study P: matches
+full-history accuracy on both models tested, at roughly half the
+input cost at 12-edit lengths, flat in session length with no
+context ceiling). The examples must use the consumer's grammar, so
+barkup ships no canned block; the README's Sessions section
+documents the pattern, with barkup-bench `src/harness/examples.ts`
+as the reference implementation.
 
 ## Finding the focus ids — content search (Study N)
 
@@ -281,6 +291,36 @@ and attributes (lowercase alphanumeric runs), nodes without ids
 skipped, zero scores excluded, ties by document order, top 5 by
 default. It is deliberately simple — see the tier-2 numbers above for
 why simple is enough.
+
+### The fan-out boundary (Study Q)
+
+The three tiers above are single-target validated: every Study N
+task edited one node. Study Q (pre-registered in barkup-bench
+`docs/BRIEF-Q.md`; REPORT.md addendum, 2026-07-09) stress-tested the
+tier-2 recipe on fan-out instructions — "set textStyle to serif on
+every text-atom inside the block named X", 2–32 targets — and both
+the recipe's economics and its accuracy fail there: median 6
+`find_nodes` calls instead of 1, 34 of 90 runs above 100k input
+tokens (max 2.4M), and on gemini −24.4 pp vs a whole-tree prompt
+(11–0 discordant, p = 0.001). The deeper result: retrieval is not
+the bottleneck. With every target visible in an oracle view, success
+is 62–69% overall and 44–50% at 7+ targets, versus 87–100%
+single-target — failures are 100% partial coverage; models emit
+legal patches that stop short of the full target set. The models
+also invert (sonnet does better on the focused view, p = 0.022;
+gemini on the full tree, p = 0.008 — the first inversion in the
+series), so no prompt-shape choice rescues fan-out
+model-independently.
+
+The guidance is **decomposition, in the application**: enumerate the
+target set deterministically yourself — your own query logic
+("descendants of C with type T") or a plain tree traversal;
+`findNodes` can help enumerate, but traversal is exact — and issue
+one single-target anchored edit per node, which runs at 87–100% at
+every size tested (Studies F, H, and I). More model calls, but each
+call is back in the regime the tiers above were measured in. On
+current models, one prompt asked to edit N nodes delivers roughly
+N × 50% coverage.
 
 ## Test plan (quality bar)
 
@@ -379,7 +419,9 @@ zero errors, every record independently re-graded):
 measured the oracle bound — task instructions named their target ids,
 so retrieval was trivially perfect — and `renderView` still takes the
 focus set as given. Study N closed the retrieval question for the
-id-free case, but with the benchmark's standing limits: two models
+id-free **single-target** case (Study Q bounds it on the other side —
+see "The fan-out boundary" above), with the benchmark's standing
+limits: two models
 (claude-sonnet-4.5 and gemini-3.5-flash), a generated corpus, trees of
 roughly 300–1000 nodes. Whether the same tiers hold for other model
 families, human-authored trees, or much larger documents is untested.

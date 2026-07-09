@@ -441,10 +441,14 @@ deliberately not valid `parse()` input.
   overlap (lowercase alphanumeric runs) between the query and each
   node's type, name, and attributes; id-less nodes skipped; zero
   scores excluded; ties by document order; top `limit` (default 5)
-  ids. It closes the "who supplies the focus ids?" gap: skeleton view
-  + one search call grounded id-free requests at oracle-level
-  accuracy on the frontier model (43/45) and full-tree-level on the
-  cheap one (39/45 vs navigation's 23/45) at ~90% less input.
+  ids. It closes the "who supplies the focus ids?" gap for
+  single-target requests: skeleton view + one search call grounded
+  id-free requests at oracle-level accuracy on the frontier model
+  (43/45) and full-tree-level on the cheap one (39/45 vs navigation's
+  23/45) at ~90% less input. Fan-out instructions ("every X inside
+  Y") are outside the recipe's boundary — Study Q measured it failing
+  there; the application should decompose to single-target edits (see
+  the boundary note in `docs/focused-views.md`).
 - **`renderSearch(grammar, tree, query, { limit?, mode? })`** — the
   benched tool-result composition, `renderView` over `findNodes`
   (minimal mode by default). Returns `null` on a miss — retrieval

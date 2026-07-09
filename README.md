@@ -372,6 +372,25 @@ miss returns `null` so your tool layer can send back the structured
 no-match text the study scored. Usual caveats: two models, a generated
 corpus, trees of ~300–1000 nodes.
 
+**Boundary: this recipe is single-target.** A pre-registered stress
+test ([Study Q addendum, barkup-bench REPORT.md](https://github.com/kevinpeckham/barkup-bench))
+pointed it at fan-out instructions — "set X on every text-atom
+inside the block named Y", 2–32 targets — and the recipe fails
+there: median 6 `find_nodes` calls instead of 1, a third of runs
+above 100k input tokens (max 2.4M), and −24 pp accuracy vs a
+whole-tree prompt on gemini. Retrieval is not the bottleneck: even
+with every target handed to the model in the view, every model
+tested left fan-out patches partially complete (62–69% success
+overall, ~45% at 7+ targets; failures are partial coverage) — and
+the models invert on mitigation (sonnet does better on views, gemini
+on the full tree), so there is no model-independent fan-out prompt
+strategy either. For "every X inside Y" requests, **decompose in
+the application**: enumerate the target set yourself — your own
+query logic or a plain tree traversal (`findNodes` can help, but
+traversal is exact) — and issue one single-target anchored edit per
+node, the 87–100% regime of Studies F/H/I. One prompt asked for N
+edits delivers roughly half of N on current models.
+
 ## Sessions: a fresh view every turn
 
 Focused views change how you serialize a single edit; **sessions** are how
@@ -415,13 +434,39 @@ move ops get anchored against an outdated picture of sibling order (they
 fall 95% → 85% → 80% across the session under serialize-once, while
 per-turn views hold ~98%). A fresh view keeps that picture current.
 
-Keep the conversation history too: two pre-registered follow-ups
-(Studies M and O) tried dropping it — a stateless fresh view each
-turn, then the same with every child annotated with its true position
-— and both fell short of history-plus-fresh-view on session
-integrity. The rule stands as stated: full history AND a fresh
-minimal view every turn (position annotations are optional and
-harmless — they cost ~9% extra view tokens and rescue nothing).
+What about the conversation history? Two options, both
+benchmark-validated:
+
+- **Keep the full history** alongside the per-turn views (Studies K,
+  M, and O). Two pre-registered follow-ups tried simply dropping it —
+  a stateless fresh view each turn, then the same with every child
+  annotated with its true position — and both fell short of
+  history-plus-fresh-view on session integrity, failing on late
+  ordinal placements. (Position annotations are optional and
+  harmless — they cost ~9% extra view tokens and rescue nothing.)
+- **Or go fully stateless**: per-turn views plus a small
+  worked-examples block in the system prompt, no history at all
+  (Study P; pre-registered gate passed on both models tested, in
+  both delivery framings — the system-prompt framing suffices). What
+  history was contributing turns out to be **teaching, not memory**:
+  two canned worked examples — an ordinal insert and an ordinal move
+  on a fixed tree the model never edits, ~900 tokens total — restore
+  stateless sessions to full-history accuracy, at roughly half the
+  input cost of keep-history at 12 edits (~26k vs ~54k input tokens
+  per session), flat in session length with no context ceiling, and
+  structurally immune to history-construction bugs.
+
+To write the examples block for **your** grammar: one example per
+tricky operation class — insert by ordinal, move by ordinal — each a
+focused view plus an edit request plus the correct anchored patch,
+drawn from a small fixed tree unrelated to any real document, with
+the patches verified against your own `applyAnchoredPatch` in a unit
+test. The benchmark's committed block is the pattern to copy:
+`EXAMPLE_TREE`, `WORKED_EXAMPLES`, and `WORKED_EXAMPLES_BLOCK` in
+barkup-bench `src/harness/examples.ts`, unit-tested in its
+`tests/sessions-p.test.ts`. barkup deliberately ships no canned
+block — the examples must speak your grammar, so this is a
+documented pattern, not an API.
 
 Whole-tree rewrite is not a session protocol. Its conversation grows
 toward a hard context ceiling (200k exhausted deterministically at step 11

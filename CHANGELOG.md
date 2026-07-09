@@ -4,6 +4,37 @@ All notable changes to `@kevinpeckham/barkup`. The project follows
 semver; the core surface is stable and scope moves only on benchmark
 evidence (see the README's maintenance posture).
 
+## 0.4.0 — 2026-07-09
+
+### Added
+
+- **Content search in `@kevinpeckham/barkup/view` — the
+  search-then-patch recipe.** `findNodes(tree, query, { limit? })` is
+  the deterministic scorer barkup-bench Study N handed to models as a
+  `find_nodes` tool: distinct-token overlap between the query and each
+  node's type, name, and attributes; id-less nodes skipped; zero
+  scores excluded; ties by document order; top 5 by default. In the
+  benchmark, a skeleton view plus a median of ONE search call grounded
+  id-free edit requests at 43/45 on sonnet-4.5 (equal to its id-oracle
+  bound) and 39/45 on gemini-3.5-flash (vs 23/45 for expand-node
+  navigation, p < 0.001) at ~90% less input than a full-tree read —
+  and upgrading the scorer to text embeddings measured no better.
+- **`renderSearch(grammar, tree, query, { limit?, mode? })`** — the
+  exact tool-result composition the study scored (`renderView` over
+  `findNodes`, minimal mode by default). Returns `null` on a miss;
+  **`NO_MATCHES_MESSAGE`** exports the exact no-match text the
+  benchmark sent back as the tool result.
+- **`SEARCH_PROMPT_RULES`** — the three-bullet search prompt block
+  pre-registered in barkup-bench BRIEF-N and scored by Study N (with
+  the benchmark's "anchored patch" phrasing generalized, as with
+  `VIEW_PROMPT_RULES`), pinned verbatim by a unit test.
+- Docs graduate `/view` from "your application must supply the focus
+  ids" to the benchmarked three-tier recipe (known ids → render
+  directly; human description → skeleton view + `find_nodes`; frontier
+  patcher under budget pressure → cheap-model grounding, 41/45 at 97%
+  less frontier input). README, `docs/focused-views.md`, and
+  `docs/architecture.md` updated with the Study N numbers and caveats.
+
 ## 0.3.0 — 2026-07-07
 
 ### Added

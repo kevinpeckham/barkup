@@ -5,7 +5,7 @@
  * Requires fast-check (optional peer dependency):
  *
  *   import fc from "fast-check";
- *   import { treeArbitrary, assertRoundTrip } from "barkup/testing";
+ *   import { treeArbitrary, assertRoundTrip } from "@kevinpeckham/barkup/testing";
  *
  *   fc.assert(fc.property(treeArbitrary(grammar.config), (tree) => {
  *     assertRoundTrip(grammar, tree, adapter);

@@ -264,7 +264,14 @@ knows:
    directly. This is the Studies I/J oracle case — retrieval is free,
    accuracy is the ceiling (sonnet 45/45 on the minimal view).
    `selectNodes` is what makes fan-out requests belong to this tier —
-   see "The fan-out boundary" below.
+   see "The fan-out boundary" below. In every tier, the focus must
+   cover **every node the request mentions**, not just the edit
+   target: Study U measured dependent edits ("set A's content to
+   match B's") against target-only views and both models silently
+   invented plausible values on all 90 cells — no refusals, no
+   invalid artifacts. With the mentioned source node added to the
+   focus ids, 90/90 succeeded at ~1.7k tokens median. View scope is
+   a correctness contract.
 2. **The app has only a human description** ("make the hero shorter"):
    give the model a skeleton view — the root with its children
    collapsed, `renderView(grammar, tree, { focus: [rootId] })` — plus

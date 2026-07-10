@@ -348,6 +348,19 @@ Where do the focus ids come from? Three tiers, each benchmark-measured
    (gemini grounds, sonnet patches) held 41/45 with 97% less
    frontier-model input (median 1,484 tokens).
 
+One rule binds all three tiers, and it is a correctness contract, not
+an optimization (Study U): **focus ids must cover every node the
+request mentions, not just the edit target.** A dependent edit ("set
+A's content to the same value as B's") against a view showing only A
+does not error — both models tested produced a valid patch with a
+**silently invented value** on all 90 such cells (zero refusals, zero
+invalid artifacts). Adding the mentioned source node to the focus ids
+fixed all 90 at ~1.7k tokens median, which also *beat* the whole-tree
+prompt (45/45 vs 42/45 on sonnet at ~1000 nodes) at 25× less input.
+The `find_nodes` tool can self-serve such reads at 82–84% — a real
+capability, but short of parity, so let the model search for *where*
+to edit and let your application put *what it must read* in the view.
+
 ```ts
 import {
   findNodes,

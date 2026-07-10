@@ -461,7 +461,9 @@ fall 95% → 85% → 80% across the session under serialize-once, while
 per-turn views hold ~98%). A fresh view keeps that picture current.
 
 What about the conversation history? Two options, both
-benchmark-validated:
+benchmark-validated — and both since measured through 36-edit
+sessions (Study S), three times the original horizon, where the
+choice turns out to be purely about cost:
 
 - **Keep the full history** alongside the per-turn views (Studies K,
   M, and O). Two pre-registered follow-ups tried simply dropping it —
@@ -470,6 +472,10 @@ benchmark-validated:
   history-plus-fresh-view on session integrity, failing on late
   ordinal placements. (Position annotations are optional and
   harmless — they cost ~9% extra view tokens and rescue nothing.)
+  Keep-history stays essentially perfect through 36 edits (Study S:
+  719/720 steps across both models) with no context ceiling in
+  sight — but its per-step input grows linearly with session length,
+  reaching ~24k tokens by step 36.
 - **Or go fully stateless**: per-turn views plus a small
   worked-examples block in the system prompt, no history at all
   (Study P; pre-registered gate passed on both models tested, in
@@ -477,10 +483,15 @@ benchmark-validated:
   history was contributing turns out to be **teaching, not memory**:
   two canned worked examples — an ordinal insert and an ordinal move
   on a fixed tree the model never edits, ~900 tokens total — restore
-  stateless sessions to full-history accuracy, at roughly half the
-  input cost of keep-history at 12 edits (~26k vs ~54k input tokens
-  per session), flat in session length with no context ceiling, and
-  structurally immune to history-construction bugs.
+  stateless sessions to full-history accuracy, flat in session
+  length, and structurally immune to history-construction bugs. The
+  horizon is measured, not assumed: at 36 edits the recipe shows no
+  late-session decay (Study S: last-third accuracy 98–99%, gate
+  passed on both models — step 36 is taught as well as step 1), and
+  the cost gap widens with length: flat ~2.1k input tokens per step
+  versus keep-history's linear growth, 5–6× less input per 36-edit
+  session (~81k vs ~449k). For long sessions, this is the measured
+  default.
 
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a

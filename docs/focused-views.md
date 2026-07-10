@@ -234,9 +234,11 @@ K, M, and O; annotating views with child positions is optional and
 harmless), or go fully stateless with two worked examples — an
 ordinal insert and an ordinal move, from a fixed tree unrelated to
 any real document — in the system prompt (Study P: matches
-full-history accuracy on both models tested, at roughly half the
-input cost at 12-edit lengths, flat in session length with no
-context ceiling). The examples must use the consumer's grammar, so
+full-history accuracy on both models tested; Study S: still true at
+36-edit lengths with no late-session decay, at flat ~2.1k input per
+step — 5–6× less than keep-history, whose per-step input grows
+linearly with session length). The examples must use the consumer's
+grammar, so
 barkup ships no canned block; the README's Sessions section
 documents the pattern, with barkup-bench `src/harness/examples.ts`
 as the reference implementation.

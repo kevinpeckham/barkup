@@ -493,17 +493,30 @@ choice turns out to be purely about cost:
   session (~81k vs ~449k). For long sessions, this is the measured
   default.
 
-One scope boundary, stated honestly: every benchmarked session
-issues **self-contained** requests — each instruction plus the
-current tree carries everything needed to execute it. Requests that
-refer back to earlier conversation ("use the campaign codename we
-settled on") cannot be resolved by a stateless editor unless your
-application carries that context into the prompt, and no study has
-measured that class yet. Study T (pre-registered in barkup-bench
-`docs/BRIEF-T.md`) tests it, including the obvious cheap fix — an
-app-maintained session-notes block, a memo instead of a transcript.
-Until it reports, read the stateless recipe as measured for
-self-contained requests only.
+One boundary, now measured (Study T): the recipes above cover
+**self-contained** requests — instruction plus current tree carry
+everything needed. Requests that reference earlier conversation
+("rename it to the codename we settled on", "apply the standing rule
+from before") fail a stateless editor **by construction**: Study T
+built sessions with exactly such callback steps and the stateless
+recipe failed all 160 of them across both models while scoring
+160/160 on the ordinary steps of the same sessions. The fix is **a
+memo, not a transcript**: have your application record each declared
+fact or standing rule as it arrives and append the running list to
+every step:
+
+```
+Session notes (maintained by the application):
+- The campaign codename is "vesper-7".
+- Standing rule: every new text atom gets textStyle "small-caps".
+```
+
+That block restored 80/80 callback steps on both models, tied full
+history on every paired comparison, beat it on end-state integrity
+(19–20/20 vs 17–19/20), and cost 1.02× the stateless baseline —
+keep-history costs 2.1× either. Capturing the notes is your
+application's job (Study T measured the memo given faithful capture);
+the format above is the exact registered block the benchmark scored.
 
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a

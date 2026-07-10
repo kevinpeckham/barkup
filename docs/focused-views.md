@@ -237,8 +237,11 @@ any real document — in the system prompt (Study P: matches
 full-history accuracy on both models tested; Study S: still true at
 36-edit lengths with no late-session decay, at flat ~2.1k input per
 step — 5–6× less than keep-history, whose per-step input grows
-linearly with session length). The examples must use the consumer's
-grammar, so
+linearly with session length). Both options are measured on
+self-contained requests only; requests that refer back to earlier
+conversation are unmeasured and registered as Study T (a stateless
+editor needs the application to carry that context into the
+prompt). The examples must use the consumer's grammar, so
 barkup ships no canned block; the README's Sessions section
 documents the pattern, with barkup-bench `src/harness/examples.ts`
 as the reference implementation.

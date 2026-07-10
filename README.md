@@ -493,6 +493,18 @@ choice turns out to be purely about cost:
   session (~81k vs ~449k). For long sessions, this is the measured
   default.
 
+One scope boundary, stated honestly: every benchmarked session
+issues **self-contained** requests — each instruction plus the
+current tree carries everything needed to execute it. Requests that
+refer back to earlier conversation ("use the campaign codename we
+settled on") cannot be resolved by a stateless editor unless your
+application carries that context into the prompt, and no study has
+measured that class yet. Study T (pre-registered in barkup-bench
+`docs/BRIEF-T.md`) tests it, including the obvious cheap fix — an
+app-maintained session-notes block, a memo instead of a transcript.
+Until it reports, read the stateless recipe as measured for
+self-contained requests only.
+
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a
 focused view plus an edit request plus the correct anchored patch,

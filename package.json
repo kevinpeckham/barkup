@@ -1,6 +1,6 @@
 {
-	"name": "barkup",
-	"version": "0.1.0",
+	"name": "@kevinpeckham/barkup",
+	"version": "0.5.0",
 	"description": "Author typed trees as HTML. A config-driven grammar codec with byte-for-byte id preservation, declared attribute coercion, and round-trip guarantees \u2014 designed for humans and LLM agents authoring the same markup.",
 	"author": "Kevin Peckham",
 	"license": "MIT",
@@ -15,11 +15,20 @@
 		"./testing": {
 			"types": "./dist/testing.d.ts",
 			"import": "./dist/testing.js"
+		},
+		"./patch": {
+			"types": "./dist/patch.d.ts",
+			"import": "./dist/patch.js"
+		},
+		"./view": {
+			"types": "./dist/view.d.ts",
+			"import": "./dist/view.js"
 		}
 	},
 	"files": [
 		"dist",
 		"README.md",
+		"CHANGELOG.md",
 		"LICENSE"
 	],
 	"sideEffects": false,
@@ -72,5 +81,8 @@
 	},
 	"bugs": {
 		"url": "https://github.com/kevinpeckham/barkup/issues"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

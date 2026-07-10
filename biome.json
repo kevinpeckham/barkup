@@ -12,6 +12,6 @@
 		}
 	},
 	"files": {
-		"includes": ["src/**", "tests/**"]
+		"includes": ["src/**", "tests/**", "!tests/fixtures/**"]
 	}
 }

@@ -1,30 +1,33 @@
 name: Release
 
-# Publishes to npm with provenance (signed attestation linking the package
-# to this repo + commit). Trigger by pushing a v* tag. Requires the
-# NPM_TOKEN repository secret (npm automation token with publish rights).
+# Publishes to npm via OIDC trusted publishing (configured on npmjs.com for
+# this repo + workflow). No tokens: GitHub's OIDC identity authenticates the
+# publish, and npm generates a signed provenance attestation automatically.
+# Trigger by pushing a v* tag.
 on:
   push:
     tags: ["v*"]
 
 permissions:
   contents: read
-  id-token: write # required for npm provenance
+  id-token: write # required for OIDC trusted publishing + provenance
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+      # Trusted publishing requires npm >= 11.5.1. Pinned to 11: npm
+      # 12.0.0's fresh global install is missing its bundled sigstore
+      # module, which breaks provenance (v0.4.0 first attempt).
+      - run: npm install -g npm@11 && npm --version
       - run: bun install --frozen-lockfile
       - run: bun run check
       - run: bun test
       - run: bun run build
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish

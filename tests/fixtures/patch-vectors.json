@@ -1,0 +1,3716 @@
+{
+	"version": 1,
+	"grammar": "src/grammar.ts BENCH_CONFIG",
+	"vectors": [
+		{
+			"name": "set-attribute happy",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-attribute",
+					"id": "t1",
+					"key": "content",
+					"value": "Hi."
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80,
+												"content": "Hi."
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "set-attribute overwrite",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-attribute",
+					"id": "t1",
+					"key": "maxLength",
+					"value": 40
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 40
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "remove-attribute happy",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "remove-attribute",
+					"id": "d1",
+					"key": "title"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "remove-attribute absent",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "remove-attribute",
+					"id": "t1",
+					"key": "content"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "set-name happy",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "b1",
+					"name": "hero"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"name": "hero",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "remove subtree",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "remove",
+					"id": "b1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "remove root rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "remove",
+					"id": "d1"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "insert before sibling",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "widget-slot",
+						"id": "w2"
+					},
+					"before": "b1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "widget-slot",
+									"id": "w2"
+								},
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "insert after sibling",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "block",
+						"id": "b2"
+					},
+					"after": "w1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								},
+								{
+									"type": "block",
+									"id": "b2"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "insert append via parentId",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "text-atom",
+						"id": "t2",
+						"attributes": {
+							"maxLength": 5
+						}
+					},
+					"parentId": "b1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										},
+										{
+											"type": "text-atom",
+											"id": "t2",
+											"attributes": {
+												"maxLength": 5
+											}
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "insert missing required attribute rejected at validation",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "text-atom",
+						"id": "t9"
+					},
+					"parentId": "b1"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "missing-attribute"
+			}
+		},
+		{
+			"name": "insert bad containment rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "p9"
+					},
+					"parentId": "b1"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-child"
+			}
+		},
+		{
+			"name": "insert duplicate id rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "block",
+						"id": "b1"
+					},
+					"parentId": "p2"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "duplicate-id"
+			}
+		},
+		{
+			"name": "move before sibling",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "move",
+					"id": "i1",
+					"before": "t1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "image-atom",
+											"id": "i1"
+										},
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "move cross-parent append",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "move",
+					"id": "b1",
+					"parentId": "p2"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "move root rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "move",
+					"id": "d1",
+					"parentId": "p2"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "move into own subtree rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "move",
+					"id": "p1",
+					"parentId": "b1"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "anchor ambiguity rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "page"
+					},
+					"before": "p1",
+					"parentId": "d1"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "anchor missing rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "page"
+					}
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "stale id names op index",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "p1",
+					"name": "ok"
+				},
+				{
+					"op": "set-attribute",
+					"id": "zzz",
+					"key": "title",
+					"value": "x"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 1
+			}
+		},
+		{
+			"name": "unknown op rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "replace",
+					"id": "t1"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 0
+			}
+		},
+		{
+			"name": "atomicity: later failure rejects earlier ops",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "remove",
+					"id": "w1"
+				},
+				{
+					"op": "remove",
+					"id": "zzz"
+				}
+			],
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch",
+				"opIndex": 1
+			}
+		},
+		{
+			"name": "multi-op compound edit",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "block",
+						"id": "b9",
+						"attributes": {
+							"featured": true
+						}
+					},
+					"after": "b1"
+				},
+				{
+					"op": "move",
+					"id": "t1",
+					"parentId": "b9"
+				},
+				{
+					"op": "set-attribute",
+					"id": "t1",
+					"key": "content",
+					"value": "Moved."
+				},
+				{
+					"op": "set-name",
+					"id": "b9",
+					"name": "landing"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "block",
+									"name": "landing",
+									"id": "b9",
+									"attributes": {
+										"featured": true
+									},
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80,
+												"content": "Moved."
+											}
+										}
+									]
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "non-array patch rejected",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": {
+				"op": "remove",
+				"id": "t1"
+			},
+			"expected": {
+				"ok": false,
+				"code": "invalid-patch"
+			}
+		},
+		{
+			"name": "sequential anchors resolve against current state",
+			"base": {
+				"type": "document",
+				"id": "d1",
+				"attributes": {
+					"title": "Vectors"
+				},
+				"children": [
+					{
+						"type": "page",
+						"id": "p1",
+						"children": [
+							{
+								"type": "block",
+								"id": "b1",
+								"children": [
+									{
+										"type": "text-atom",
+										"id": "t1",
+										"attributes": {
+											"maxLength": 80
+										}
+									},
+									{
+										"type": "image-atom",
+										"id": "i1"
+									}
+								]
+							},
+							{
+								"type": "widget-slot",
+								"id": "w1"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "p2"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "insert",
+					"node": {
+						"type": "block",
+						"id": "b3"
+					},
+					"before": "w1"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "block",
+						"id": "b4"
+					},
+					"before": "b3"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"id": "d1",
+					"attributes": {
+						"title": "Vectors"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "p1",
+							"children": [
+								{
+									"type": "block",
+									"id": "b1",
+									"children": [
+										{
+											"type": "text-atom",
+											"id": "t1",
+											"attributes": {
+												"maxLength": 80
+											}
+										},
+										{
+											"type": "image-atom",
+											"id": "i1"
+										}
+									]
+								},
+								{
+									"type": "block",
+									"id": "b4"
+								},
+								{
+									"type": "block",
+									"id": "b3"
+								},
+								{
+									"type": "widget-slot",
+									"id": "w1"
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "p2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-0: rename root + append page",
+			"base": {
+				"type": "document",
+				"id": "n2",
+				"attributes": {
+					"title": "&ca",
+					"theme": "ref"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "w1Dc_Z_",
+						"id": "n1",
+						"attributes": {
+							"layoutSize": "arguments"
+						},
+						"children": [
+							{
+								"type": "block",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "=#",
+									"featured": false
+								}
+							}
+						]
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n2",
+					"name": "vec-0"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-0"
+					},
+					"parentId": "n2"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-0",
+					"id": "n2",
+					"attributes": {
+						"title": "&ca",
+						"theme": "ref"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "w1Dc_Z_",
+							"id": "n1",
+							"attributes": {
+								"layoutSize": "arguments"
+							},
+							"children": [
+								{
+									"type": "block",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "=#",
+										"featured": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-0"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-1: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "E_",
+				"children": [
+					{
+						"type": "page",
+						"name": "AB_-",
+						"attributes": {
+							"layoutSize": "=6p"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "AL-57606",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "6",
+									"featured": true
+								}
+							}
+						],
+						"id": "n2"
+					},
+					{
+						"type": "page",
+						"name": "v",
+						"attributes": {
+							"layoutSize": "S:"
+						},
+						"id": "n3"
+					}
+				],
+				"id": "n1"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n1",
+					"name": "vec-1"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-1"
+					},
+					"parentId": "n1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-1",
+					"id": "n1",
+					"children": [
+						{
+							"type": "page",
+							"name": "AB_-",
+							"id": "n2",
+							"attributes": {
+								"layoutSize": "=6p"
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "AL-57606",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "6",
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "v",
+							"id": "n3",
+							"attributes": {
+								"layoutSize": "S:"
+							}
+						},
+						{
+							"type": "page",
+							"id": "vp-1"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-2: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "MJ33_-A",
+				"id": "n0",
+				"attributes": {
+					"title": "+\\SeL%8\\"
+				}
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n0",
+					"name": "vec-2"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-2"
+					},
+					"parentId": "n0"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-2",
+					"id": "n0",
+					"attributes": {
+						"title": "+\\SeL%8\\"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "vp-2"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-3: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "A-t_1_-",
+				"attributes": {
+					"title": "bi",
+					"theme": "=Nl>y"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "pot",
+						"attributes": {
+							"layoutSize": "$"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "x",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "+F~ttDW`",
+									"featured": false
+								}
+							}
+						],
+						"id": "n2"
+					}
+				],
+				"id": "n1"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n1",
+					"name": "vec-3"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-3"
+					},
+					"parentId": "n1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-3",
+					"id": "n1",
+					"attributes": {
+						"title": "bi",
+						"theme": "=Nl>y"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "pot",
+							"id": "n2",
+							"attributes": {
+								"layoutSize": "$"
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "x",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "+F~ttDW`",
+										"featured": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-3"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-4: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "b6",
+				"id": "n0",
+				"attributes": {
+					"title": "",
+					"theme": "y&O"
+				}
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n0",
+					"name": "vec-4"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-4"
+					},
+					"parentId": "n0"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-4",
+					"id": "n0",
+					"attributes": {
+						"title": "",
+						"theme": "y&O"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "vp-4"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-5: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "AvalueOf",
+				"attributes": {
+					"title": "length"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "XL",
+						"attributes": {
+							"layoutSize": "_dk_vRGHt"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "E-ceX_t-",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "Dr l",
+									"featured": true
+								}
+							}
+						],
+						"id": "n5"
+					},
+					{
+						"type": "page",
+						"name": "d-S",
+						"attributes": {
+							"layoutSize": "1bf1o4hKD4"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "uL-Iy",
+								"id": "n1",
+								"attributes": {
+									"containerClasses": "",
+									"featured": false
+								}
+							},
+							{
+								"type": "block",
+								"name": "g8B_68",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "^O",
+									"featured": false
+								}
+							},
+							{
+								"type": "block",
+								"name": "OA-i",
+								"id": "n3",
+								"attributes": {
+									"featured": false
+								}
+							}
+						],
+						"id": "n6"
+					}
+				],
+				"id": "n4"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n4",
+					"name": "vec-5"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-5"
+					},
+					"parentId": "n4"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-5",
+					"id": "n4",
+					"attributes": {
+						"title": "length"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "XL",
+							"id": "n5",
+							"attributes": {
+								"layoutSize": "_dk_vRGHt"
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "E-ceX_t-",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "Dr l",
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "d-S",
+							"id": "n6",
+							"attributes": {
+								"layoutSize": "1bf1o4hKD4"
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "uL-Iy",
+									"id": "n1",
+									"attributes": {
+										"containerClasses": "",
+										"featured": false
+									}
+								},
+								{
+									"type": "block",
+									"name": "g8B_68",
+									"id": "n2",
+									"attributes": {
+										"containerClasses": "^O",
+										"featured": false
+									}
+								},
+								{
+									"type": "block",
+									"name": "OA-i",
+									"id": "n3",
+									"attributes": {
+										"featured": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-5"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-6: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "bo___",
+				"attributes": {
+					"title": "j-(z`XPk",
+					"theme": "__look"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "H_-e2",
+						"attributes": {
+							"layoutSize": "vB4(hM]1$"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "jp_0v4EF-__",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "",
+									"featured": true
+								}
+							}
+						],
+						"id": "n6"
+					},
+					{
+						"type": "page",
+						"name": "Q_-",
+						"id": "n1",
+						"attributes": {
+							"layoutSize": "n"
+						},
+						"children": [
+							{
+								"type": "block",
+								"attributes": {
+									"featured": true
+								},
+								"id": "n7"
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "Lxa-",
+						"id": "n4",
+						"attributes": {
+							"layoutSize": "62QB[lW"
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "iQ_-19y-G",
+								"id": "n2",
+								"attributes": {
+									"featured": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "T0",
+								"id": "n3",
+								"attributes": {
+									"defaultWidgetId": "",
+									"allowedWidgetIds": null,
+									"requireBleed": false
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "a--8yK",
+								"attributes": {
+									"defaultWidgetId": "}iV^s",
+									"allowedWidgetIds": [
+										"\\Y",
+										{
+											"Qv\"qOt:8~)": false,
+											"vV": true,
+											"j'h(ZdY": true,
+											"jJ93Bx": -2.0373929275160072e-18,
+											"zl`Di": false,
+											"<YQ@d": null,
+											"7kSB7*": -5.173174813381693e+303,
+											"s0-1?7": false,
+											"]jp": -2.9043409374273023e+221,
+											"?!#aajY": null
+										},
+										{},
+										-1.6166539922315555e+181
+									]
+								},
+								"id": "n8"
+							}
+						]
+					}
+				],
+				"id": "n5"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n5",
+					"name": "vec-6"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-6"
+					},
+					"parentId": "n5"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-6",
+					"id": "n5",
+					"attributes": {
+						"title": "j-(z`XPk",
+						"theme": "__look"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "H_-e2",
+							"id": "n6",
+							"attributes": {
+								"layoutSize": "vB4(hM]1$"
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "jp_0v4EF-__",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "",
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "Q_-",
+							"id": "n1",
+							"attributes": {
+								"layoutSize": "n"
+							},
+							"children": [
+								{
+									"type": "block",
+									"id": "n7",
+									"attributes": {
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "Lxa-",
+							"id": "n4",
+							"attributes": {
+								"layoutSize": "62QB[lW"
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "iQ_-19y-G",
+									"id": "n2",
+									"attributes": {
+										"featured": true
+									}
+								},
+								{
+									"type": "widget-slot",
+									"name": "T0",
+									"id": "n3",
+									"attributes": {
+										"defaultWidgetId": "",
+										"allowedWidgetIds": null,
+										"requireBleed": false
+									}
+								},
+								{
+									"type": "widget-slot",
+									"name": "a--8yK",
+									"id": "n8",
+									"attributes": {
+										"defaultWidgetId": "}iV^s",
+										"allowedWidgetIds": [
+											"\\Y",
+											{
+												"Qv\"qOt:8~)": false,
+												"vV": true,
+												"j'h(ZdY": true,
+												"jJ93Bx": -2.0373929275160072e-18,
+												"zl`Di": false,
+												"<YQ@d": null,
+												"7kSB7*": -5.173174813381693e+303,
+												"s0-1?7": false,
+												"]jp": -2.9043409374273023e+221,
+												"?!#aajY": null
+											},
+											{},
+											-1.6166539922315555e+181
+										]
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-6"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-7: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "b7-_3",
+				"id": "n4",
+				"attributes": {
+					"title": "k"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "Q6c_Q2-5",
+						"id": "n2",
+						"attributes": {
+							"layoutSize": "\"D!&rEN"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "d5",
+								"attributes": {
+									"defaultWidgetId": "",
+									"allowedWidgetIds": {
+										"Hg<th5Y": false,
+										"": [
+											null,
+											6.407026093326194e-171,
+											3.511494797479327e+130
+										],
+										"REW7G2$p": {
+											"GL/hW::t": null,
+											"7zNh": null,
+											"": "1,d'g/~",
+											"d;$_ ": null,
+											"AVtdD": false,
+											"-sc ~": true
+										},
+										"Otx^Kb/B": {
+											"h#": -1.5284270985112795e-45,
+											"_h": true,
+											":": true,
+											"qy1Y&x": "&mbQ= ,8`%",
+											"LffVP": ";#PNFsCeA",
+											"Pevljnxq.": null,
+											"aY": 3.310085236418209e+267
+										}
+									},
+									"requireBleed": false
+								},
+								"id": "n7"
+							},
+							{
+								"type": "block",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "O2?is~!$Yc",
+									"featured": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"id": "n1",
+								"attributes": {
+									"defaultWidgetId": "guOF:4gq",
+									"allowedWidgetIds": "k",
+									"requireBleed": true
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"name": "Eo",
+						"children": [
+							{
+								"type": "block",
+								"name": "CY-_NQ__is",
+								"id": "n3",
+								"attributes": {
+									"containerClasses": "H<BK%>",
+									"featured": true
+								}
+							},
+							{
+								"type": "block",
+								"name": "s",
+								"attributes": {
+									"featured": true
+								},
+								"id": "n8"
+							}
+						],
+						"id": "n5"
+					},
+					{
+						"type": "page",
+						"name": "U",
+						"attributes": {
+							"layoutSize": "Ub@Wk.6x=8"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"attributes": {
+									"defaultWidgetId": "DQekjw",
+									"requireBleed": false
+								},
+								"id": "n9"
+							}
+						],
+						"id": "n6"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n4",
+					"name": "vec-7"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-7"
+					},
+					"parentId": "n4"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-7",
+					"id": "n4",
+					"attributes": {
+						"title": "k"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "Q6c_Q2-5",
+							"id": "n2",
+							"attributes": {
+								"layoutSize": "\"D!&rEN"
+							},
+							"children": [
+								{
+									"type": "widget-slot",
+									"name": "d5",
+									"id": "n7",
+									"attributes": {
+										"defaultWidgetId": "",
+										"allowedWidgetIds": {
+											"Hg<th5Y": false,
+											"": [
+												null,
+												6.407026093326194e-171,
+												3.511494797479327e+130
+											],
+											"REW7G2$p": {
+												"GL/hW::t": null,
+												"7zNh": null,
+												"": "1,d'g/~",
+												"d;$_ ": null,
+												"AVtdD": false,
+												"-sc ~": true
+											},
+											"Otx^Kb/B": {
+												"h#": -1.5284270985112795e-45,
+												"_h": true,
+												":": true,
+												"qy1Y&x": "&mbQ= ,8`%",
+												"LffVP": ";#PNFsCeA",
+												"Pevljnxq.": null,
+												"aY": 3.310085236418209e+267
+											}
+										},
+										"requireBleed": false
+									}
+								},
+								{
+									"type": "block",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "O2?is~!$Yc",
+										"featured": true
+									}
+								},
+								{
+									"type": "widget-slot",
+									"id": "n1",
+									"attributes": {
+										"defaultWidgetId": "guOF:4gq",
+										"allowedWidgetIds": "k",
+										"requireBleed": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "Eo",
+							"id": "n5",
+							"children": [
+								{
+									"type": "block",
+									"name": "CY-_NQ__is",
+									"id": "n3",
+									"attributes": {
+										"containerClasses": "H<BK%>",
+										"featured": true
+									}
+								},
+								{
+									"type": "block",
+									"name": "s",
+									"id": "n8",
+									"attributes": {
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "U",
+							"id": "n6",
+							"attributes": {
+								"layoutSize": "Ub@Wk.6x=8"
+							},
+							"children": [
+								{
+									"type": "widget-slot",
+									"id": "n9",
+									"attributes": {
+										"defaultWidgetId": "DQekjw",
+										"requireBleed": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-7"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-8: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "aZ-G",
+				"attributes": {
+					"title": "M"
+				},
+				"id": "n1"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n1",
+					"name": "vec-8"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-8"
+					},
+					"parentId": "n1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-8",
+					"id": "n1",
+					"attributes": {
+						"title": "M"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "vp-8"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-9: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "ER5gAzL--R1",
+				"id": "n0",
+				"attributes": {
+					"title": "bi",
+					"theme": "l@rcK),4"
+				}
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n0",
+					"name": "vec-9"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-9"
+					},
+					"parentId": "n0"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-9",
+					"id": "n0",
+					"attributes": {
+						"title": "bi",
+						"theme": "l@rcK),4"
+					},
+					"children": [
+						{
+							"type": "page",
+							"id": "vp-9"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-10: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "p-_6W3",
+				"attributes": {
+					"title": "p$fiTD+y|O",
+					"theme": "*F: 1)-"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "g_15_vf-y",
+						"id": "n1",
+						"attributes": {
+							"layoutSize": "?!$u:xq "
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "kD-_R-vDn_",
+								"attributes": {
+									"defaultWidgetId": "",
+									"allowedWidgetIds": [
+										{
+											"0": "uJ)8_r68-n",
+											"": 6.264401347642627e+187,
+											"RjX]9c": null,
+											"|Uq#]zh9`b": 1.1894116107337761e-234,
+											"NslkI": -0.11726827741085452,
+											"b7{HHDd c": 7.25428748476871e-247,
+											"9m": -8.092268147031468e-149,
+											"XV": true
+										}
+									]
+								},
+								"id": "n7"
+							},
+							{
+								"type": "block",
+								"name": "YXQ-6_8",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "/+",
+									"featured": false
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"attributes": {
+							"layoutSize": "[F} "
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "o4-J",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "K5.KCW4",
+									"featured": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "f5R_3---J",
+								"id": "n3",
+								"attributes": {
+									"defaultWidgetId": "",
+									"allowedWidgetIds": [
+										null,
+										" &B-\"`",
+										"msk-))yG\\",
+										false,
+										true,
+										2.444930048224988e-160,
+										null,
+										"l>>)",
+										1.911028979693686e+61,
+										null
+									],
+									"requireBleed": true
+								}
+							},
+							{
+								"type": "block",
+								"name": "i__1BOjN",
+								"attributes": {
+									"containerClasses": "LvsL]b",
+									"featured": true
+								},
+								"id": "n8"
+							}
+						],
+						"id": "n6"
+					},
+					{
+						"type": "page",
+						"name": "Br",
+						"id": "n4",
+						"attributes": {
+							"layoutSize": "Zykc-fu/"
+						}
+					}
+				],
+				"id": "n5"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n5",
+					"name": "vec-10"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-10"
+					},
+					"parentId": "n5"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-10",
+					"id": "n5",
+					"attributes": {
+						"title": "p$fiTD+y|O",
+						"theme": "*F: 1)-"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "g_15_vf-y",
+							"id": "n1",
+							"attributes": {
+								"layoutSize": "?!$u:xq "
+							},
+							"children": [
+								{
+									"type": "widget-slot",
+									"name": "kD-_R-vDn_",
+									"id": "n7",
+									"attributes": {
+										"defaultWidgetId": "",
+										"allowedWidgetIds": [
+											{
+												"0": "uJ)8_r68-n",
+												"": 6.264401347642627e+187,
+												"RjX]9c": null,
+												"|Uq#]zh9`b": 1.1894116107337761e-234,
+												"NslkI": -0.11726827741085452,
+												"b7{HHDd c": 7.25428748476871e-247,
+												"9m": -8.092268147031468e-149,
+												"XV": true
+											}
+										]
+									}
+								},
+								{
+									"type": "block",
+									"name": "YXQ-6_8",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "/+",
+										"featured": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "n6",
+							"attributes": {
+								"layoutSize": "[F} "
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "o4-J",
+									"id": "n2",
+									"attributes": {
+										"containerClasses": "K5.KCW4",
+										"featured": true
+									}
+								},
+								{
+									"type": "widget-slot",
+									"name": "f5R_3---J",
+									"id": "n3",
+									"attributes": {
+										"defaultWidgetId": "",
+										"allowedWidgetIds": [
+											null,
+											" &B-\"`",
+											"msk-))yG\\",
+											false,
+											true,
+											2.444930048224988e-160,
+											null,
+											"l>>)",
+											1.911028979693686e+61,
+											null
+										],
+										"requireBleed": true
+									}
+								},
+								{
+									"type": "block",
+									"name": "i__1BOjN",
+									"id": "n8",
+									"attributes": {
+										"containerClasses": "LvsL]b",
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"name": "Br",
+							"id": "n4",
+							"attributes": {
+								"layoutSize": "Zykc-fu/"
+							}
+						},
+						{
+							"type": "page",
+							"id": "vp-10"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-11: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "v",
+				"id": "n2",
+				"attributes": {
+					"title": "",
+					"theme": "#^M"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "KT_s",
+						"attributes": {
+							"layoutSize": "-~?}G"
+						},
+						"children": [
+							{
+								"type": "widget-slot",
+								"name": "Kt",
+								"id": "n0",
+								"attributes": {
+									"allowedWidgetIds": {
+										"z1je>": [
+											false,
+											-1.5018246296854498e-181,
+											null,
+											4.271554743348946e+175,
+											-7.159539311766647e+139,
+											"YaC_FI=W",
+											"f9C)"
+										],
+										"": [],
+										"aXIL&7c": {
+											"F^*k=": null,
+											"*q~cu?j": 1.888167232203756e+48,
+											"": false,
+											"yvog}'&\"T)": -2.6337171557215477e+79,
+											"7/ek": "vb_h9xfQNc"
+										}
+									},
+									"requireBleed": false
+								}
+							},
+							{
+								"type": "widget-slot",
+								"id": "n1",
+								"attributes": {
+									"defaultWidgetId": "",
+									"requireBleed": true
+								}
+							},
+							{
+								"type": "widget-slot",
+								"name": "W_-Q5",
+								"attributes": {
+									"defaultWidgetId": "+`-;[pL^",
+									"requireBleed": false
+								},
+								"id": "n4"
+							}
+						],
+						"id": "n3"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n2",
+					"name": "vec-11"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-11"
+					},
+					"parentId": "n2"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-11",
+					"id": "n2",
+					"attributes": {
+						"title": "",
+						"theme": "#^M"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "KT_s",
+							"id": "n3",
+							"attributes": {
+								"layoutSize": "-~?}G"
+							},
+							"children": [
+								{
+									"type": "widget-slot",
+									"name": "Kt",
+									"id": "n0",
+									"attributes": {
+										"allowedWidgetIds": {
+											"z1je>": [
+												false,
+												-1.5018246296854498e-181,
+												null,
+												4.271554743348946e+175,
+												-7.159539311766647e+139,
+												"YaC_FI=W",
+												"f9C)"
+											],
+											"": [],
+											"aXIL&7c": {
+												"F^*k=": null,
+												"*q~cu?j": 1.888167232203756e+48,
+												"": false,
+												"yvog}'&\"T)": -2.6337171557215477e+79,
+												"7/ek": "vb_h9xfQNc"
+											}
+										},
+										"requireBleed": false
+									}
+								},
+								{
+									"type": "widget-slot",
+									"id": "n1",
+									"attributes": {
+										"defaultWidgetId": "",
+										"requireBleed": true
+									}
+								},
+								{
+									"type": "widget-slot",
+									"name": "W_-Q5",
+									"id": "n4",
+									"attributes": {
+										"defaultWidgetId": "+`-;[pL^",
+										"requireBleed": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-11"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-12: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "uD-0-_8M9l_",
+				"id": "n1",
+				"attributes": {
+					"theme": "MI%!|c#>"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "a--x__85ff-",
+						"id": "n0",
+						"attributes": {
+							"layoutSize": "@E"
+						}
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n1",
+					"name": "vec-12"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-12"
+					},
+					"parentId": "n1"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-12",
+					"id": "n1",
+					"attributes": {
+						"theme": "MI%!|c#>"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "a--x__85ff-",
+							"id": "n0",
+							"attributes": {
+								"layoutSize": "@E"
+							}
+						},
+						{
+							"type": "page",
+							"id": "vp-12"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-13: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "cxyarg",
+				"id": "n3",
+				"attributes": {
+					"title": "Bl",
+					"theme": " {#w% $"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "p---_",
+						"id": "n0"
+					},
+					{
+						"type": "page",
+						"name": "Q",
+						"children": [
+							{
+								"type": "block",
+								"name": "PG3-",
+								"id": "n1",
+								"attributes": {
+									"containerClasses": "",
+									"featured": true
+								}
+							},
+							{
+								"type": "block",
+								"name": "M__0b_",
+								"attributes": {
+									"featured": false
+								},
+								"id": "n5"
+							},
+							{
+								"type": "block",
+								"id": "n2",
+								"attributes": {
+									"containerClasses": "8S2ly79a2",
+									"featured": true
+								}
+							}
+						],
+						"id": "n4"
+					}
+				]
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n3",
+					"name": "vec-13"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-13"
+					},
+					"parentId": "n3"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-13",
+					"id": "n3",
+					"attributes": {
+						"title": "Bl",
+						"theme": " {#w% $"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "p---_",
+							"id": "n0"
+						},
+						{
+							"type": "page",
+							"name": "Q",
+							"id": "n4",
+							"children": [
+								{
+									"type": "block",
+									"name": "PG3-",
+									"id": "n1",
+									"attributes": {
+										"containerClasses": "",
+										"featured": true
+									}
+								},
+								{
+									"type": "block",
+									"name": "M__0b_",
+									"id": "n5",
+									"attributes": {
+										"featured": false
+									}
+								},
+								{
+									"type": "block",
+									"id": "n2",
+									"attributes": {
+										"containerClasses": "8S2ly79a2",
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-13"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "random-14: rename root + append page",
+			"base": {
+				"type": "document",
+				"name": "CE7uWa3",
+				"attributes": {
+					"title": "FBZu",
+					"theme": "XF*etMnsZ"
+				},
+				"children": [
+					{
+						"type": "page",
+						"name": "fgx",
+						"id": "n1",
+						"attributes": {
+							"layoutSize": ""
+						},
+						"children": [
+							{
+								"type": "block",
+								"name": "lp---2-L",
+								"id": "n0",
+								"attributes": {
+									"containerClasses": "v",
+									"featured": true
+								}
+							}
+						]
+					},
+					{
+						"type": "page",
+						"id": "n2"
+					},
+					{
+						"type": "page",
+						"name": "y-Z--6Z9",
+						"children": [
+							{
+								"type": "widget-slot",
+								"attributes": {
+									"defaultWidgetId": "s%|R",
+									"allowedWidgetIds": null,
+									"requireBleed": false
+								},
+								"id": "n6"
+							},
+							{
+								"type": "block",
+								"name": "K",
+								"attributes": {
+									"containerClasses": "^@}4Xso",
+									"featured": true
+								},
+								"id": "n7"
+							},
+							{
+								"type": "widget-slot",
+								"name": "O_qJIx_M-_",
+								"id": "n3",
+								"attributes": {
+									"defaultWidgetId": "[p",
+									"requireBleed": false
+								}
+							}
+						],
+						"id": "n5"
+					}
+				],
+				"id": "n4"
+			},
+			"patch": [
+				{
+					"op": "set-name",
+					"id": "n4",
+					"name": "vec-14"
+				},
+				{
+					"op": "insert",
+					"node": {
+						"type": "page",
+						"id": "vp-14"
+					},
+					"parentId": "n4"
+				}
+			],
+			"expected": {
+				"ok": true,
+				"node": {
+					"type": "document",
+					"name": "vec-14",
+					"id": "n4",
+					"attributes": {
+						"title": "FBZu",
+						"theme": "XF*etMnsZ"
+					},
+					"children": [
+						{
+							"type": "page",
+							"name": "fgx",
+							"id": "n1",
+							"attributes": {
+								"layoutSize": ""
+							},
+							"children": [
+								{
+									"type": "block",
+									"name": "lp---2-L",
+									"id": "n0",
+									"attributes": {
+										"containerClasses": "v",
+										"featured": true
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "n2"
+						},
+						{
+							"type": "page",
+							"name": "y-Z--6Z9",
+							"id": "n5",
+							"children": [
+								{
+									"type": "widget-slot",
+									"id": "n6",
+									"attributes": {
+										"defaultWidgetId": "s%|R",
+										"allowedWidgetIds": null,
+										"requireBleed": false
+									}
+								},
+								{
+									"type": "block",
+									"name": "K",
+									"id": "n7",
+									"attributes": {
+										"containerClasses": "^@}4Xso",
+										"featured": true
+									}
+								},
+								{
+									"type": "widget-slot",
+									"name": "O_qJIx_M-_",
+									"id": "n3",
+									"attributes": {
+										"defaultWidgetId": "[p",
+										"requireBleed": false
+									}
+								}
+							]
+						},
+						{
+							"type": "page",
+							"id": "vp-14"
+						}
+					]
+				}
+			}
+		}
+	]
+}

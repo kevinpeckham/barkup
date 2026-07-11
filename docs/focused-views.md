@@ -271,7 +271,12 @@ knows:
    invented plausible values on all 90 cells — no refusals, no
    invalid artifacts. With the mentioned source node added to the
    focus ids, 90/90 succeeded at ~1.7k tokens median. View scope is
-   a correctness contract.
+   a correctness contract. One measured refinement (Study V,
+   judge-graded): the view contract covers **values** an edit must
+   read, not **goals** it must satisfy — a model shown the node where
+   a qualitative goal lives reads it but writes measurably less
+   focused prose than one told the goal in the instruction or the
+   session memo. Views carry values; memos carry goals.
 2. **The app has only a human description** ("make the hero shorter"):
    give the model a skeleton view — the root with its children
    collapsed, `renderView(grammar, tree, { focus: [rootId] })` — plus

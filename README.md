@@ -531,6 +531,17 @@ keep-history costs 2.1× either. Capturing the notes is your
 application's job (Study T measured the memo given faithful capture);
 the format above is the exact registered block the benchmark scored.
 
+The memo also carries **qualitative goals**, and it is the right
+place for them (Study V, the benchmark's judge-graded track): asked
+to "rewrite this paragraph to focus on our central thesis," a model
+with the thesis in its memo ties one told the thesis outright — while
+a model that merely has the thesis-bearing node *in its view* reads
+it but writes measurably less focused prose (it lost 117/120 judged
+comparisons). The division of labor that fell out of Studies U and V:
+**views carry values, memos carry goals.** Put the nodes an edit must
+read in the focus ids; put the intent it must satisfy in the
+instruction or the memo, restated outright.
+
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a
 focused view plus an edit request plus the correct anchored patch,

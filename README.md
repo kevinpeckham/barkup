@@ -527,9 +527,14 @@ Session notes (maintained by the application):
 That block restored 80/80 callback steps on both models, tied full
 history on every paired comparison, beat it on end-state integrity
 (19–20/20 vs 17–19/20), and cost 1.02× the stateless baseline —
-keep-history costs 2.1× either. Capturing the notes is your
-application's job (Study T measured the memo given faithful capture);
-the format above is the exact registered block the benchmark scored.
+keep-history costs 2.1× either. Capturing the notes can be the
+AGENT'S job: Study W tested delegated extraction (an
+update_session_notes tool with full-replace semantics plus a prompt
+rule, the configuration Replicator ships) and it tied the oracle on
+all three models tested — recall 36/36 per model, retractions
+handled 12/12, zero noise notes, and no recording laziness even when
+a history window made the memo redundant. The format above is the
+exact registered block the benchmark scored.
 
 The memo also carries **qualitative goals**, and it is the right
 place for them (Study V, the benchmark's judge-graded track): asked

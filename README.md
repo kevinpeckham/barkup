@@ -536,6 +536,14 @@ handled 12/12, zero noise notes, and no recording laziness even when
 a history window made the memo redundant. The format above is the
 exact registered block the benchmark scored.
 
+The extraction rule also survives contact with human speech (Study
+Y): declarations phrased the way people actually talk — buried
+mid-sentence, "scratch that" retractions, house-style asides —
+extract at exact parity with formulaic announcements on all three
+models tested (zero discordant callback cells), and 432
+conversational chatter baits produced not one false memo note. No
+announcement syntax is required of your users.
+
 Discourse gets the same treatment (Study X): follow-ups that point at
 the previous edit — "also set that same node's...", "apply the same
 change to X", "actually, undo that" — fail a carrier-less editor

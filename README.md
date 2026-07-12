@@ -536,6 +536,22 @@ handled 12/12, zero noise notes, and no recording laziness even when
 a history window made the memo redundant. The format above is the
 exact registered block the benchmark scored.
 
+Discourse gets the same treatment (Study X): follow-ups that point at
+the previous edit — "also set that same node's...", "apply the same
+change to X", "actually, undo that" — fail a carrier-less editor
+0/144 across three models, every failure a valid silently-guessed
+patch. The measured carrier is a one-line **last-edit echo** the
+application appends automatically (`Previous edit (applied by the
+app): set "{key}" from {old} to {new} on {nodeRef}.`): it ties full
+history per model at about half the cost and beat history outright
+on opus-4.8 (48/48 vs 46/48), with the from/to form carrying "undo"
+completely. Fine print: "apply the same change to X" strains
+compressed carriers on some models (sonnet 7/12 with the note) —
+carrier advice is not model-independent; re-test on your tier. The
+full stateless session stack, each clause measured: fresh view per
+turn + two worked examples + the session-notes memo + the last-edit
+echo.
+
 The memo also carries **qualitative goals**, and it is the right
 place for them (Study V, the benchmark's judge-graded track): asked
 to "rewrite this paragraph to focus on our central thesis," a model

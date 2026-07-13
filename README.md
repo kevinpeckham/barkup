@@ -604,8 +604,15 @@ with no trademark symbol") the memo caused the rule to be enforced
 against the user's explicit ask (opus 12/12, sonnet 9/12; without the
 memo, all 36/36 base cells honored the countermand). Guidance: audit
 standing rules for "always"/"exactly" and phrase them as preferences;
-don't trust meta-rules to arbitrate; and never restate a rule in the
-memo when the current request may be overriding it.
+don't trust styleguide meta-rules to arbitrate. The memo footgun is
+closed, measured (Study AB): one precedence sentence INSIDE the memo
+block itself ("a direct, explicit instruction in the current request
+overrides any note here for that request") restored every trampled
+countermand (opus 0/12 → 12/12, sonnet 3/12 → 11/12) at zero cost to
+the memo's steering benefit — where the same sentence class buried in
+a styleguide had moved nothing. If your memo block restates rules,
+carry that clause in the block header; placement at the point of
+injury is what makes it work.
 
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a

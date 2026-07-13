@@ -585,11 +585,27 @@ across requests, and the full pack under Anthropic's cached-system
 layout cut effective input cost by 25–43%. The one hazard measured is
 **spec conflict**: when a styleguide rule ("contact lines always
 follow the form X") collided with an instruction clause, every model
-resolved it cleanly one way or the other — never violating either —
-and the strongest models chose the most *literal* rule reading most
-often. Don't ship rules that can collide with instructions; when
-interpretation matters, restate the applicable rules near the request
-(the memo mechanism above measurably steers which reading wins).
+resolved it cleanly one way or the other — never violating either.
+Study AA then measured the conflict on purpose (three conflict kinds,
+four interventions, 432 cells), and corrected our own first reading
+of Z: which reading a model picks is NOT a capability gradient (the
+confirmation study inverted the Z ordering — opus took zero literal
+readings where sonnet took ten) and is composition-sensitive, so test
+the tier you ship on the pack you ship. What the interventions
+measured: a priority meta-rule ("the user's request takes
+precedence") moved nothing significantly; softening rule wording from
+"always" to "we generally prefer" collapsed literal readings (sonnet
+10/24 → 2/24, gemini 7/24 → 0/24) — the cheapest fix that works; and
+restating rules in the session-notes memo steers interpretation
+powerfully in BOTH directions: it resolves rule-vs-instruction
+tension (sonnet 2/12 → 11/12 satisfying both, replicated exactly),
+but on requests that explicitly countermand a rule ("written plain,
+with no trademark symbol") the memo caused the rule to be enforced
+against the user's explicit ask (opus 12/12, sonnet 9/12; without the
+memo, all 36/36 base cells honored the countermand). Guidance: audit
+standing rules for "always"/"exactly" and phrase them as preferences;
+don't trust meta-rules to arbitrate; and never restate a rule in the
+memo when the current request may be overriding it.
 
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a

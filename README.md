@@ -571,6 +571,26 @@ comparisons). The division of labor that fell out of Studies U and V:
 read in the focus ids; put the intent it must satisfy in the
 instruction or the memo, restated outright.
 
+Standing context — a brand pack (company, clients, styleguide)
+shipped in the system prompt with every request — simply works at
+production sizes (Study Z): with ~3.3k-token packs, exact client
+facts were copied correctly past three same-schema distractor
+clients and styleguide rules were applied unprompted in 216/216
+fact-and-rule cells per arm across three models, with **zero
+cross-client contamination in 324 cells** and no burial effect (head,
+middle, and tail styleguide positions all perfect). Slicing the pack
+down to the relevant client bought nothing on accuracy and forfeited
+prompt caching — a static block only caches if it is actually static
+across requests, and the full pack under Anthropic's cached-system
+layout cut effective input cost by 25–43%. The one hazard measured is
+**spec conflict**: when a styleguide rule ("contact lines always
+follow the form X") collided with an instruction clause, every model
+resolved it cleanly one way or the other — never violating either —
+and the strongest models chose the most *literal* rule reading most
+often. Don't ship rules that can collide with instructions; when
+interpretation matters, restate the applicable rules near the request
+(the memo mechanism above measurably steers which reading wins).
+
 To write the examples block for **your** grammar: one example per
 tricky operation class — insert by ordinal, move by ordinal — each a
 focused view plus an edit request plus the correct anchored patch,

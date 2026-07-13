@@ -361,6 +361,21 @@ The `find_nodes` tool can self-serve such reads at 82–84% — a real
 capability, but short of parity, so let the model search for *where*
 to edit and let your application put *what it must read* in the view.
 
+The silence itself turned out to be a protocol defect, not a model
+property (Study AC): offered an explicit escape hatch — one
+registered sentence ("if the request requires a value or a node that
+is not visible in the view and not stated in the request, do NOT
+guess: reply NEED-INFO: …"), or equivalently an `ask_user` tool —
+every model asked on every provably-unsolvable cell (270/270 vs
+0/270 without the hatch) and never once asked on a solvable twin,
+naming the exact missing node each time. The models always saw the
+gap; nothing had told them asking was allowed. Ship the hatch as the
+seatbelt alongside the focus-ids contract: the contract makes the
+question unnecessary, the hatch makes the remaining failures visible
+instead of silent. Caveat: measured at a validated hard boundary,
+not on merely-vague requests — calibration on fuzzy ambiguity is
+untested.
+
 ```ts
 import {
   findNodes,

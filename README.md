@@ -374,9 +374,23 @@ naming the exact missing node each time. The models always saw the
 gap; nothing had told them asking was allowed. Ship the hatch as the
 seatbelt alongside the focus-ids contract: the contract makes the
 question unnecessary, the hatch makes the remaining failures visible
-instead of silent. Caveat: measured at a validated hard boundary,
-not on merely-vague requests — calibration on fuzzy ambiguity is
-untested.
+instead of silent. Calibration is now measured across a five-level
+ambiguity ladder (Study AE): the hatch costs NOTHING on clear
+requests (zero false asks in 90 cells, including indirect references
+the model resolves itself, and no interviews about discretionary
+wording), and the full ask → answer → patch loop closes at ceiling —
+135/135 resumed solves from a plain-text answer, zero re-asks, zero
+wrong integrations. The measured boundary that remains: **referent
+ambiguity is tier-dependent.** When a singular request matches two
+visible nodes, claude-opus-4.8 asks 15/15 (naming both candidate
+ids); sonnet-4.5 silently edits BOTH matches and gemini-3.5-flash
+silently picks one, each asking just 1/15 — the registered sentence
+is scoped to information that is "not visible," and an ambiguous
+referent is entirely visible. Below the frontier tier, app-side
+disambiguation (unique references, `selectNodes` enumeration,
+selection grounding) remains the only defense; a multiplicity-aware
+hatch sentence is the obvious amendment but is unmeasured — test it
+before shipping it.
 
 ```ts
 import {

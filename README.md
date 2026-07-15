@@ -82,8 +82,9 @@ protocol correction). It publishes what it found:
   id-bearing placeholders or omitted with an honest count — while
   patches still applied to the full tree. Accuracy was statistically
   unchanged in every paired comparison (McNemar p = 0.5–1.0; sonnet
-  went 45/45 on the minimal view), and median input per ~1000-node
-  task fell from ~86k tokens to ~1.4k (−98%). View size scales with
+  went 45/45 on the minimal view; claude-opus-4.8 later swept both
+  HTML modes 90/90 at every size, Study AD), and median input per
+  ~1000-node task fell from ~86k tokens to ~1.4k (−98%). View size scales with
   tree **depth**, not node count, which effectively removes the
   context-window ceiling for id-addressed edits. HTML is the native
   rendering: identical accuracy to JSON views (p = 1.0 in all four
@@ -95,7 +96,8 @@ protocol correction). It publishes what it found:
   pre-registered follow-up (Study N) gave models a skeleton view plus
   one deterministic keyword-search tool (`find_nodes`, shipped here
   as `findNodes`/`renderSearch`): id-free requests grounded at 43/45
-  on sonnet-4.5 (equal to its id-oracle bound) and 39/45 on
+  on sonnet-4.5 (equal to its id-oracle bound), 43/45 on
+  claude-opus-4.8 (Study AD — the same bound), and 39/45 on
   gemini-3.5-flash (vs 23/45 for expand-node navigation, p < 0.001),
   with a median of ONE search call at ~90% less input than reading
   the whole tree. Upgrading the scorer to text embeddings measured no
@@ -415,7 +417,11 @@ tested left fan-out patches partially complete (62–69% success
 overall, ~45% at 7+ targets; failures are partial coverage) — and
 the models invert on mitigation (sonnet does better on views, gemini
 on the full tree), so there is no model-independent fan-out prompt
-strategy either.
+strategy either. The frontier tier raises the floor without ending
+the story: claude-opus-4.8 (Study AD) reached 80% on views and 89%
+on the full tree — a third distinct mitigation profile — and still
+left one in three 7+-target view tasks incomplete, the same
+partial-coverage anatomy.
 
 The fix is measured, not inferred
 ([Study R addendum](https://github.com/kevinpeckham/barkup-bench)):
@@ -519,7 +525,14 @@ choice turns out to be purely about cost:
   the cost gap widens with length: flat ~2.1k input tokens per step
   versus keep-history's linear growth, 5–6× less input per 36-edit
   session (~81k vs ~449k). For long sessions, this is the measured
-  default.
+  default. At the frontier tier the examples turn out to be
+  insurance rather than a requirement: on claude-opus-4.8 (Study
+  AD) keep-history, stateless-plus-examples, AND bare stateless all
+  scored 240/240 steps with 20/20 intact end-states — opus needs no
+  precedent for ordinal ops at this horizon, so the block's ~900
+  tokens are load-bearing only below the frontier (sonnet without
+  them: 13/20 end-states). Keep shipping the block; it costs almost
+  nothing and covers every tier.
 
 One boundary, now measured (Study T): the recipes above cover
 **self-contained** requests — instruction plus current tree carry

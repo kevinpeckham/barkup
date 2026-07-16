@@ -388,9 +388,17 @@ silently picks one, each asking just 1/15 — the registered sentence
 is scoped to information that is "not visible," and an ambiguous
 referent is entirely visible. Below the frontier tier, app-side
 disambiguation (unique references, `selectNodes` enumeration,
-selection grounding) remains the only defense; a multiplicity-aware
-hatch sentence is the obvious amendment but is unmeasured — test it
-before shipping it.
+selection grounding) remains the only defense. The obvious
+amendment — one added sentence covering requests that match more
+than one node — has now been measured (Study AI): it rescues
+sonnet completely (3/15 → 15/15, every ask naming both ids), moves
+gemini from 0 to 11/15 but leaves a silent edit-both residue, taxes
+clear requests nothing anywhere, and on the frontier tier adds
+nothing (already 15/15) while directionally increasing
+interrogation of discretionary "make it punchier" requests. So the
+clause is a real improvement for sub-frontier deployments and NOT
+worth shipping on frontier ones — and either way it is a mitigation,
+not a guarantee: app-side disambiguation stays the contract.
 
 ```ts
 import {

@@ -586,6 +586,23 @@ models tested (zero discordant callback cells), and 432
 conversational chatter baits produced not one false memo note. No
 announcement syntax is required of your users.
 
+The memo is also measured at scale (Study AH): against a FULL
+20-note memo — the shipped cap — recall of any note is perfect at
+every position (no burial: first, middle, and last notes all 15/15
+per model), unprompted rule application from a 12-rule memo is
+perfect with zero cross-note contamination, and the agent's
+full-replace update is lossless wherever the update fits (60/60
+clean at 10 and 19 notes). The one hazard is the CAP EDGE itself:
+when a 21st declaration arrives at a full memo, a note dies every
+time — and in 30 of 30 measured cells, on all three models, the
+victim was a GOAL note, because the block renders facts → rules →
+goals and both the silent clamp and the models' own pruning eat
+the tail. Goals are the one thing only the memo carries (Study V),
+so the fix is app-side and specific: never silently clamp an
+over-cap update — evict the oldest FACT deterministically (never
+the goals tail), or surface memo-full to the user. Below the edge,
+note-count is a safe, monitorable budget.
+
 Discourse gets the same treatment (Study X): follow-ups that point at
 the previous edit — "also set that same node's...", "apply the same
 change to X", "actually, undo that" — fail a carrier-less editor

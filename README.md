@@ -611,7 +611,18 @@ it but writes measurably less focused prose (it lost 117/120 judged
 comparisons). The division of labor that fell out of Studies U and V:
 **views carry values, memos carry goals.** Put the nodes an edit must
 read in the focus ids; put the intent it must satisfy in the
-instruction or the memo, restated outright.
+instruction or the memo, restated outright. And that division is now
+a measured mechanism, not a heuristic (Study AF, judge-graded):
+forcing the model to restate a view-read goal in its own words
+before rewriting does NOT rescue it — compliance was perfect in
+every cell and the restate arm still lost every decisive comparison,
+90 for 0. The models repeat the goal and then orbit it anyway. Where
+a goal comes from matters more than whether the model says it aloud,
+so no prompt ceremony substitutes for putting the goal where it
+belongs. (The same study measured the memo-plus-restate clause at
+parity under the primary judge with a sensitivity-judge dissent
+toward mild harm — a restate instruction adds nothing measurable
+even where the memo already carries the goal.)
 
 Standing context — a brand pack (company, clients, styleguide)
 shipped in the system prompt with every request — simply works at

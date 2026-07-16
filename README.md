@@ -400,6 +400,22 @@ clause is a real improvement for sub-frontier deployments and NOT
 worth shipping on frontier ones — and either way it is a mitigation,
 not a guarantee: app-side disambiguation stays the contract.
 
+The hatch's last border is measured too (Study AG): pointed at the
+discourse construction ("undo that" with no carrier, previously
+0/144 silent guesses), the shipped sentence fires on EVERY tier —
+138/144 asks that genuinely name the dangling antecedent — because
+a missing referent is squarely inside the sentence's letter. But
+the same study found the sentence's visibility clause biting where
+it should not: under skeleton views, models receiving a complete
+last-edit echo (id, key, both values) still asked ~70% of the time,
+citing only that the target node "is not visible in the view" —
+despite anchored patches needing only the id. So the hatch's
+zero-tax guarantee is CONDITIONAL on the focus-ids contract: views
+that cover every node a request mentions produce zero false asks
+(measured three times now); skeleton or outline protocols need
+either target-carrying views, a self-serve view tool, or a
+re-scoped hatch variant measured before shipping.
+
 ```ts
 import {
   findNodes,

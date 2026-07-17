@@ -751,7 +751,13 @@ document platform described in the article compiles its template grammar
 **every template edit its LLM agents author must pass barkup validation
 before it is applied**. The structured issues — unknown types, invalid
 containment, stray text, duplicate ids — go back to the model verbatim as
-correction feedback.
+correction feedback. A note on why, now measured (Study AJ): with the
+feedback message as the only variable across 405 seeded-failure cells,
+models recovered at 93–100% whether they received the full structured
+issues, bare codes, or just "the patch was invalid" — the same cells
+failed regardless. So the verbatim habit is developer UX (humane logs,
+debuggable corrections), not a model-accuracy requirement: keep it
+because it costs nothing, not because the loop depends on it.
 
 ## Maintenance posture
 

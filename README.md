@@ -624,8 +624,21 @@ goals and both the silent clamp and the models' own pruning eat
 the tail. Goals are the one thing only the memo carries (Study V),
 so the fix is app-side and specific: never silently clamp an
 over-cap update — evict the oldest FACT deterministically (never
-the goals tail), or surface memo-full to the user. Below the edge,
-note-count is a safe, monitorable budget.
+the goals tail), or surface memo-full to the user. That fix is now
+MEASURED, not just designed (Study AK, 2026-07-17): with the
+v3.213.0 eviction pipeline in the update path, every over-cap send
+became a designed eviction (19/19 — oldest fact out, every goal
+kept, zero contract violations), K=20 goal survival went 0/10 →
+10/10 on opus (p=.002) and 0 → 6/10 on sonnet (p=.031), and the
+pipeline is a verified no-op wherever the update fits (60/60). The
+honest boundary: eviction cannot restore a note the model pruned
+client-side before sending — sonnet pruned 4/10 and gemini 6/10 at
+the cap edge, victims still goals — so below the frontier tier the
+guarantee covers the clamp pathway, not the model's own editing.
+One frontier grace note: told the memo was full via the eviction
+notice, opus once consolidated 21 notes' content into 11 notes,
+losing nothing. Below the edge, note-count is a safe, monitorable
+budget.
 
 Discourse gets the same treatment (Study X): follow-ups that point at
 the previous edit — "also set that same node's...", "apply the same

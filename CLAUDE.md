@@ -45,3 +45,13 @@ bun run audit      # fallow house rules
   (`.env.schema`). Publish credentials via `npm login` / 1Password only.
 - Publishing is manual by the author — never run `npm publish` (dry-run is
   fine).
+
+## Agent tooling
+
+What an agent gets in this repository is declared here, not in anyone's
+personal Claude Code settings:
+
+- `.mcp.json`: MCP servers: `varlock-docs-mcp` (Varlock's documentation: read it before changing `.env.schema` or how the environment is loaded)
+- `.claude/settings.json`: the approval of those servers
+
+Add or remove a tool by editing these files in a pull request.

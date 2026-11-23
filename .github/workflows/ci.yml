@@ -38,4 +38,3 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: bunx fallow audit --base "origin/$BASE_REF"
         continue-on-error: true
-

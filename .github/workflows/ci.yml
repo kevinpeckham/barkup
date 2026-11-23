@@ -19,3 +19,22 @@ jobs:
       - run: bunx biome ci .
       - run: bun test
       - run: bun run build
+
+  # Advisory. Fallow reads the files a pull request changes for dead code,
+  # duplication and complexity; what it finds shows in this job's log. The
+  # step never fails the run: `verify` above is the gate.
+  fallow:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          # Fallow compares with the branch the pull request targets.
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      - run: bun install --frozen-lockfile
+      - name: fallow audit
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: bunx fallow audit --base "origin/$BASE_REF"
+        continue-on-error: true
